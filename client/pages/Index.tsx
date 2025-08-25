@@ -240,7 +240,7 @@ export default function Index() {
       <PlaceholderSection 
         sectionId={5} 
         title="Mon système de suivi" 
-        description="Cr��ez votre plan personnalisé de développement"
+        description="Créez votre plan personnalisé de développement"
         icon={Target}
       />
       
@@ -426,7 +426,7 @@ function ResultsDisplay({ responses, questions, onComplete, onContinue }: any) {
       </div>
 
       <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl mb-8">
-        <h4 className="font-semibold text-learning-primary mb-3">💡 Conseil personnalisé</h4>
+        <h4 className="font-semibold text-learning-primary mb-3">Conseil personnalisé</h4>
         <p className="text-gray-700">
           {avgScore >= 4 
             ? "Excellent ! Vous montrez une grande résilience. Continuez à cultiver ces forces et partagez votre expérience avec d'autres."
@@ -849,7 +849,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
               </div>
 
               <div className="mt-8 p-6 bg-learning-primary bg-opacity-10 rounded-xl">
-                <h4 className="font-semibold text-learning-primary mb-3">💡 Clé du succès :</h4>
+                <h4 className="font-semibold text-learning-primary mb-3">Clé du succès :</h4>
                 <p className="text-gray-700">
                   <strong>Passez progressivement du Quadrant 1 au Quadrant 2.</strong> Plus vous investissez dans Q2
                   (planification, prévention, développement), moins vous aurez de crises en Q1. C'est le secret d'une
@@ -863,7 +863,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                 onClick={() => setCurrentPhase('practice')}
                 className="learning-button text-lg px-8 py-4"
               >
-                Passer à la pratique →
+                Passer �� la pratique →
               </button>
             </div>
           </div>
@@ -1005,7 +1005,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
               </div>
 
               <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl mb-8">
-                <h4 className="font-semibold text-learning-primary mb-3">💡 Recommandations personnalisées</h4>
+                <h4 className="font-semibold text-learning-primary mb-3">Recommandations personnalisées</h4>
                 <div className="text-left space-y-3">
                   {getTasksInQuadrant(1).length > 3 && (
                     <p className="text-gray-700">⚠️ <strong>Trop de tâches urgentes :</strong> Investissez plus dans la planification (Q2) pour réduire les crises.</p>
