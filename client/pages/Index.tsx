@@ -1834,7 +1834,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-learning-primary mb-6">
-            Simulation de Stress Extrême
+            Simulation de Stress Extr��me
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Testez votre résilience dans des situations de haute pression.
@@ -2632,7 +2632,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                     className="p-6 bg-gradient-to-r from-learning-accent to-white rounded-xl border-l-4 border-learning-primary"
                   >
                     <div className="flex items-start space-x-4">
-                      <div className="text-3xl">{section.icon}</div>
+                      <div className="w-12 h-12 bg-learning-primary rounded-full flex items-center justify-center text-white font-bold text-xs">{section.icon}</div>
                       <div className="flex-1">
                         <h4 className="font-bold text-learning-primary mb-2">{section.title}</h4>
                         <p className="text-gray-700 mb-3">{section.keyLearning}</p>
