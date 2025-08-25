@@ -19,6 +19,96 @@ const SECTIONS = [
   { id: 6, title: "Réseau de soutien" },
 ];
 
+// PDF Export function
+const exportToPDF = (avgScore: number, questions: any[], responses: Record<string, number>) => {
+  // Create PDF content as HTML that can be converted
+  const getScoreColor = (score: number) => {
+    if (score >= 4) return '#22c55e'; // green
+    if (score >= 3) return '#f59e0b'; // amber
+    return '#ef4444'; // red
+  };
+
+  const getPersonalizedAdvice = (avgScore: number) => {
+    if (avgScore >= 4) {
+      return "Excellent ! Vous montrez une grande résilience. Continuez à cultiver ces forces et partagez votre expérience avec d'autres.";
+    } else if (avgScore >= 3) {
+      return "Bonne base ! Identifiez 1-2 domaines à renforcer en priorité. Votre parcours de développement sera très bénéfique.";
+    } else {
+      return "Potentiel d'amélioration important ! Ce module vous donnera des outils concrets pour développer votre résilience. Restez motivé(e) !";
+    }
+  };
+
+  // Create a temporary div with the content
+  const content = `
+    <div style="font-family: Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto;">
+      <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #1e40af; font-size: 28px; margin-bottom: 20px;">Bilan Personnel - Autonomie & Résilience</h1>
+        <div style="font-size: 48px; font-weight: bold; margin-bottom: 10px; color: ${getScoreColor(avgScore)};">
+          ${avgScore.toFixed(1)}/5
+        </div>
+        <p style="color: #666; font-size: 16px;">Score moyen de résilience</p>
+        <p style="color: #666; font-size: 14px;">Généré le ${new Date().toLocaleDateString('fr-FR')}</p>
+      </div>
+
+      <div style="margin-bottom: 30px;">
+        <h2 style="color: #1e40af; font-size: 20px; margin-bottom: 20px;">Détail par dimension</h2>
+        ${questions.map(question => `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background-color: #f9fafb; margin-bottom: 8px; border-radius: 8px;">
+            <span style="font-weight: 500; color: #374151;">${question.label}</span>
+            <span style="font-weight: bold; color: ${getScoreColor(responses[question.id])}; font-size: 18px;">
+              ${responses[question.id]}/5
+            </span>
+          </div>
+        `).join('')}
+      </div>
+
+      <div style="background-color: #dbeafe; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+        <h3 style="color: #1e40af; font-size: 18px; margin-bottom: 12px;">Conseil personnalisé</h3>
+        <p style="color: #374151; line-height: 1.6;">
+          ${getPersonalizedAdvice(avgScore)}
+        </p>
+      </div>
+
+      <div style="border-top: 2px solid #e5e7eb; padding-top: 20px; text-align: center;">
+        <p style="color: #666; font-size: 12px;">
+          Document généré par le Module 4 - Autonomie & Résilience Durable
+        </p>
+      </div>
+    </div>
+  `;
+
+  // Open content in new window for printing/saving as PDF
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Bilan Personnel - Autonomie & Résilience</title>
+          <style>
+            @media print {
+              body { margin: 0; }
+              .no-print { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          ${content}
+          <div class="no-print" style="text-align: center; margin-top: 30px;">
+            <button onclick="window.print()" style="background-color: #1e40af; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-right: 10px;">
+              Imprimer / Sauvegarder en PDF
+            </button>
+            <button onclick="window.close()" style="background-color: #6b7280; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
+              Fermer
+            </button>
+          </div>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  }
+};
+
 export default function Index() {
   const [progress, setProgress] = useState<ModuleProgress>({
     currentSection: 0,
