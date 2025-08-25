@@ -1025,7 +1025,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
 }
 
 // Placeholder Section Component
-function PlaceholderSection({ sectionId, title, description, icon: Icon }: any) {
+function PlaceholderSection({ sectionId, title, description }: any) {
   return (
     <section id={`section-${sectionId}`} className="min-h-screen py-20 px-4 flex items-center">
       <div className="max-w-4xl mx-auto text-center">
@@ -1036,7 +1036,9 @@ function PlaceholderSection({ sectionId, title, description, icon: Icon }: any) 
           viewport={{ once: true }}
           className="learning-card p-12"
         >
-          <Icon className="w-16 h-16 text-learning-primary mx-auto mb-6" />
+          <div className="w-16 h-16 bg-learning-primary rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="text-white text-2xl font-bold">{sectionId}</span>
+          </div>
           <h2 className="text-4xl font-bold text-learning-primary mb-6">
             {title}
           </h2>
@@ -1044,7 +1046,7 @@ function PlaceholderSection({ sectionId, title, description, icon: Icon }: any) 
             {description}
           </p>
           <p className="text-sm text-gray-500">
-            Cette section sera développée dans la prochaine itération. 
+            Cette section sera développée dans la prochaine itération.
             Continuez à faire défiler pour explorer les autres sections disponibles.
           </p>
         </motion.div>
