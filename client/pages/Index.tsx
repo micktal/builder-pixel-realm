@@ -2389,6 +2389,480 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
   );
 }
 
+// Module Synthesis Section Component
+function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
+  const [currentPhase, setCurrentPhase] = useState<'recap' | 'concepts' | 'quiz' | 'completion'>('recap');
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
+  const [quizScore, setQuizScore] = useState(0);
+  const [showResults, setShowResults] = useState(false);
+  const [completionBadge, setCompletionBadge] = useState<'bronze' | 'silver' | 'gold' | 'none'>('none');
+
+  const moduleRecap = [
+    {
+      id: 1,
+      title: "Auto-bilan 360°",
+      keyLearning: "Conscience de soi et identification des forces personnelles",
+      concepts: ["Auto-évaluation", "Forces personnelles", "Zones d'amélioration"],
+      icon: "🎯"
+    },
+    {
+      id: 2,
+      title: "Résilience face à l'imprévu",
+      keyLearning: "Stratégies d'adaptation et développement du rituel minute",
+      concepts: ["Gestion de l'imprévu", "Techniques d'adaptation", "Rituel de recadrage"],
+      icon: "⚡"
+    },
+    {
+      id: 3,
+      title: "Gestion des priorités",
+      keyLearning: "Matrice d'Eisenhower pour optimiser son temps et ses décisions",
+      concepts: ["Urgent vs Important", "Planification", "Prise de décision"],
+      icon: "🧠"
+    },
+    {
+      id: 4,
+      title: "Gestion du stress",
+      keyLearning: "4 techniques concrètes pour adapter sa réponse au stress",
+      concepts: ["Mécanismes du stress", "Techniques d'adaptation", "Profil personnel"],
+      icon: "🌊"
+    },
+    {
+      id: 5,
+      title: "Simulation stress extrême",
+      keyLearning: "Test de résilience sous pression avec feedback immédiat",
+      concepts: ["Résilience vs Réactivité", "Gestion de la pression", "Choix sous stress"],
+      icon: "🔥"
+    },
+    {
+      id: 6,
+      title: "Réseau de soutien",
+      keyLearning: "Cartographie des relations et identification des ressources humaines",
+      concepts: ["Types de soutien", "Proximité relationnelle", "Mobilisation du réseau"],
+      icon: "🌐"
+    }
+  ];
+
+  const fundamentalConcepts = [
+    {
+      concept: "Autonomie",
+      definition: "Capacité à agir de manière indépendante tout en sachant solliciter de l'aide au bon moment",
+      applications: ["Prendre des décisions éclairées", "Gérer ses priorités", "Développer sa résilience"]
+    },
+    {
+      concept: "Résilience",
+      definition: "Aptitude à rebondir face aux difficultés et à s'adapter aux changements",
+      applications: ["Gérer le stress efficacement", "Apprendre de l'échec", "Maintenir son équilibre"]
+    },
+    {
+      concept: "Adaptation",
+      definition: "Ajustement intelligent de ses stratégies selon le contexte et les défis",
+      applications: ["Modifier ses approches", "Utiliser les bonnes techniques", "Évoluer continuellement"]
+    }
+  ];
+
+  const quizQuestions = [
+    {
+      id: 'q1',
+      type: 'qcm',
+      question: "Dans la matrice d'Eisenhower, les tâches importantes mais non urgentes doivent être :",
+      options: [
+        { id: 'a', text: "Éliminées immédiatement" },
+        { id: 'b', text: "Planifiées et prioris��es" },
+        { id: 'c', text: "Déléguées à d'autres" },
+        { id: 'd', text: "Faites en urgence" }
+      ],
+      correct: 'b'
+    },
+    {
+      id: 'q2',
+      type: 'vrai-faux',
+      question: "Le stress est toujours négatif et doit être complètement éliminé.",
+      correct: 'false'
+    },
+    {
+      id: 'q3',
+      type: 'qcm',
+      question: "Qu'est-ce qui caractérise une réponse 'résiliente' face au stress ?",
+      options: [
+        { id: 'a', text: "Réagir immédiatement sans réfléchir" },
+        { id: 'b', text: "Éviter complètement la situation" },
+        { id: 'c', text: "Prendre du recul et choisir consciemment sa réponse" },
+        { id: 'd', text: "Déléguer systématiquement le problème" }
+      ],
+      correct: 'c'
+    },
+    {
+      id: 'q4',
+      type: 'vrai-faux',
+      question: "L'auto-bilan 360° permet uniquement d'identifier ses faiblesses.",
+      correct: 'false'
+    },
+    {
+      id: 'q5',
+      type: 'qcm',
+      question: "Dans votre réseau de soutien, le cercle de la famille représente :",
+      options: [
+        { id: 'a', text: "Un soutien principalement professionnel" },
+        { id: 'b', text: "Un soutien inconditionnel et émotionnel" },
+        { id: 'c', text: "Un soutien uniquement pratique" },
+        { id: 'd', text: "Un soutien temporaire" }
+      ],
+      correct: 'b'
+    },
+    {
+      id: 'q6',
+      type: 'qcm',
+      question: "Le 'rituel minute' en situation d'imprévu consiste à :",
+      options: [
+        { id: 'a', text: "Paniquer pendant une minute puis agir" },
+        { id: 'b', text: "Attendre une minute avant de faire quoi que ce soit" },
+        { id: 'c', text: "Prendre 60 secondes pour se recentrer et choisir sa stratégie" },
+        { id: 'd', text: "Déléguer la décision à quelqu'un d'autre" }
+      ],
+      correct: 'c'
+    }
+  ];
+
+  const handleQuizAnswer = (questionId: string, answer: string) => {
+    setQuizAnswers(prev => ({ ...prev, [questionId]: answer }));
+  };
+
+  const submitQuiz = () => {
+    let correct = 0;
+    quizQuestions.forEach(question => {
+      if (quizAnswers[question.id] === question.correct) {
+        correct++;
+      }
+    });
+
+    const score = Math.round((correct / quizQuestions.length) * 100);
+    setQuizScore(score);
+    setShowResults(true);
+
+    // Déterminer le badge selon le score
+    if (score >= 85) setCompletionBadge('gold');
+    else if (score >= 70) setCompletionBadge('silver');
+    else if (score >= 50) setCompletionBadge('bronze');
+    else setCompletionBadge('none');
+
+    setCurrentPhase('completion');
+  };
+
+  const getBadgeColor = (badge: string) => {
+    switch (badge) {
+      case 'gold': return 'from-yellow-400 to-yellow-600';
+      case 'silver': return 'from-gray-300 to-gray-500';
+      case 'bronze': return 'from-orange-400 to-orange-600';
+      default: return 'from-gray-200 to-gray-400';
+    }
+  };
+
+  const getBadgeEmoji = (badge: string) => {
+    switch (badge) {
+      case 'gold': return '🏆';
+      case 'silver': return '🥈';
+      case 'bronze': return '🥉';
+      default: return '📜';
+    }
+  };
+
+  return (
+    <section id="section-7" className="min-h-screen py-20 px-4 bg-gradient-to-b from-purple-50 to-white">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl font-bold text-learning-primary mb-6">
+            Synthèse du Module 4
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Récapitulatif de votre parcours "Autonomie & Résilience Durable"
+            avec validation des acquis et remise de votre certificat.
+          </p>
+        </motion.div>
+
+        {/* Navigation des phases */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {[
+            { id: 'recap', label: 'Récapitulatif', desc: 'Vos apprentissages' },
+            { id: 'concepts', label: 'Concepts clés', desc: 'Fondamentaux' },
+            { id: 'quiz', label: 'Mini-quiz', desc: 'Validation' },
+            { id: 'completion', label: 'Certificat', desc: 'Réussite' }
+          ].map(phase => (
+            <motion.button
+              key={phase.id}
+              onClick={() => setCurrentPhase(phase.id as any)}
+              className={`px-6 py-4 rounded-xl font-medium transition-all duration-300 flex flex-col items-center ${
+                currentPhase === phase.id
+                  ? 'bg-learning-primary text-white shadow-lg scale-105'
+                  : 'bg-white text-learning-primary border-2 border-learning-primary hover:bg-learning-accent'
+              }`}
+              whileHover={{ scale: currentPhase === phase.id ? 1.05 : 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="font-bold">{phase.label}</div>
+              <div className="text-xs opacity-75">{phase.desc}</div>
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Phase Récapitulatif */}
+        {currentPhase === 'recap' && (
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="learning-card p-8"
+            >
+              <h3 className="text-2xl font-bold text-learning-primary mb-8 text-center">
+                Votre parcours d'apprentissage
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {moduleRecap.map((section, index) => (
+                  <motion.div
+                    key={section.id}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="p-6 bg-gradient-to-r from-learning-accent to-white rounded-xl border-l-4 border-learning-primary"
+                  >
+                    <div className="flex items-start space-x-4">
+                      <div className="text-3xl">{section.icon}</div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-learning-primary mb-2">{section.title}</h4>
+                        <p className="text-gray-700 mb-3">{section.keyLearning}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {section.concepts.map((concept, i) => (
+                            <span key={i} className="text-xs px-2 py-1 bg-learning-primary text-white rounded-full">
+                              {concept}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Phase Concepts clés */}
+        {currentPhase === 'concepts' && (
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="learning-card p-8"
+            >
+              <h3 className="text-2xl font-bold text-learning-primary mb-8 text-center">
+                Concepts fondamentaux maîtrisés
+              </h3>
+
+              <div className="space-y-8">
+                {fundamentalConcepts.map((item, index) => (
+                  <motion.div
+                    key={item.concept}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.2 }}
+                    className="p-6 border-2 border-learning-accent rounded-xl"
+                  >
+                    <h4 className="text-xl font-bold text-learning-primary mb-3">
+                      {item.concept}
+                    </h4>
+                    <p className="text-gray-700 mb-4 text-lg">
+                      {item.definition}
+                    </p>
+                    <div className="grid md:grid-cols-3 gap-3">
+                      {item.applications.map((app, i) => (
+                        <div key={i} className="p-3 bg-learning-accent bg-opacity-20 rounded-lg text-center">
+                          <span className="text-sm font-medium">{app}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Phase Quiz */}
+        {currentPhase === 'quiz' && (
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="learning-card p-8"
+            >
+              <h3 className="text-2xl font-bold text-learning-primary mb-8 text-center">
+                Mini-quiz de validation des acquis
+              </h3>
+              <p className="text-gray-600 text-center mb-8">
+                6 questions pour valider votre compréhension du module. Seuil de réussite : 50%
+              </p>
+
+              <div className="space-y-6">
+                {quizQuestions.map((question, index) => (
+                  <motion.div
+                    key={question.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="p-6 border-2 border-gray-200 rounded-xl"
+                  >
+                    <h4 className="font-semibold text-learning-primary mb-4">
+                      Question {index + 1}: {question.question}
+                    </h4>
+
+                    {question.type === 'qcm' && question.options && (
+                      <div className="space-y-3">
+                        {question.options.map(option => (
+                          <motion.button
+                            key={option.id}
+                            onClick={() => handleQuizAnswer(question.id, option.id)}
+                            className={`w-full text-left p-3 rounded-lg border-2 transition-all duration-300 ${
+                              quizAnswers[question.id] === option.id
+                                ? 'border-learning-primary bg-learning-accent bg-opacity-20'
+                                : 'border-gray-200 hover:border-learning-primary'
+                            }`}
+                            whileHover={{ scale: 1.01 }}
+                            whileTap={{ scale: 0.99 }}
+                          >
+                            <span className="font-medium mr-3">{option.id.toUpperCase()})</span>
+                            {option.text}
+                          </motion.button>
+                        ))}
+                      </div>
+                    )}
+
+                    {question.type === 'vrai-faux' && (
+                      <div className="flex gap-4">
+                        {['true', 'false'].map(value => (
+                          <motion.button
+                            key={value}
+                            onClick={() => handleQuizAnswer(question.id, value)}
+                            className={`px-6 py-3 rounded-lg border-2 transition-all duration-300 ${
+                              quizAnswers[question.id] === value
+                                ? 'border-learning-primary bg-learning-accent bg-opacity-20'
+                                : 'border-gray-200 hover:border-learning-primary'
+                            }`}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            {value === 'true' ? 'Vrai' : 'Faux'}
+                          </motion.button>
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+
+              {Object.keys(quizAnswers).length === quizQuestions.length && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center mt-8"
+                >
+                  <button
+                    onClick={submitQuiz}
+                    className="learning-button text-lg px-8 py-4"
+                  >
+                    Valider mes réponses
+                  </button>
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
+        )}
+
+        {/* Phase Completion */}
+        {currentPhase === 'completion' && (
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="learning-card p-8 text-center"
+            >
+              <h3 className="text-3xl font-bold text-learning-primary mb-8">
+                Félicitations ! Module terminé
+              </h3>
+
+              {/* Badge de réussite */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+                className={`w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-br ${getBadgeColor(completionBadge)} flex items-center justify-center shadow-lg`}
+              >
+                <span className="text-4xl">{getBadgeEmoji(completionBadge)}</span>
+              </motion.div>
+
+              <div className="mb-8">
+                <h4 className="text-2xl font-bold text-learning-primary mb-4">
+                  {completionBadge === 'gold' ? 'Certification Or' :
+                   completionBadge === 'silver' ? 'Certification Argent' :
+                   completionBadge === 'bronze' ? 'Certification Bronze' :
+                   'Participation validée'}
+                </h4>
+                <p className="text-lg text-gray-600 mb-4">
+                  Score au quiz : {quizScore}%
+                </p>
+                <p className="text-gray-700">
+                  Vous avez terminé avec succès le Module 4 "Autonomie & Résilience Durable".
+                  Vous disposez maintenant d'outils concrets pour renforcer votre résilience
+                  et développer votre autonomie au quotidien.
+                </p>
+              </div>
+
+              {/* Résumé des acquis */}
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <div className="p-4 bg-blue-50 rounded-xl">
+                  <h5 className="font-bold text-blue-600 mb-2">Outils acquis</h5>
+                  <p className="text-sm text-blue-700">6 sections maîtrisées</p>
+                </div>
+                <div className="p-4 bg-green-50 rounded-xl">
+                  <h5 className="font-bold text-green-600 mb-2">Techniques apprises</h5>
+                  <p className="text-sm text-green-700">15+ stratégies pratiques</p>
+                </div>
+                <div className="p-4 bg-purple-50 rounded-xl">
+                  <h5 className="font-bold text-purple-600 mb-2">Durée du parcours</h5>
+                  <p className="text-sm text-purple-700">~30 minutes complétées</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => setCurrentPhase('recap')}
+                  className="learning-button-secondary px-6 py-3"
+                >
+                  📖 Revoir la synthèse
+                </button>
+                <button
+                  onClick={() => {
+                    onComplete();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="learning-button px-6 py-3"
+                >
+                  🎯 Retour à l'accueil
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 // Placeholder Section Component
 function PlaceholderSection({ sectionId, title, description }: any) {
   return (
