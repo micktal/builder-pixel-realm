@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { CheckCircle, ArrowUp, User, Zap, Users, Target, Shield, Award, Heart } from "lucide-react";
+import { CheckCircle, ArrowUp, User, Zap, Users, Target, Shield, Award, Brain } from "lucide-react";
 
 // Progress tracking
 interface ModuleProgress {
@@ -14,7 +14,7 @@ const SECTIONS = [
   { id: 0, title: "Accueil", icon: User },
   { id: 1, title: "Auto-bilan 360°", icon: Target },
   { id: 2, title: "Résilience face à l'imprévu", icon: Zap },
-  { id: 3, title: "Techniques de respiration", icon: Heart },
+  { id: 3, title: "Gestion des priorités", icon: Brain },
   { id: 4, title: "Soutiens & ressources", icon: Shield },
   { id: 5, title: "Mon système de suivi", icon: Target },
   { id: 6, title: "Quiz final", icon: Award },
@@ -224,7 +224,7 @@ export default function Index() {
       />
 
       {/* Placeholder for other sections */}
-      <BreathingSection
+      <PriorityManagementSection
         progress={progress}
         onComplete={() => completeSection(3)}
         onNavigate={navigateToSection}
