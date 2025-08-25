@@ -307,7 +307,7 @@ function SelfAssessmentSection({ progress, onComplete, onNavigate }: any) {
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Évaluez votre niveau actuel dans différentes dimensions de l'autonomie et de la résilience. 
-            Soyez honnête avec vous-même pour obtenir un bilan personnalisé.
+            Soyez honn��te avec vous-même pour obtenir un bilan personnalisé.
           </p>
         </motion.div>
 
@@ -598,6 +598,286 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
                 Sauvegarder et continuer →
               </button>
             </div>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// Breathing Techniques Section Component
+function BreathingSection({ progress, onComplete, onNavigate }: any) {
+  const [currentTechnique, setCurrentTechnique] = useState(0);
+  const [isBreathing, setIsBreathing] = useState(false);
+  const [breathingPhase, setBreathingPhase] = useState('');
+  const [completedTechniques, setCompletedTechniques] = useState<Set<number>>(new Set());
+  const [selectedFavorite, setSelectedFavorite] = useState<number | null>(null);
+
+  const techniques = [
+    {
+      id: 0,
+      name: "Respiration 4-7-8",
+      description: "Technique relaxante pour réduire l'anxiété et favoriser l'endormissement",
+      instructions: [
+        "Inspirez par le nez pendant 4 secondes",
+        "Retenez votre souffle pendant 7 secondes",
+        "Expirez par la bouche pendant 8 secondes"
+      ],
+      duration: 19, // 4+7+8
+      benefits: "Réduit l'anxiété, facilite l'endormissement, calme le système nerveux"
+    },
+    {
+      id: 1,
+      name: "Cohérence cardiaque",
+      description: "Respiration régulière pour équilibrer le système nerveux",
+      instructions: [
+        "Inspirez pendant 5 secondes",
+        "Expirez pendant 5 secondes",
+        "Répétez 6 fois par minute pendant 5 minutes"
+      ],
+      duration: 10, // 5+5
+      benefits: "Améliore la concentration, réduit le stress, régule les émotions"
+    },
+    {
+      id: 2,
+      name: "Respiration du carré",
+      description: "Technique de concentration et d'ancrage dans le présent",
+      instructions: [
+        "Inspirez pendant 4 secondes",
+        "Retenez pendant 4 secondes",
+        "Expirez pendant 4 secondes",
+        "Retenez (poumons vides) pendant 4 secondes"
+      ],
+      duration: 16, // 4+4+4+4
+      benefits: "Améliore la concentration, procure un sentiment de contrôle"
+    }
+  ];
+
+  const startBreathingExercise = (techniqueId: number) => {
+    setCurrentTechnique(techniqueId);
+    setIsBreathing(true);
+
+    const technique = techniques[techniqueId];
+    let cycleCount = 0;
+    const maxCycles = 3;
+
+    const runCycle = () => {
+      if (cycleCount >= maxCycles) {
+        setIsBreathing(false);
+        setBreathingPhase('');
+        setCompletedTechniques(prev => new Set([...prev, techniqueId]));
+        return;
+      }
+
+      // Phases de respiration selon la technique
+      if (techniqueId === 0) { // 4-7-8
+        setBreathingPhase('Inspirez (4s)');
+        setTimeout(() => setBreathingPhase('Retenez (7s)'), 4000);
+        setTimeout(() => setBreathingPhase('Expirez (8s)'), 11000);
+        setTimeout(() => {
+          cycleCount++;
+          runCycle();
+        }, 19000);
+      } else if (techniqueId === 1) { // Cohérence cardiaque
+        setBreathingPhase('Inspirez (5s)');
+        setTimeout(() => setBreathingPhase('Expirez (5s)'), 5000);
+        setTimeout(() => {
+          cycleCount++;
+          runCycle();
+        }, 10000);
+      } else if (techniqueId === 2) { // Respiration du carré
+        setBreathingPhase('Inspirez (4s)');
+        setTimeout(() => setBreathingPhase('Retenez (4s)'), 4000);
+        setTimeout(() => setBreathingPhase('Expirez (4s)'), 8000);
+        setTimeout(() => setBreathingPhase('Pause (4s)'), 12000);
+        setTimeout(() => {
+          cycleCount++;
+          runCycle();
+        }, 16000);
+      }
+    };
+
+    runCycle();
+  };
+
+  const selectFavorite = (techniqueId: number) => {
+    setSelectedFavorite(techniqueId);
+  };
+
+  const isCompleted = completedTechniques.size >= 2; // Au moins 2 techniques testées
+
+  return (
+    <section id="section-3" className="min-h-screen py-20 px-4 bg-gradient-to-b from-white to-blue-50">
+      <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-12 h-12 text-learning-primary mr-4 flex items-center justify-center">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+              </svg>
+            </div>
+            <h2 className="text-4xl font-bold text-learning-primary">
+              Techniques de Respiration
+            </h2>
+          </div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Apprenez des techniques de respiration scientifiquement prouvées pour gérer le stress,
+            améliorer votre concentration et renforcer votre résilience au quotidien.
+          </p>
+        </motion.div>
+
+        {!isBreathing ? (
+          <div className="grid md:grid-cols-1 gap-8 mb-12">
+            {techniques.map((technique, index) => {
+              const isCompletedTechnique = completedTechniques.has(technique.id);
+
+              return (
+                <motion.div
+                  key={technique.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className={`learning-card p-8 ${isCompletedTechnique ? 'ring-2 ring-learning-primary' : ''}`}
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <h3 className="text-2xl font-bold text-learning-neutral flex items-center">
+                      {technique.name}
+                      {isCompletedTechnique && (
+                        <CheckCircle className="w-6 h-6 text-learning-primary ml-2" />
+                      )}
+                    </h3>
+                  </div>
+
+                  <p className="text-gray-600 mb-6">{technique.description}</p>
+
+                  <div className="mb-6">
+                    <h4 className="font-semibold text-learning-primary mb-3">Instructions :</h4>
+                    <ul className="space-y-2">
+                      {technique.instructions.map((instruction, i) => (
+                        <li key={i} className="flex items-start">
+                          <span className="bg-learning-accent text-learning-primary w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0 mt-0.5">
+                            {i + 1}
+                          </span>
+                          <span className="text-gray-700">{instruction}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mb-6 p-4 bg-learning-accent bg-opacity-20 rounded-lg">
+                    <h4 className="font-semibold text-learning-primary mb-2">💡 Bienfaits :</h4>
+                    <p className="text-gray-700">{technique.benefits}</p>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <button
+                      onClick={() => startBreathingExercise(technique.id)}
+                      className="learning-button flex-1"
+                    >
+                      🧘‍♀️ Essayer cette technique
+                    </button>
+
+                    {isCompletedTechnique && (
+                      <button
+                        onClick={() => selectFavorite(technique.id)}
+                        className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                          selectedFavorite === technique.id
+                            ? 'bg-learning-primary text-white'
+                            : 'border-2 border-learning-primary text-learning-primary hover:bg-learning-primary hover:text-white'
+                        }`}
+                      >
+                        ⭐ {selectedFavorite === technique.id ? 'Technique favorite' : 'Marquer comme favorite'}
+                      </button>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="learning-card p-12 text-center"
+          >
+            <h3 className="text-3xl font-bold text-learning-primary mb-8">
+              {techniques[currentTechnique].name}
+            </h3>
+
+            {/* Cercle de respiration animé */}
+            <div className="relative w-64 h-64 mx-auto mb-8">
+              <motion.div
+                className="absolute inset-0 rounded-full border-4 border-learning-primary"
+                animate={{
+                  scale: breathingPhase.includes('Inspirez') ? 1.2 :
+                         breathingPhase.includes('Retenez') ? 1.2 : 0.8
+                }}
+                transition={{ duration: breathingPhase.includes('Retenez') ? 0 : 3, ease: "easeInOut" }}
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div
+                  className="w-32 h-32 rounded-full bg-learning-primary bg-opacity-20 flex items-center justify-center"
+                  animate={{
+                    scale: breathingPhase.includes('Inspirez') ? 1.3 :
+                           breathingPhase.includes('Retenez') ? 1.3 : 0.7
+                  }}
+                  transition={{ duration: breathingPhase.includes('Retenez') ? 0 : 3, ease: "easeInOut" }}
+                >
+                  <span className="text-learning-primary font-bold text-lg">
+                    🧘‍♀️
+                  </span>
+                </motion.div>
+              </div>
+            </div>
+
+            <p className="text-2xl font-semibold text-learning-primary mb-4">
+              {breathingPhase}
+            </p>
+
+            <p className="text-gray-600">
+              Suivez le rythme du cercle et concentrez-vous sur votre respiration
+            </p>
+          </motion.div>
+        )}
+
+        {isCompleted && !isBreathing && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="learning-card p-8 text-center"
+          >
+            <h3 className="text-2xl font-bold text-learning-primary mb-4">
+              🎉 Félicitations !
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Vous avez découvert et pratiqué des techniques de respiration.
+              {selectedFavorite !== null && ` Votre technique favorite est : ${techniques[selectedFavorite].name}.`}
+            </p>
+
+            <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl mb-6">
+              <h4 className="font-semibold text-learning-primary mb-3">💡 Conseil pour la suite</h4>
+              <p className="text-gray-700">
+                Pratiquez votre technique favorite 5 minutes par jour pendant une semaine.
+                Utilisez-la notamment dans les moments de stress pour retrouver rapidement votre calme.
+              </p>
+            </div>
+
+            <button
+              onClick={() => {
+                onComplete();
+                onNavigate(4);
+              }}
+              className="learning-button"
+            >
+              Continuer vers les ressources de soutien →
+            </button>
           </motion.div>
         )}
       </div>
