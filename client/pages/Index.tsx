@@ -2432,14 +2432,14 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
       title: "Simulation stress extrême",
       keyLearning: "Test de résilience sous pression avec feedback immédiat",
       concepts: ["Résilience vs Réactivité", "Gestion de la pression", "Choix sous stress"],
-      icon: "FIRE"
+      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM12 20c-3.31 0-6-2.69-6-6 0-1.53.3-3.04.86-4.43.14 1.73 1.63 3.1 3.47 3.1 1.85 0 3.34-1.38 3.47-3.1.56 1.39.86 2.9.86 4.43 0 3.31-2.69 6-6 6z"/></svg>
     },
     {
       id: 6,
       title: "Réseau de soutien",
       keyLearning: "Cartographie des relations et identification des ressources humaines",
       concepts: ["Types de soutien", "Proximité relationnelle", "Mobilisation du réseau"],
-      icon: "NETWORK"
+      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V9C3 10.1 3.9 11 5 11H7V13H5C3.9 13 3 13.9 3 15V21C3 22.1 3.9 23 5 23H11C12.1 23 13 22.1 13 21V15C13 13.9 12.1 13 11 13H9V11H15C16.1 11 17 10.1 17 9V7H19C20.1 7 21 7.9 21 9ZM7 9H5V3H7V9ZM11 21H5V15H11V21ZM15 9H9V7H15V9Z"/></svg>
     }
   ];
 
@@ -2563,7 +2563,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
       case 'gold': return 'OR';
       case 'silver': return 'ARGENT';
       case 'bronze': return 'BRONZE';
-      default: return 'CERTIFICAT';
+      default: return <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/><path d="M9,15V17H15V15H9M9,11V13H15V11H9Z"/></svg>;
     }
   };
 
