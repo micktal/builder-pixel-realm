@@ -305,7 +305,7 @@ function SelfAssessmentSection({ progress, onComplete, onNavigate }: any) {
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Évaluez votre niveau actuel dans différentes dimensions de l'autonomie et de la résilience. 
-            Soyez honn��te avec vous-même pour obtenir un bilan personnalisé.
+            Soyez honnête avec vous-même pour obtenir un bilan personnalisé.
           </p>
         </motion.div>
 
@@ -1815,7 +1815,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
   const getScoreLabel = (score: number) => {
     if (score >= 80) return 'RÉSISTANT AU STRESS';
     if (score >= 60) return 'RÉSILIENCE MODÉRÉE';
-    return 'R��ACTIF SOUS PRESSION';
+    return 'RÉACTIF SOUS PRESSION';
   };
 
   const formatTime = (seconds: number) => {
@@ -1835,7 +1835,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-learning-primary mb-6">
-            Simulation de Stress Extr��me
+            Simulation de Stress Extrême
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Testez votre résilience dans des situations de haute pression.
