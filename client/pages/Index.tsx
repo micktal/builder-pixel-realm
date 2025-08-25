@@ -128,7 +128,7 @@ export default function Index() {
             <h1 className="text-5xl md:text-7xl font-bold text-learning-primary mb-6 leading-tight">
               Autonomie &<br />
               <span className="bg-gradient-to-r from-learning-primary to-learning-accent bg-clip-text text-transparent">
-                R��silience Durable
+                Résilience Durable
               </span>
             </h1>
             
@@ -187,7 +187,6 @@ export default function Index() {
               animate={{ x: [0, 5, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
             >
-              ➤
             </motion.div>
           </motion.button>
 
@@ -695,7 +694,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
             Gestion des Priorités & Prise de Décision
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Maîtrisez la Matrice d'Eisenhower pour prendre des décisions éclair��es,
+            Maîtrisez la Matrice d'Eisenhower pour prendre des décisions éclairées,
             gérer efficacement votre temps et renforcer votre autonomie.
           </p>
         </motion.div>
