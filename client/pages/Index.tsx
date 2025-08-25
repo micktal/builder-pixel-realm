@@ -1694,7 +1694,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
       choices: [
         { id: 'A', text: "Je lui dis de se calmer ou je raccroche", type: 'reactive' as const },
         { id: 'B', text: "J'écoute activement et reformule son problème", type: 'resilient' as const },
-        { id: 'C', text: "Je transf��re immédiatement à mon manager", type: 'reactive' as const }
+        { id: 'C', text: "Je transfère immédiatement à mon manager", type: 'reactive' as const }
       ]
     },
     {
@@ -2559,10 +2559,10 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
 
   const getBadgeEmoji = (badge: string) => {
     switch (badge) {
-      case 'gold': return '🏆';
-      case 'silver': return '🥈';
-      case 'bronze': return '🥉';
-      default: return '📜';
+      case 'gold': return 'OR';
+      case 'silver': return 'ARGENT';
+      case 'bronze': return 'BRONZE';
+      default: return 'CERTIFICAT';
     }
   };
 
@@ -2843,7 +2843,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                   onClick={() => setCurrentPhase('recap')}
                   className="learning-button-secondary px-6 py-3"
                 >
-                  📖 Revoir la synthèse
+                  Revoir la synthèse
                 </button>
                 <button
                   onClick={() => {
@@ -2852,7 +2852,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                   }}
                   className="learning-button px-6 py-3"
                 >
-                  🎯 Retour à l'accueil
+                  Retour à l'accueil
                 </button>
               </div>
             </motion.div>
