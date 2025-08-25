@@ -198,7 +198,7 @@ export default function Index() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
           >
-            ⏱️ Durée estimée : 30 minutes
+            Durée estimée : 30 minutes
           </motion.p>
         </div>
       </section>
@@ -704,9 +704,9 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
         <div className="flex justify-center mb-12">
           <div className="flex space-x-4">
             {[
-              { id: 'theory', label: '📚 Théorie', desc: 'Apprentissage' },
-              { id: 'practice', label: '🎯 Pratique', desc: 'Exercice' },
-              { id: 'evaluation', label: '✅ Évaluation', desc: 'Synthèse' }
+              { id: 'theory', label: 'Théorie', desc: 'Apprentissage' },
+              { id: 'practice', label: 'Pratique', desc: 'Exercice' },
+              { id: 'evaluation', label: 'Évaluation', desc: 'Synthèse' }
             ].map(phase => (
               <button
                 key={phase.id}
@@ -754,7 +754,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                       <p>Ce qui demande une attention immédiate. L'urgence est souvent imposée par les autres ou les circonstances externes.</p>
                     </div>
                     <div>
-                      <h5 className="font-semibold text-learning-primary mb-2">🎯 IMPORTANT</h5>
+                      <h5 className="font-semibold text-learning-primary mb-2">IMPORTANT</h5>
                       <p>Ce qui contribue à vos objectifs à long terme, vos valeurs et votre mission. L'importance est déterminée par vous.</p>
                     </div>
                   </div>
@@ -813,7 +813,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
               className="learning-card p-8"
             >
               <h3 className="text-2xl font-bold text-learning-primary mb-6">
-                ⚡ Principes d'action pour chaque quadrant
+                Principes d'action pour chaque quadrant
               </h3>
 
               <div className="grid md:grid-cols-2 gap-8">
@@ -863,7 +863,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
               className="learning-card p-8"
             >
               <h3 className="text-2xl font-bold text-learning-primary mb-6">
-                🎯 Exercice pratique : Classez vos tâches
+                Exercice pratique : Classez vos tâches
               </h3>
 
               <p className="text-gray-600 mb-6">
@@ -891,7 +891,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
               {/* Tâches non assignées */}
               {getUnassignedTasks().length > 0 && (
                 <div className="mb-8">
-                  <h4 className="font-semibold text-learning-primary mb-4">📝 Tâches à classer :</h4>
+                  <h4 className="font-semibold text-learning-primary mb-4">Tâches à classer :</h4>
                   <div className="grid md:grid-cols-2 gap-3">
                     {getUnassignedTasks().map(task => (
                       <motion.div
@@ -973,7 +973,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
           >
             <div className="learning-card p-8 text-center">
               <h3 className="text-3xl font-bold text-learning-primary mb-6">
-                🎉 Analyse de votre classification
+                Analyse de votre classification
               </h3>
 
               <div className="grid md:grid-cols-4 gap-6 mb-8">
@@ -993,16 +993,16 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                 <h4 className="font-semibold text-learning-primary mb-3">Recommandations personnalisées</h4>
                 <div className="text-left space-y-3">
                   {getTasksInQuadrant(1).length > 3 && (
-                    <p className="text-gray-700">⚠️ <strong>Trop de tâches urgentes :</strong> Investissez plus dans la planification (Q2) pour réduire les crises.</p>
+                    <p className="text-gray-700"><strong>Trop de tâches urgentes :</strong> Investissez plus dans la planification (Q2) pour réduire les crises.</p>
                   )}
                   {getTasksInQuadrant(2).length < 2 && (
-                    <p className="text-gray-700">📈 <strong>Développez Q2 :</strong> Ajoutez plus d'activités de développement et de prévention.</p>
+                    <p className="text-gray-700"><strong>Développez Q2 :</strong> Ajoutez plus d'activités de développement et de prévention.</p>
                   )}
                   {getTasksInQuadrant(4).length > 0 && (
-                    <p className="text-gray-700">🎯 <strong>Éliminez Q4 :</strong> Ces activités nuisent à votre productivité.</p>
+                    <p className="text-gray-700"><strong>Éliminez Q4 :</strong> Ces activités nuisent à votre productivité.</p>
                   )}
                   {getTasksInQuadrant(2).length >= getTasksInQuadrant(1).length && (
-                    <p className="text-gray-700">✅ <strong>Excellent équilibre :</strong> Vous priorisez l'important sur l'urgent !</p>
+                    <p className="text-gray-700"><strong>Excellent équilibre :</strong> Vous priorisez l'important sur l'urgent !</p>
                   )}
                 </div>
               </div>
