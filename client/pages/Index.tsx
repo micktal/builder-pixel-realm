@@ -1851,22 +1851,22 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
           >
             <div className="mb-8">
               <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-4xl">⚡</span>
+                <span className="text-4xl font-bold text-red-600">STRESS</span>
               </div>
               <h3 className="text-2xl font-bold text-learning-primary mb-4">
                 Prêt(e) pour le défi ?
               </h3>
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 <div className="p-4 bg-red-50 rounded-xl">
-                  <h4 className="font-bold text-red-600 mb-2">⏱️ 2 Minutes</h4>
+                  <h4 className="font-bold text-red-600 mb-2">2 Minutes</h4>
                   <p className="text-sm text-gray-600">Chronomètre impitoyable</p>
                 </div>
                 <div className="p-4 bg-orange-50 rounded-xl">
-                  <h4 className="font-bold text-orange-600 mb-2">🔥 5 Crises</h4>
+                  <h4 className="font-bold text-orange-600 mb-2">5 Crises</h4>
                   <p className="text-sm text-gray-600">Situations extrêmes</p>
                 </div>
                 <div className="p-4 bg-yellow-50 rounded-xl">
-                  <h4 className="font-bold text-yellow-600 mb-2">⚡ Pression</h4>
+                  <h4 className="font-bold text-yellow-600 mb-2">Pression</h4>
                   <p className="text-sm text-gray-600">Choix rapides requis</p>
                 </div>
               </div>
@@ -1883,7 +1883,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              🚀 LANCER LA SIMULATION
+              LANCER LA SIMULATION
             </motion.button>
           </motion.div>
         )}
@@ -2033,7 +2033,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
                 onClick={startSimulation}
                 className="learning-button-secondary px-6 py-3"
               >
-                🔄 Rejouer
+                Rejouer
               </button>
               <button
                 onClick={() => {
@@ -2228,7 +2228,7 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
                 animate={{ opacity: 1 }}
                 className="text-center py-8 text-gray-500"
               >
-                <div className="text-4xl mb-2">🎉</div>
+                <div className="text-2xl font-bold text-green-600 mb-2">BRAVO</div>
                 <p>Tous vos contacts sont organisés !</p>
               </motion.div>
             )}
@@ -2349,7 +2349,7 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
               onClick={resetMap}
               className="learning-button-secondary px-6 py-3"
             >
-              🔄 Réorganiser
+              Réorganiser
             </button>
 
             {isCompleted && (
@@ -2364,7 +2364,7 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                ✅ Terminer le module
+                Terminer le module
               </motion.button>
             )}
           </div>
@@ -2376,7 +2376,7 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
               transition={{ delay: 0.3 }}
               className="mt-6 p-6 bg-green-50 rounded-xl"
             >
-              <h4 className="font-bold text-green-700 mb-2">🎉 Félicitations !</h4>
+              <h4 className="font-bold text-green-700 mb-2">Félicitations !</h4>
               <p className="text-green-600">
                 Vous avez cartographié votre réseau de soutien. Cette visualisation vous aidera
                 à mieux identifier vers qui vous tourner selon vos besoins.
@@ -2467,7 +2467,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
       question: "Dans la matrice d'Eisenhower, les tâches importantes mais non urgentes doivent être :",
       options: [
         { id: 'a', text: "Éliminées immédiatement" },
-        { id: 'b', text: "Planifiées et prioris��es" },
+        { id: 'b', text: "Planifiées et priorisées" },
         { id: 'c', text: "Déléguées à d'autres" },
         { id: 'd', text: "Faites en urgence" }
       ],
