@@ -1203,10 +1203,10 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-learning-primary mb-6">
-            Gestion du Stress au Quotidien
+            Notre stress et notre adaptation
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Apprenez à identifier, comprendre et gérer le stress avec des techniques concrètes
+            le stress avec des techniques concrètes
             et des stratégies personnalisées pour votre bien-être durable.
           </p>
         </motion.div>
@@ -1223,7 +1223,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="flex items-start">
               <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">1</div>
-              <span>Comprendre les mécanismes physiologiques et psychologiques du stress</span>
+              <span>Adapter sa réponse aux mécanismes physiologiques et psychologiques du stress</span>
             </div>
             <div className="flex items-start">
               <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">2</div>
@@ -1243,7 +1243,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
         {/* Navigation des phases */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {[
-            { id: 'theory', label: 'Comprendre', desc: 'Théorie' },
+            { id: 'theory', label: 'Adapter', desc: 'Théorie' },
             { id: 'techniques', label: 'Apprendre', desc: 'Techniques' },
             { id: 'scenarios', label: 'Pratiquer', desc: 'Scénarios' },
             { id: 'evaluation', label: 'Personnaliser', desc: 'Mon profil' }
@@ -1295,7 +1295,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
               className="learning-card p-8"
             >
               <h3 className="text-2xl font-bold text-learning-primary mb-6">
-                Comprendre le stress : Mécanismes et impact
+                Adapter sa réponse au stress : Mécanismes et impact
               </h3>
 
               <div className="prose max-w-none text-gray-700 space-y-6">
