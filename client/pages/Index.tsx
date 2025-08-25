@@ -756,7 +756,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
 
               <div className="prose max-w-none text-gray-700 space-y-6">
                 <p className="text-lg leading-relaxed">
-                  Développée par le Président américain <strong>Dwight D. Eisenhower</strong> et popularisée par Stephen Covey,
+                  Développée par le Pr��sident américain <strong>Dwight D. Eisenhower</strong> et popularisée par Stephen Covey,
                   cette matrice révolutionnaire distingue deux dimensions cruciales de toute tâche :
                   <strong className="text-learning-primary"> l'urgence et l'importance</strong>.
                 </p>
@@ -2318,7 +2318,7 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1, duration: 0.6 }}
-                className="absolute w-20 h-20 bg-learning-primary text-white rounded-full flex items-center justify-center font-bold text-lg z-10 shadow-lg"
+                className="absolute w-16 h-16 bg-learning-primary text-white rounded-full flex items-center justify-center font-bold text-base z-10 shadow-lg"
               >
                 Vous
               </motion.div>
