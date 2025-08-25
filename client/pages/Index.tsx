@@ -594,7 +594,7 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
 
 // Priority Management Section Component
 function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
-  const [currentPhase, setCurrentPhase] = useState<'theory' | 'practice' | 'evaluation'>('practice');
+  const [currentPhase, setCurrentPhase] = useState<'theory' | 'practice' | 'evaluation'>('theory');
   const [userTasks, setUserTasks] = useState<Array<{id: number, text: string, quadrant: number | null}>>([]);
   const [newTask, setNewTask] = useState('');
   const [completedQuadrants, setCompletedQuadrants] = useState<Set<number>>(new Set());
@@ -703,8 +703,8 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
         <div className="flex justify-center mb-12">
           <div className="flex space-x-4">
             {[
-              { id: 'practice', label: 'Pratique', desc: 'Exercice' },
               { id: 'theory', label: 'Théorie', desc: 'Apprentissage' },
+              { id: 'practice', label: 'Pratique', desc: 'Exercice' },
               { id: 'evaluation', label: 'Évaluation', desc: 'Synthèse' }
             ].map(phase => (
               <button
