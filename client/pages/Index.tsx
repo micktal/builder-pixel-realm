@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { CheckCircle, ArrowUp, User, Zap, Users, Target, Shield, Award, Brain } from "lucide-react";
 
 // Progress tracking
 interface ModuleProgress {
@@ -11,13 +10,13 @@ interface ModuleProgress {
 }
 
 const SECTIONS = [
-  { id: 0, title: "Accueil", icon: User },
-  { id: 1, title: "Auto-bilan 360°", icon: Target },
-  { id: 2, title: "Résilience face à l'imprévu", icon: Zap },
-  { id: 3, title: "Gestion des priorités", icon: Brain },
-  { id: 4, title: "Soutiens & ressources", icon: Shield },
-  { id: 5, title: "Mon système de suivi", icon: Target },
-  { id: 6, title: "Quiz final", icon: Award },
+  { id: 0, title: "Accueil" },
+  { id: 1, title: "Auto-bilan 360°" },
+  { id: 2, title: "Résilience face à l'imprévu" },
+  { id: 3, title: "Gestion des priorités" },
+  { id: 4, title: "Soutiens & ressources" },
+  { id: 5, title: "Mon système de suivi" },
+  { id: 6, title: "Quiz final" },
 ];
 
 export default function Index() {
@@ -77,28 +76,23 @@ export default function Index() {
           {SECTIONS.map((section) => {
             const isCompleted = progress.completedSections.has(section.id);
             const isCurrent = progress.currentSection === section.id;
-            const Icon = section.icon;
-            
+
             return (
               <motion.button
                 key={section.id}
                 onClick={() => navigateToSection(section.id)}
                 className={`relative group flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${
-                  isCompleted 
-                    ? 'bg-learning-primary text-white' 
-                    : isCurrent 
-                    ? 'bg-learning-accent text-learning-primary ring-2 ring-learning-primary' 
+                  isCompleted
+                    ? 'bg-learning-primary text-white'
+                    : isCurrent
+                    ? 'bg-learning-accent text-learning-primary ring-2 ring-learning-primary'
                     : 'bg-white text-gray-400 hover:bg-learning-accent hover:text-learning-primary'
                 }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {isCompleted ? (
-                  <CheckCircle className="w-6 h-6" />
-                ) : (
-                  <Icon className="w-6 h-6" />
-                )}
-                
+                <span className="text-sm font-bold">{section.id + 1}</span>
+
                 {/* Tooltip */}
                 <div className="absolute left-16 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   {section.title}
@@ -119,7 +113,7 @@ export default function Index() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
-          <ArrowUp className="w-6 h-6" />
+          ↑
         </motion.button>
       )}
 
@@ -230,25 +224,22 @@ export default function Index() {
         onNavigate={navigateToSection}
       />
       
-      <PlaceholderSection 
-        sectionId={4} 
-        title="Soutiens & ressources" 
+      <PlaceholderSection
+        sectionId={4}
+        title="Soutiens & ressources"
         description="Identifiez votre réseau de soutien et vos ressources"
-        icon={Shield}
       />
       
-      <PlaceholderSection 
-        sectionId={5} 
-        title="Mon système de suivi" 
+      <PlaceholderSection
+        sectionId={5}
+        title="Mon système de suivi"
         description="Créez votre plan personnalisé de développement"
-        icon={Target}
       />
       
-      <PlaceholderSection 
-        sectionId={6} 
-        title="Quiz final & engagement" 
+      <PlaceholderSection
+        sectionId={6}
+        title="Quiz final & engagement"
         description="Validez vos acquis et prenez votre engagement"
-        icon={Award}
       />
     </div>
   );
@@ -502,12 +493,9 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="flex items-center justify-center mb-6">
-            <Zap className="w-12 h-12 text-learning-primary mr-4" />
-            <h2 className="text-4xl font-bold text-learning-primary">
-              Résilience face à l'imprévu
-            </h2>
-          </div>
+          <h2 className="text-4xl font-bold text-learning-primary mb-6">
+            Résilience face à l'imprévu
+          </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Testez vos réflexes face aux situations inattendues et développez votre capacité d'adaptation.
           </p>
@@ -703,12 +691,9 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="flex items-center justify-center mb-6">
-            <Brain className="w-12 h-12 text-learning-primary mr-4" />
-            <h2 className="text-4xl font-bold text-learning-primary">
-              Gestion des Priorités & Prise de Décision
-            </h2>
-          </div>
+          <h2 className="text-4xl font-bold text-learning-primary mb-6">
+            Gestion des Priorités & Prise de Décision
+          </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Maîtrisez la Matrice d'Eisenhower pour prendre des décisions éclairées,
             gérer efficacement votre temps et renforcer votre autonomie.
@@ -863,7 +848,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                 onClick={() => setCurrentPhase('practice')}
                 className="learning-button text-lg px-8 py-4"
               >
-                Passer �� la pratique →
+                Passer à la pratique →
               </button>
             </div>
           </div>
