@@ -1458,7 +1458,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
 
         {/* Phase Scénarios */}
         {currentPhase === 'scenarios' && (
-          <div className="space-y-8">
+          <div id="stress-scenarios" className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
