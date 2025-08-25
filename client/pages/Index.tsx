@@ -436,7 +436,10 @@ function ResultsDisplay({ responses, questions, onComplete, onContinue }: any) {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <button className="learning-button-secondary">
+        <button
+          onClick={() => exportToPDF(avgScore, questions, responses)}
+          className="learning-button-secondary"
+        >
           Exporter mon bilan PDF
         </button>
         <button 
