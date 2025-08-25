@@ -455,7 +455,7 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
   const scenarios = [
     {
       id: 0,
-      situation: "Votre r��union importante déborde de 30 minutes, mais vous avez un autre engagement familial prévu juste après...",
+      situation: "Votre réunion importante déborde de 30 minutes, mais vous avez un autre engagement familial prévu juste après...",
       choices: [
         { id: 'A', text: "J'interromps poliment la réunion pour respecter mon engagement", feedback: "Excellent ! Vous savez poser vos limites et honorer vos engagements personnels." },
         { id: 'B', text: "Je reste en réunion et j'annule mon engagement familial", feedback: "Attention à l'équilibre ! Vos proches méritent aussi votre respect des engagements." },
@@ -1062,7 +1062,7 @@ function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
     { id: 'apprentissage', label: 'Apprentissage', color: 'bg-yellow-100 border-yellow-300' }
   ];
 
-  const comfortZoneActions = [
+  const availableActions = [
     "Prendre la parole en public",
     "Proposer une idée innovante en réunion",
     "Aborder quelqu'un que je ne connais pas",
