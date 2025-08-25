@@ -1694,7 +1694,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
       choices: [
         { id: 'A', text: "Je lui dis de se calmer ou je raccroche", type: 'reactive' as const },
         { id: 'B', text: "J'écoute activement et reformule son problème", type: 'resilient' as const },
-        { id: 'C', text: "Je transfère immédiatement à mon manager", type: 'reactive' as const }
+        { id: 'C', text: "Je transf��re immédiatement à mon manager", type: 'reactive' as const }
       ]
     },
     {
@@ -2403,42 +2403,42 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
       title: "Auto-bilan 360°",
       keyLearning: "Conscience de soi et identification des forces personnelles",
       concepts: ["Auto-évaluation", "Forces personnelles", "Zones d'amélioration"],
-      icon: "🎯"
+      icon: "TARGET"
     },
     {
       id: 2,
       title: "Résilience face à l'imprévu",
       keyLearning: "Stratégies d'adaptation et développement du rituel minute",
       concepts: ["Gestion de l'imprévu", "Techniques d'adaptation", "Rituel de recadrage"],
-      icon: "⚡"
+      icon: "LIGHTNING"
     },
     {
       id: 3,
       title: "Gestion des priorités",
       keyLearning: "Matrice d'Eisenhower pour optimiser son temps et ses décisions",
       concepts: ["Urgent vs Important", "Planification", "Prise de décision"],
-      icon: "🧠"
+      icon: "BRAIN"
     },
     {
       id: 4,
       title: "Gestion du stress",
       keyLearning: "4 techniques concrètes pour adapter sa réponse au stress",
       concepts: ["Mécanismes du stress", "Techniques d'adaptation", "Profil personnel"],
-      icon: "🌊"
+      icon: "WAVE"
     },
     {
       id: 5,
       title: "Simulation stress extrême",
       keyLearning: "Test de résilience sous pression avec feedback immédiat",
       concepts: ["Résilience vs Réactivité", "Gestion de la pression", "Choix sous stress"],
-      icon: "🔥"
+      icon: "FIRE"
     },
     {
       id: 6,
       title: "Réseau de soutien",
       keyLearning: "Cartographie des relations et identification des ressources humaines",
       concepts: ["Types de soutien", "Proximité relationnelle", "Mobilisation du réseau"],
-      icon: "🌐"
+      icon: "NETWORK"
     }
   ];
 
