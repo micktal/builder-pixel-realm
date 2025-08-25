@@ -240,6 +240,13 @@ export default function Index() {
         onComplete={() => completeSection(6)}
         onNavigate={navigateToSection}
       />
+
+      {/* Section de synthèse finale */}
+      <ModuleSynthesisSection
+        progress={progress}
+        onComplete={() => completeSection(7)}
+        onNavigate={navigateToSection}
+      />
     </div>
   );
 }
