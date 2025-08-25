@@ -1032,105 +1032,168 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
   );
 }
 
-// Confidence Development Section Component
-function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
-  const [currentPhase, setCurrentPhase] = useState<'assessment' | 'successes' | 'comfort-zone'>('assessment');
-  const [strengths, setStrengths] = useState<Record<string, number>>({});
-  const [selectedStrengths, setSelectedStrengths] = useState<string[]>([]);
-  const [successes, setSuccesses] = useState<Array<{id: number, text: string, category: string, pride: number}>>([]);
-  const [newSuccess, setNewSuccess] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [comfortZoneLevel, setComfortZoneLevel] = useState(0);
-  const [comfortZoneActions, setComfortZoneActions] = useState<string[]>([]);
-  const [confidenceScore, setConfidenceScore] = useState(0);
+// Stress Management Section Component
+function StressManagementSection({ progress, onComplete, onNavigate }: any) {
+  const [currentPhase, setCurrentPhase] = useState<'theory' | 'techniques' | 'scenarios' | 'evaluation'>('theory');
+  const [stressFactors, setStressFactors] = useState<Record<string, number>>({});
+  const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
+  const [scenarioResults, setScenarioResults] = useState<Record<string, string>>({});
+  const [personalPlan, setPersonalPlan] = useState<string[]>([]);
 
-  const strengthsOptions = [
-    { id: 'communication', label: 'Communication', description: 'Capacité à exprimer clairement ses idées' },
-    { id: 'leadership', label: 'Leadership', description: 'Aptitude à guider et inspirer les autres' },
-    { id: 'creativite', label: 'Créativité', description: 'Capacité à trouver des solutions innovantes' },
-    { id: 'empathie', label: 'Empathie', description: 'Compréhension et connexion émotionnelle' },
-    { id: 'perseverance', label: 'Persévérance', description: 'Ténacité face aux obstacles' },
-    { id: 'adaptabilite', label: 'Adaptabilité', description: 'Flexibilité face au changement' },
-    { id: 'organisation', label: 'Organisation', description: 'Structuration et planification efficace' },
-    { id: 'apprentissage', label: 'Apprentissage', description: 'Capacité à acquérir de nouvelles compétences' }
+  const stressTypes = [
+    { id: 'workload', label: 'Surcharge de travail', description: 'Trop de tâches à accomplir dans un temps limité' },
+    { id: 'deadlines', label: 'Pression temporelle', description: 'Stress lié aux échéances et délais serrés' },
+    { id: 'conflict', label: 'Conflits relationnels', description: 'Tensions avec collègues, famille ou amis' },
+    { id: 'uncertainty', label: 'Incertitude', description: 'Manque de clarté sur l\'avenir ou les attentes' },
+    { id: 'perfectionism', label: 'Perfectionnisme', description: 'Exigences personnelles trop élevées' },
+    { id: 'change', label: 'Résistance au changement', description: 'Difficulté à s\'adapter aux nouveautés' }
   ];
 
-  const successCategories = [
-    { id: 'professionnel', label: 'Professionnel', color: 'bg-blue-100 border-blue-300' },
-    { id: 'personnel', label: 'Personnel', color: 'bg-green-100 border-green-300' },
-    { id: 'relationnel', label: 'Relationnel', color: 'bg-purple-100 border-purple-300' },
-    { id: 'apprentissage', label: 'Apprentissage', color: 'bg-yellow-100 border-yellow-300' }
+  const stressTechniques = [
+    {
+      id: 'cognitive',
+      name: 'Restructuration cognitive',
+      description: 'Identifier et modifier les pensées négatives automatiques',
+      steps: [
+        'Identifier la pensée stressante',
+        'Questionner sa validité',
+        'Rechercher des preuves contradictoires',
+        'Formuler une pensée plus réaliste'
+      ],
+      example: 'Pensée: "Je vais échouer" → "J\'ai les compétences nécessaires et je peux demander de l\'aide"'
+    },
+    {
+      id: 'anchoring',
+      name: 'Technique d\'ancrage 5-4-3-2-1',
+      description: 'Recentrage immédiat par stimulation sensorielle',
+      steps: [
+        '5 choses que vous voyez',
+        '4 choses que vous touchez',
+        '3 choses que vous entendez',
+        '2 choses que vous sentez',
+        '1 chose que vous goûtez'
+      ],
+      example: 'Utilisée en cas d\'anxiété soudaine pour revenir au moment présent'
+    },
+    {
+      id: 'planning',
+      name: 'Planification adaptative',
+      description: 'Organiser ses tâches pour réduire la surcharge mentale',
+      steps: [
+        'Lister toutes les tâches',
+        'Estimer le temps réaliste',
+        'Prioriser selon l\'urgence/importance',
+        'Prévoir des marges de sécurité'
+      ],
+      example: 'Bloquer 15min entre chaque réunion pour décompresser'
+    },
+    {
+      id: 'boundaries',
+      name: 'Définition des limites',
+      description: 'Apprendre à dire non et protéger son énergie',
+      steps: [
+        'Identifier ses valeurs prioritaires',
+        'Reconnaître ses signaux de surcharge',
+        'Formuler un "non" bienveillant',
+        'Proposer des alternatives si possible'
+      ],
+      example: '"Je ne peux pas prendre ce projet maintenant, mais je serai disponible la semaine prochaine"'
+    }
   ];
 
-  const availableActions = [
-    "Prendre la parole en public",
-    "Proposer une idée innovante en réunion",
-    "Aborder quelqu'un que je ne connais pas",
-    "Dire non à une demande déraisonnable",
-    "Demander une augmentation ou promotion",
-    "Essayer une nouvelle activité créative",
-    "Voyager seul(e) dans un endroit inconnu",
-    "Apprendre une nouvelle compétence technique"
+  const stressScenarios = [
+    {
+      id: 'meeting-overload',
+      title: 'Journée surchargée de réunions',
+      situation: 'Vous avez 6 réunions consécutives programmées aujourd\'hui. Vous sentez déjà l\'anxiété monter en regardant votre agenda.',
+      options: [
+        { id: 'A', text: 'Annuler certaines réunions non-critiques', technique: 'boundaries' },
+        { id: 'B', text: 'Prendre 2 minutes entre chaque réunion pour la technique 5-4-3-2-1', technique: 'anchoring' },
+        { id: 'C', text: 'Recadrer positivement: "C\'est une journée intense mais productive"', technique: 'cognitive' }
+      ]
+    },
+    {
+      id: 'project-deadline',
+      title: 'Projet en retard',
+      situation: 'Un projet important a pris du retard et l\'échéance approche. Votre manager commence à s\'impatienter.',
+      options: [
+        { id: 'A', text: 'Refaire une planification réaliste avec des étapes micro', technique: 'planning' },
+        { id: 'B', text: 'Communiquer proactivement les défis et négocier l\'échéance', technique: 'boundaries' },
+        { id: 'C', text: 'Remplacer "Je n\'y arriverai jamais" par "Je progresse étape par étape"', technique: 'cognitive' }
+      ]
+    },
+    {
+      id: 'conflict-colleague',
+      title: 'Conflit avec un collègue',
+      situation: 'Un collègue critique systématiquement vos propositions en réunion. Vous commencez à redouter ces moments.',
+      options: [
+        { id: 'A', text: 'Avant la réunion, visualiser une interaction positive', technique: 'cognitive' },
+        { id: 'B', text: 'Utiliser l\'ancrage sensoriel si la tension monte', technique: 'anchoring' },
+        { id: 'C', text: 'Définir des limites claires sur le type de feedback acceptable', technique: 'boundaries' }
+      ]
+    }
   ];
 
-  const rateStrength = (strengthId: string, rating: number) => {
-    setStrengths(prev => ({ ...prev, [strengthId]: rating }));
+  const rateStressFactor = (factorId: string, level: number) => {
+    setStressFactors(prev => ({ ...prev, [factorId]: level }));
   };
 
-  const toggleStrength = (strengthId: string) => {
-    setSelectedStrengths(prev =>
-      prev.includes(strengthId)
-        ? prev.filter(s => s !== strengthId)
-        : [...prev, strengthId]
+  const toggleTechnique = (techniqueId: string) => {
+    setSelectedTechniques(prev =>
+      prev.includes(techniqueId)
+        ? prev.filter(t => t !== techniqueId)
+        : [...prev, techniqueId]
     );
   };
 
-  const addSuccess = () => {
-    if (newSuccess.trim() && selectedCategory) {
-      setSuccesses(prev => [...prev, {
-        id: Date.now(),
-        text: newSuccess.trim(),
-        category: selectedCategory,
-        pride: 0
-      }]);
-      setNewSuccess('');
-      setSelectedCategory('');
-    }
+  const handleScenarioChoice = (scenarioId: string, choice: string) => {
+    setScenarioResults(prev => ({ ...prev, [scenarioId]: choice }));
   };
 
-  const updateSuccessPride = (successId: number, pride: number) => {
-    setSuccesses(prev => prev.map(success =>
-      success.id === successId ? { ...success, pride } : success
-    ));
-  };
+  const generatePersonalPlan = () => {
+    const plan = [];
 
-  const calculateConfidenceScore = () => {
-    const strengthsScore = Object.values(strengths).reduce((a, b) => a + b, 0) / Object.keys(strengths).length || 0;
-    const successesScore = successes.length > 0 ? successes.reduce((sum, s) => sum + s.pride, 0) / successes.length : 0;
-    const comfortZoneScore = comfortZoneLevel;
+    // Techniques sélectionnées
+    selectedTechniques.forEach(techId => {
+      const technique = stressTechniques.find(t => t.id === techId);
+      if (technique) {
+        plan.push(`Pratiquer la ${technique.name.toLowerCase()} quotidiennement`);
+      }
+    });
 
-    return Math.round((strengthsScore + successesScore + comfortZoneScore) / 3 * 20);
+    // Facteurs de stress les plus élevés
+    const highStressFactors = Object.entries(stressFactors)
+      .filter(([_, level]) => level >= 4)
+      .map(([factorId]) => stressTypes.find(t => t.id === factorId))
+      .filter(Boolean);
+
+    highStressFactors.forEach(factor => {
+      plan.push(`Développer des stratégies spécifiques pour ${factor?.label.toLowerCase()}`);
+    });
+
+    setPersonalPlan(plan);
   };
 
   const isPhaseComplete = (phase: string) => {
     switch (phase) {
-      case 'assessment': return Object.keys(strengths).length >= 5 && selectedStrengths.length >= 3;
-      case 'successes': return successes.length >= 3;
-      case 'comfort-zone': return comfortZoneLevel > 0 && comfortZoneActions.length >= 2;
+      case 'theory': return true; // Toujours considéré comme lu
+      case 'techniques': return selectedTechniques.length >= 2;
+      case 'scenarios': return Object.keys(scenarioResults).length >= 2;
+      case 'evaluation': return Object.keys(stressFactors).length >= 4;
       default: return false;
     }
   };
 
-  const isCompleted = isPhaseComplete('assessment') && isPhaseComplete('successes') && isPhaseComplete('comfort-zone');
+  const isCompleted = isPhaseComplete('techniques') && isPhaseComplete('scenarios') && isPhaseComplete('evaluation');
 
   useEffect(() => {
     if (isCompleted) {
-      setConfidenceScore(calculateConfidenceScore());
+      generatePersonalPlan();
     }
-  }, [strengths, successes, comfortZoneLevel]);
+  }, [stressFactors, selectedTechniques, scenarioResults]);
 
   return (
-    <section id="section-4" className="min-h-screen py-20 px-4 bg-gradient-to-b from-blue-50 to-white">
+    <section id="section-4" className="min-h-screen py-20 px-4 bg-gradient-to-b from-orange-50 to-white">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -1140,20 +1203,50 @@ function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-learning-primary mb-6">
-            Développement de la Confiance en Soi
+            Gestion du Stress au Quotidien
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Renforcez votre confiance par la reconnaissance de vos forces, la célébration de vos réussites,
-            et l'exploration progressive de nouvelles zones de croissance.
+            Apprenez à identifier, comprendre et gérer le stress avec des techniques concrètes
+            et des stratégies personnalisées pour votre bien-être durable.
           </p>
+        </motion.div>
+
+        {/* Objectifs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="learning-card p-6 mb-12"
+        >
+          <h3 className="text-xl font-bold text-learning-primary mb-4">Objectifs de cette section :</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="flex items-start">
+              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">1</div>
+              <span>Comprendre les mécanismes physiologiques et psychologiques du stress</span>
+            </div>
+            <div className="flex items-start">
+              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">2</div>
+              <span>Maîtriser 4 techniques concrètes de gestion du stress</span>
+            </div>
+            <div className="flex items-start">
+              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">3</div>
+              <span>Appliquer ces techniques dans des situations réelles</span>
+            </div>
+            <div className="flex items-start">
+              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">4</div>
+              <span>Élaborer votre plan personnel de gestion du stress</span>
+            </div>
+          </div>
         </motion.div>
 
         {/* Navigation des phases */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {[
-            { id: 'assessment', label: 'Forces personnelles', desc: 'Auto-évaluation', icon: '💪' },
-            { id: 'successes', label: 'Réussites passées', desc: 'Reconnaissance', icon: '🏆' },
-            { id: 'comfort-zone', label: 'Zone de confort', desc: 'Extension', icon: '🚀' }
+            { id: 'theory', label: 'Comprendre', desc: 'Théorie' },
+            { id: 'techniques', label: 'Apprendre', desc: 'Techniques' },
+            { id: 'scenarios', label: 'Pratiquer', desc: 'Scénarios' },
+            { id: 'evaluation', label: 'Personnaliser', desc: 'Mon profil' }
           ].map(phase => (
             <motion.button
               key={phase.id}
@@ -1174,7 +1267,6 @@ function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
               whileHover={{ scale: currentPhase === phase.id ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="text-2xl mb-1">{phase.icon}</div>
               <div className="font-bold">{phase.label}</div>
               <div className="text-xs opacity-75">{phase.desc}</div>
               {isPhaseComplete(phase.id) && (
@@ -1188,8 +1280,8 @@ function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
           ))}
         </div>
 
-        {/* Phase 1: Auto-évaluation des forces */}
-        {currentPhase === 'assessment' && (
+        {/* Phase Théorie */}
+        {currentPhase === 'theory' && (
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -1197,87 +1289,157 @@ function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
               className="learning-card p-8"
             >
               <h3 className="text-2xl font-bold text-learning-primary mb-6">
-                Identifiez vos forces personnelles
+                Comprendre le stress : Mécanismes et impact
+              </h3>
+
+              <div className="prose max-w-none text-gray-700 space-y-6">
+                <div className="bg-orange-50 p-6 rounded-xl">
+                  <h4 className="font-semibold text-learning-primary mb-3">Qu'est-ce que le stress ?</h4>
+                  <p>
+                    Le stress est une <strong>réaction d'adaptation naturelle</strong> de notre organisme face à une situation
+                    perçue comme menaçante ou exigeante. Il se manifeste par une cascade de réactions physiologiques,
+                    émotionnelles et comportementales destinées à nous préparer à l'action.
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="p-6 bg-red-50 rounded-xl">
+                    <h4 className="font-semibold text-learning-primary mb-3">Phase d'alarme</h4>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Libération d'adrénaline et cortisol</li>
+                      <li>• Accélération cardiaque et respiratoire</li>
+                      <li>• Tension musculaire</li>
+                      <li>• Hypervigilance</li>
+                    </ul>
+                  </div>
+                  <div className="p-6 bg-yellow-50 rounded-xl">
+                    <h4 className="font-semibold text-learning-primary mb-3">Phase de résistance</h4>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Adaptation à la situation</li>
+                      <li>• Mobilisation des ressources</li>
+                      <li>• Maintien de la performance</li>
+                      <li>• Fatigue progressive</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl">
+                  <h4 className="font-semibold text-learning-primary mb-3">Stress aigu vs chronique</h4>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <h5 className="font-semibold text-learning-primary mb-2">Stress aigu (positif)</h5>
+                      <p className="text-sm">Réaction ponctuelle qui améliore les performances et disparaît rapidement.
+                      Exemple : présentation importante, entretien d'embauche.</p>
+                    </div>
+                    <div>
+                      <h5 className="font-semibold text-learning-primary mb-2">Stress chronique (nocif)</h5>
+                      <p className="text-sm">Exposition prolongée aux facteurs stressants qui épuise l'organisme
+                      et peut mener au burnout, anxiété et problèmes de santé.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6 bg-learning-primary bg-opacity-10 rounded-xl">
+                  <h4 className="font-semibold text-learning-primary mb-3">Impact sur la performance</h4>
+                  <p>
+                    La <strong>courbe de performance de Yerkes-Dodson</strong> montre qu'un niveau modéré de stress
+                    optimise nos capacités, mais qu'au-delà d'un seuil, la performance chute drastiquement.
+                    L'objectif n'est donc pas d'éliminer tout stress, mais de le maintenir dans une zone optimale.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Phase Techniques */}
+        {currentPhase === 'techniques' && (
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="learning-card p-8"
+            >
+              <h3 className="text-2xl font-bold text-learning-primary mb-6">
+                4 Techniques essentielles de gestion du stress
               </h3>
               <p className="text-gray-600 mb-8">
-                Évaluez-vous sur ces différentes dimensions, puis sélectionnez vos 3 forces principales.
+                Sélectionnez au moins 2 techniques que vous souhaitez intégrer dans votre quotidien.
               </p>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                {strengthsOptions.map((strength, index) => (
+              <div className="space-y-6">
+                {stressTechniques.map((technique, index) => (
                   <motion.div
-                    key={strength.id}
+                    key={technique.id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{ delay: index * 0.2 }}
                     className={`p-6 rounded-xl border-2 transition-all duration-300 ${
-                      selectedStrengths.includes(strength.id)
+                      selectedTechniques.includes(technique.id)
                         ? 'border-learning-primary bg-learning-accent bg-opacity-20 ring-2 ring-learning-primary'
                         : 'border-gray-200 hover:border-learning-primary'
                     }`}
                   >
                     <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h4 className="font-semibold text-learning-primary mb-2">{strength.label}</h4>
-                        <p className="text-sm text-gray-600">{strength.description}</p>
+                      <div className="flex-1">
+                        <h4 className="text-xl font-semibold text-learning-primary mb-2">{technique.name}</h4>
+                        <p className="text-gray-600 mb-4">{technique.description}</p>
+
+                        <div className="mb-4">
+                          <h5 className="font-semibold text-learning-primary mb-2">Étapes :</h5>
+                          <ol className="space-y-1">
+                            {technique.steps.map((step, i) => (
+                              <li key={i} className="flex items-start">
+                                <span className="bg-learning-primary text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold mr-2 mt-0.5">
+                                  {i + 1}
+                                </span>
+                                <span className="text-sm text-gray-700">{step}</span>
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+
+                        <div className="p-3 bg-gray-50 rounded-lg">
+                          <h5 className="font-semibold text-learning-primary mb-1">Exemple concret :</h5>
+                          <p className="text-sm text-gray-700 italic">{technique.example}</p>
+                        </div>
                       </div>
+
                       <motion.button
-                        onClick={() => toggleStrength(strength.id)}
-                        className={`ml-4 w-8 h-8 rounded-full border-2 transition-all duration-300 ${
-                          selectedStrengths.includes(strength.id)
+                        onClick={() => toggleTechnique(technique.id)}
+                        className={`ml-4 w-12 h-12 rounded-full border-2 transition-all duration-300 flex items-center justify-center ${
+                          selectedTechniques.includes(technique.id)
                             ? 'bg-learning-primary border-learning-primary text-white'
                             : 'border-gray-300 hover:border-learning-primary'
                         }`}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                       >
-                        {selectedStrengths.includes(strength.id) ? '✓' : ''}
+                        {selectedTechniques.includes(technique.id) ? '✓' : '+'}
                       </motion.button>
-                    </div>
-
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500">Faible</span>
-                      <div className="flex space-x-1">
-                        {[1, 2, 3, 4, 5].map((rating) => (
-                          <motion.button
-                            key={rating}
-                            onClick={() => rateStrength(strength.id, rating)}
-                            className={`w-8 h-8 rounded-full transition-all duration-300 ${
-                              strengths[strength.id] >= rating
-                                ? 'bg-learning-primary text-white'
-                                : 'bg-gray-200 hover:bg-learning-accent'
-                            }`}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                          >
-                            {rating}
-                          </motion.button>
-                        ))}
-                      </div>
-                      <span className="text-xs text-gray-500">Fort</span>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              {selectedStrengths.length === 3 && Object.keys(strengths).length >= 5 && (
+              {selectedTechniques.length >= 2 && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-8 p-6 bg-learning-primary bg-opacity-10 rounded-xl text-center"
                 >
-                  <h4 className="font-bold text-learning-primary mb-3">Vos 3 forces principales :</h4>
+                  <h4 className="font-bold text-learning-primary mb-3">Techniques sélectionnées :</h4>
                   <div className="flex flex-wrap justify-center gap-3">
-                    {selectedStrengths.map(strengthId => {
-                      const strength = strengthsOptions.find(s => s.id === strengthId);
+                    {selectedTechniques.map(techId => {
+                      const technique = stressTechniques.find(t => t.id === techId);
                       return (
                         <motion.div
-                          key={strengthId}
+                          key={techId}
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           className="bg-learning-primary text-white px-4 py-2 rounded-full font-medium"
                         >
-                          {strength?.label}
+                          {technique?.name}
                         </motion.div>
                       );
                     })}
@@ -1288,8 +1450,8 @@ function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
           </div>
         )}
 
-        {/* Phase 2: Réussites passées */}
-        {currentPhase === 'successes' && (
+        {/* Phase Scénarios */}
+        {currentPhase === 'scenarios' && (
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -1297,93 +1459,94 @@ function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
               className="learning-card p-8"
             >
               <h3 className="text-2xl font-bold text-learning-primary mb-6">
-                Reconnaissez vos réussites passées
+                Scénarios pratiques d'application
               </h3>
               <p className="text-gray-600 mb-8">
-                Identifiez au moins 3 réussites dont vous êtes fier(e), dans différents domaines de votre vie.
+                Choisissez la meilleure stratégie pour chaque situation stressante.
               </p>
 
-              {/* Ajout de nouvelles réussites */}
-              <div className="grid md:grid-cols-3 gap-4 mb-8">
-                <input
-                  type="text"
-                  value={newSuccess}
-                  onChange={(e) => setNewSuccess(e.target.value)}
-                  placeholder="Décrivez une réussite..."
-                  className="col-span-2 p-3 border-2 border-gray-200 rounded-lg focus:border-learning-primary focus:outline-none"
-                />
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="p-3 border-2 border-gray-200 rounded-lg focus:border-learning-primary focus:outline-none"
-                >
-                  <option value="">Choisir catégorie</option>
-                  {successCategories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.label}</option>
-                  ))}
-                </select>
-              </div>
+              <div className="space-y-8">
+                {stressScenarios.map((scenario, index) => (
+                  <motion.div
+                    key={scenario.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.2 }}
+                    className="p-6 border-2 border-gray-200 rounded-xl"
+                  >
+                    <h4 className="text-xl font-semibold text-learning-primary mb-4">{scenario.title}</h4>
+                    <div className="p-4 bg-orange-50 rounded-lg mb-6">
+                      <p className="text-gray-700 italic">{scenario.situation}</p>
+                    </div>
 
-              <div className="text-center mb-8">
-                <motion.button
-                  onClick={addSuccess}
-                  disabled={!newSuccess.trim() || !selectedCategory}
-                  className="learning-button-secondary px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
-                  whileHover={{ scale: newSuccess.trim() && selectedCategory ? 1.05 : 1 }}
-                >
-                  Ajouter cette réussite
-                </motion.button>
-              </div>
+                    <div className="space-y-3">
+                      <h5 className="font-semibold text-learning-primary">Quelle stratégie choisissez-vous ?</h5>
+                      {scenario.options.map(option => {
+                        const technique = stressTechniques.find(t => t.id === option.technique);
+                        const isSelected = scenarioResults[scenario.id] === option.id;
 
-              {/* Liste des réussites */}
-              <div className="grid md:grid-cols-2 gap-6">
-                {successes.map((success, index) => {
-                  const category = successCategories.find(c => c.id === success.category);
-                  return (
-                    <motion.div
-                      key={success.id}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                      className={`p-6 rounded-xl border-2 ${category?.color}`}
-                    >
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <h4 className="font-semibold text-learning-primary mb-2">{success.text}</h4>
-                          <span className="text-xs px-2 py-1 bg-white rounded-full">{category?.label}</span>
-                        </div>
-                      </div>
+                        return (
+                          <motion.button
+                            key={option.id}
+                            onClick={() => handleScenarioChoice(scenario.id, option.id)}
+                            className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-300 ${
+                              isSelected
+                                ? 'border-learning-primary bg-learning-accent bg-opacity-20'
+                                : 'border-gray-200 hover:border-learning-primary'
+                            }`}
+                            whileHover={{ scale: 1.01 }}
+                            whileTap={{ scale: 0.99 }}
+                          >
+                            <div className="flex justify-between items-start">
+                              <div className="flex-1">
+                                <div className="flex items-center mb-2">
+                                  <span className="bg-learning-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mr-3">
+                                    {option.id}
+                                  </span>
+                                  <span className="font-medium">{option.text}</span>
+                                </div>
+                                <div className="ml-9">
+                                  <span className="text-xs px-2 py-1 bg-learning-primary text-white rounded-full">
+                                    Technique: {technique?.name}
+                                  </span>
+                                </div>
+                              </div>
+                              {isSelected && (
+                                <motion.div
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-sm"
+                                >
+                                  ✓
+                                </motion.div>
+                              )}
+                            </div>
+                          </motion.button>
+                        );
+                      })}
+                    </div>
 
-                      <div className="mb-4">
-                        <p className="text-sm text-gray-600 mb-2">Niveau de fierté :</p>
-                        <div className="flex space-x-2">
-                          {[1, 2, 3, 4, 5].map((level) => (
-                            <motion.button
-                              key={level}
-                              onClick={() => updateSuccessPride(success.id, level)}
-                              className={`w-8 h-8 rounded-full transition-all duration-300 ${
-                                success.pride >= level
-                                  ? 'bg-yellow-400 text-white'
-                                  : 'bg-gray-200 hover:bg-yellow-200'
-                              }`}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                            >
-                              ⭐
-                            </motion.button>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                    {scenarioResults[scenario.id] && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-4 p-4 bg-green-50 rounded-lg"
+                      >
+                        <p className="text-green-700">
+                          <strong>Excellent choix !</strong> Cette approche vous permettra de gérer efficacement
+                          la situation en utilisant une technique concrète.
+                        </p>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
           </div>
         )}
 
-        {/* Phase 3: Zone de confort */}
-        {currentPhase === 'comfort-zone' && (
+        {/* Phase Évaluation */}
+        {currentPhase === 'evaluation' && (
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -1391,115 +1554,95 @@ function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
               className="learning-card p-8"
             >
               <h3 className="text-2xl font-bold text-learning-primary mb-6">
-                Explorez votre zone de confort
+                Votre profil de stress personnel
               </h3>
               <p className="text-gray-600 mb-8">
-                Évaluez votre niveau de confort actuel et choisissez des actions pour l'étendre progressivement.
+                Évaluez l'intensité de ces facteurs de stress dans votre quotidien (1 = faible, 5 = très élevé).
               </p>
 
-              {/* Échelle de confort */}
-              <div className="mb-8">
-                <h4 className="font-semibold text-learning-primary mb-4">Votre niveau de prise de risque actuel :</h4>
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-sm text-gray-500">Très prudent(e)</span>
-                  <span className="text-sm text-gray-500">Très audacieux(se)</span>
-                </div>
-                <div className="relative">
-                  <input
-                    type="range"
-                    min="1"
-                    max="5"
-                    value={comfortZoneLevel}
-                    onChange={(e) => setComfortZoneLevel(parseInt(e.target.value))}
-                    className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-2">
-                    {[1, 2, 3, 4, 5].map(num => (
-                      <span key={num} className={comfortZoneLevel >= num ? 'text-learning-primary font-bold' : ''}>
-                        {num}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                {stressTypes.map((stressType, index) => (
+                  <motion.div
+                    key={stressType.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="p-6 rounded-xl border-2 border-gray-200 hover:border-learning-primary transition-colors"
+                  >
+                    <h4 className="font-semibold text-learning-primary mb-2">{stressType.label}</h4>
+                    <p className="text-sm text-gray-600 mb-4">{stressType.description}</p>
 
-              {/* Actions hors zone de confort */}
-              <div>
-                <h4 className="font-semibold text-learning-primary mb-4">
-                  Actions pour sortir de votre zone de confort (choisissez-en 2) :
-                </h4>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {availableActions.map((action, index) => (
-                    <motion.button
-                      key={index}
-                      onClick={() => {
-                        setComfortZoneActions(prev =>
-                          prev.includes(action)
-                            ? prev.filter(a => a !== action)
-                            : prev.length < 2 ? [...prev, action] : prev
-                        );
-                      }}
-                      className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
-                        comfortZoneActions.includes(action)
-                          ? 'border-learning-primary bg-learning-accent bg-opacity-20'
-                          : 'border-gray-200 hover:border-learning-primary'
-                      }`}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      disabled={!comfortZoneActions.includes(action) && comfortZoneActions.length >= 2}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-700">{action}</span>
-                        {comfortZoneActions.includes(action) && (
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm"
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">Faible</span>
+                      <div className="flex space-x-1">
+                        {[1, 2, 3, 4, 5].map((level) => (
+                          <motion.button
+                            key={level}
+                            onClick={() => rateStressFactor(stressType.id, level)}
+                            className={`w-8 h-8 rounded-full transition-all duration-300 ${
+                              stressFactors[stressType.id] >= level
+                                ? 'bg-orange-500 text-white'
+                                : 'bg-gray-200 hover:bg-orange-200'
+                            }`}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
                           >
-                            ✓
-                          </motion.div>
-                        )}
+                            {level}
+                          </motion.button>
+                        ))}
                       </div>
-                    </motion.button>
-                  ))}
-                </div>
+                      <span className="text-xs text-gray-500">Élevé</span>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
           </div>
         )}
 
         {/* Résultat final */}
-        {isCompleted && (
+        {isCompleted && personalPlan.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="learning-card p-8 text-center"
           >
             <h3 className="text-3xl font-bold text-learning-primary mb-6">
-              Votre profil de confiance
+              Votre plan personnel de gestion du stress
             </h3>
 
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.3 }}
-              className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-learning-primary to-learning-accent flex items-center justify-center"
-            >
-              <span className="text-3xl font-bold text-white">{confidenceScore}%</span>
-            </motion.div>
-
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="p-4 bg-blue-50 rounded-xl">
-                <h4 className="font-bold text-learning-primary mb-2">Forces identifiées</h4>
-                <p className="text-sm text-gray-600">{selectedStrengths.length} forces principales</p>
+              <div className="p-4 bg-orange-50 rounded-xl">
+                <h4 className="font-bold text-learning-primary mb-2">Techniques maîtrisées</h4>
+                <p className="text-sm text-gray-600">{selectedTechniques.length} techniques sélectionnées</p>
               </div>
               <div className="p-4 bg-green-50 rounded-xl">
-                <h4 className="font-bold text-learning-primary mb-2">Réussites célébrées</h4>
-                <p className="text-sm text-gray-600">{successes.length} réussites reconnues</p>
+                <h4 className="font-bold text-learning-primary mb-2">Scénarios pratiqués</h4>
+                <p className="text-sm text-gray-600">{Object.keys(scenarioResults).length} situations résolues</p>
               </div>
-              <div className="p-4 bg-purple-50 rounded-xl">
-                <h4 className="font-bold text-learning-primary mb-2">Zone de croissance</h4>
-                <p className="text-sm text-gray-600">Niveau {comfortZoneLevel}/5</p>
+              <div className="p-4 bg-blue-50 rounded-xl">
+                <h4 className="font-bold text-learning-primary mb-2">Profil évalué</h4>
+                <p className="text-sm text-gray-600">{Object.keys(stressFactors).length} facteurs identifiés</p>
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <h4 className="font-bold text-learning-primary mb-4">Actions recommandées :</h4>
+              <div className="space-y-2">
+                {personalPlan.map((action, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex items-center p-3 bg-learning-accent bg-opacity-20 rounded-lg"
+                  >
+                    <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3">
+                      {index + 1}
+                    </div>
+                    <span>{action}</span>
+                  </motion.div>
+                ))}
               </div>
             </div>
 
