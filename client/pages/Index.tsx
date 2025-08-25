@@ -455,7 +455,7 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
   const scenarios = [
     {
       id: 0,
-      situation: "Votre réunion importante déborde de 30 minutes, mais vous avez un autre engagement familial prévu juste après...",
+      situation: "Votre r��union importante déborde de 30 minutes, mais vous avez un autre engagement familial prévu juste après...",
       choices: [
         { id: 'A', text: "J'interromps poliment la réunion pour respecter mon engagement", feedback: "Excellent ! Vous savez poser vos limites et honorer vos engagements personnels." },
         { id: 'B', text: "Je reste en réunion et j'annule mon engagement familial", feedback: "Attention à l'équilibre ! Vos proches méritent aussi votre respect des engagements." },
@@ -1025,6 +1025,493 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                 Continuer vers les ressources de soutien
               </button>
             </div>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// Confidence Development Section Component
+function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
+  const [currentPhase, setCurrentPhase] = useState<'assessment' | 'successes' | 'comfort-zone'>('assessment');
+  const [strengths, setStrengths] = useState<Record<string, number>>({});
+  const [selectedStrengths, setSelectedStrengths] = useState<string[]>([]);
+  const [successes, setSuccesses] = useState<Array<{id: number, text: string, category: string, pride: number}>>([]);
+  const [newSuccess, setNewSuccess] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [comfortZoneLevel, setComfortZoneLevel] = useState(0);
+  const [comfortZoneActions, setComfortZoneActions] = useState<string[]>([]);
+  const [confidenceScore, setConfidenceScore] = useState(0);
+
+  const strengthsOptions = [
+    { id: 'communication', label: 'Communication', description: 'Capacité à exprimer clairement ses idées' },
+    { id: 'leadership', label: 'Leadership', description: 'Aptitude à guider et inspirer les autres' },
+    { id: 'creativite', label: 'Créativité', description: 'Capacité à trouver des solutions innovantes' },
+    { id: 'empathie', label: 'Empathie', description: 'Compréhension et connexion émotionnelle' },
+    { id: 'perseverance', label: 'Persévérance', description: 'Ténacité face aux obstacles' },
+    { id: 'adaptabilite', label: 'Adaptabilité', description: 'Flexibilité face au changement' },
+    { id: 'organisation', label: 'Organisation', description: 'Structuration et planification efficace' },
+    { id: 'apprentissage', label: 'Apprentissage', description: 'Capacité à acquérir de nouvelles compétences' }
+  ];
+
+  const successCategories = [
+    { id: 'professionnel', label: 'Professionnel', color: 'bg-blue-100 border-blue-300' },
+    { id: 'personnel', label: 'Personnel', color: 'bg-green-100 border-green-300' },
+    { id: 'relationnel', label: 'Relationnel', color: 'bg-purple-100 border-purple-300' },
+    { id: 'apprentissage', label: 'Apprentissage', color: 'bg-yellow-100 border-yellow-300' }
+  ];
+
+  const comfortZoneActions = [
+    "Prendre la parole en public",
+    "Proposer une idée innovante en réunion",
+    "Aborder quelqu'un que je ne connais pas",
+    "Dire non à une demande déraisonnable",
+    "Demander une augmentation ou promotion",
+    "Essayer une nouvelle activité créative",
+    "Voyager seul(e) dans un endroit inconnu",
+    "Apprendre une nouvelle compétence technique"
+  ];
+
+  const rateStrength = (strengthId: string, rating: number) => {
+    setStrengths(prev => ({ ...prev, [strengthId]: rating }));
+  };
+
+  const toggleStrength = (strengthId: string) => {
+    setSelectedStrengths(prev =>
+      prev.includes(strengthId)
+        ? prev.filter(s => s !== strengthId)
+        : [...prev, strengthId]
+    );
+  };
+
+  const addSuccess = () => {
+    if (newSuccess.trim() && selectedCategory) {
+      setSuccesses(prev => [...prev, {
+        id: Date.now(),
+        text: newSuccess.trim(),
+        category: selectedCategory,
+        pride: 0
+      }]);
+      setNewSuccess('');
+      setSelectedCategory('');
+    }
+  };
+
+  const updateSuccessPride = (successId: number, pride: number) => {
+    setSuccesses(prev => prev.map(success =>
+      success.id === successId ? { ...success, pride } : success
+    ));
+  };
+
+  const calculateConfidenceScore = () => {
+    const strengthsScore = Object.values(strengths).reduce((a, b) => a + b, 0) / Object.keys(strengths).length || 0;
+    const successesScore = successes.length > 0 ? successes.reduce((sum, s) => sum + s.pride, 0) / successes.length : 0;
+    const comfortZoneScore = comfortZoneLevel;
+
+    return Math.round((strengthsScore + successesScore + comfortZoneScore) / 3 * 20);
+  };
+
+  const isPhaseComplete = (phase: string) => {
+    switch (phase) {
+      case 'assessment': return Object.keys(strengths).length >= 5 && selectedStrengths.length >= 3;
+      case 'successes': return successes.length >= 3;
+      case 'comfort-zone': return comfortZoneLevel > 0 && comfortZoneActions.length >= 2;
+      default: return false;
+    }
+  };
+
+  const isCompleted = isPhaseComplete('assessment') && isPhaseComplete('successes') && isPhaseComplete('comfort-zone');
+
+  useEffect(() => {
+    if (isCompleted) {
+      setConfidenceScore(calculateConfidenceScore());
+    }
+  }, [strengths, successes, comfortZoneLevel]);
+
+  return (
+    <section id="section-4" className="min-h-screen py-20 px-4 bg-gradient-to-b from-blue-50 to-white">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl font-bold text-learning-primary mb-6">
+            Développement de la Confiance en Soi
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Renforcez votre confiance par la reconnaissance de vos forces, la célébration de vos réussites,
+            et l'exploration progressive de nouvelles zones de croissance.
+          </p>
+        </motion.div>
+
+        {/* Navigation des phases */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {[
+            { id: 'assessment', label: 'Forces personnelles', desc: 'Auto-évaluation', icon: '💪' },
+            { id: 'successes', label: 'Réussites passées', desc: 'Reconnaissance', icon: '🏆' },
+            { id: 'comfort-zone', label: 'Zone de confort', desc: 'Extension', icon: '🚀' }
+          ].map(phase => (
+            <motion.button
+              key={phase.id}
+              onClick={() => {
+                setCurrentPhase(phase.id as any);
+                setTimeout(() => {
+                  const section = document.getElementById('section-4');
+                  if (section) {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }, 100);
+              }}
+              className={`px-6 py-4 rounded-xl font-medium transition-all duration-300 flex flex-col items-center ${
+                currentPhase === phase.id
+                  ? 'bg-learning-primary text-white shadow-lg scale-105'
+                  : 'bg-white text-learning-primary border-2 border-learning-primary hover:bg-learning-accent'
+              }`}
+              whileHover={{ scale: currentPhase === phase.id ? 1.05 : 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="text-2xl mb-1">{phase.icon}</div>
+              <div className="font-bold">{phase.label}</div>
+              <div className="text-xs opacity-75">{phase.desc}</div>
+              {isPhaseComplete(phase.id) && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="mt-1 w-2 h-2 bg-green-400 rounded-full"
+                />
+              )}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Phase 1: Auto-évaluation des forces */}
+        {currentPhase === 'assessment' && (
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="learning-card p-8"
+            >
+              <h3 className="text-2xl font-bold text-learning-primary mb-6">
+                Identifiez vos forces personnelles
+              </h3>
+              <p className="text-gray-600 mb-8">
+                Évaluez-vous sur ces différentes dimensions, puis sélectionnez vos 3 forces principales.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {strengthsOptions.map((strength, index) => (
+                  <motion.div
+                    key={strength.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`p-6 rounded-xl border-2 transition-all duration-300 ${
+                      selectedStrengths.includes(strength.id)
+                        ? 'border-learning-primary bg-learning-accent bg-opacity-20 ring-2 ring-learning-primary'
+                        : 'border-gray-200 hover:border-learning-primary'
+                    }`}
+                  >
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="font-semibold text-learning-primary mb-2">{strength.label}</h4>
+                        <p className="text-sm text-gray-600">{strength.description}</p>
+                      </div>
+                      <motion.button
+                        onClick={() => toggleStrength(strength.id)}
+                        className={`ml-4 w-8 h-8 rounded-full border-2 transition-all duration-300 ${
+                          selectedStrengths.includes(strength.id)
+                            ? 'bg-learning-primary border-learning-primary text-white'
+                            : 'border-gray-300 hover:border-learning-primary'
+                        }`}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        {selectedStrengths.includes(strength.id) ? '✓' : ''}
+                      </motion.button>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">Faible</span>
+                      <div className="flex space-x-1">
+                        {[1, 2, 3, 4, 5].map((rating) => (
+                          <motion.button
+                            key={rating}
+                            onClick={() => rateStrength(strength.id, rating)}
+                            className={`w-8 h-8 rounded-full transition-all duration-300 ${
+                              strengths[strength.id] >= rating
+                                ? 'bg-learning-primary text-white'
+                                : 'bg-gray-200 hover:bg-learning-accent'
+                            }`}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            {rating}
+                          </motion.button>
+                        ))}
+                      </div>
+                      <span className="text-xs text-gray-500">Fort</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {selectedStrengths.length === 3 && Object.keys(strengths).length >= 5 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-8 p-6 bg-learning-primary bg-opacity-10 rounded-xl text-center"
+                >
+                  <h4 className="font-bold text-learning-primary mb-3">Vos 3 forces principales :</h4>
+                  <div className="flex flex-wrap justify-center gap-3">
+                    {selectedStrengths.map(strengthId => {
+                      const strength = strengthsOptions.find(s => s.id === strengthId);
+                      return (
+                        <motion.div
+                          key={strengthId}
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="bg-learning-primary text-white px-4 py-2 rounded-full font-medium"
+                        >
+                          {strength?.label}
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
+        )}
+
+        {/* Phase 2: Réussites passées */}
+        {currentPhase === 'successes' && (
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="learning-card p-8"
+            >
+              <h3 className="text-2xl font-bold text-learning-primary mb-6">
+                Reconnaissez vos réussites passées
+              </h3>
+              <p className="text-gray-600 mb-8">
+                Identifiez au moins 3 réussites dont vous êtes fier(e), dans différents domaines de votre vie.
+              </p>
+
+              {/* Ajout de nouvelles réussites */}
+              <div className="grid md:grid-cols-3 gap-4 mb-8">
+                <input
+                  type="text"
+                  value={newSuccess}
+                  onChange={(e) => setNewSuccess(e.target.value)}
+                  placeholder="Décrivez une réussite..."
+                  className="col-span-2 p-3 border-2 border-gray-200 rounded-lg focus:border-learning-primary focus:outline-none"
+                />
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="p-3 border-2 border-gray-200 rounded-lg focus:border-learning-primary focus:outline-none"
+                >
+                  <option value="">Choisir catégorie</option>
+                  {successCategories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="text-center mb-8">
+                <motion.button
+                  onClick={addSuccess}
+                  disabled={!newSuccess.trim() || !selectedCategory}
+                  className="learning-button-secondary px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={{ scale: newSuccess.trim() && selectedCategory ? 1.05 : 1 }}
+                >
+                  Ajouter cette réussite
+                </motion.button>
+              </div>
+
+              {/* Liste des réussites */}
+              <div className="grid md:grid-cols-2 gap-6">
+                {successes.map((success, index) => {
+                  const category = successCategories.find(c => c.id === success.category);
+                  return (
+                    <motion.div
+                      key={success.id}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      className={`p-6 rounded-xl border-2 ${category?.color}`}
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h4 className="font-semibold text-learning-primary mb-2">{success.text}</h4>
+                          <span className="text-xs px-2 py-1 bg-white rounded-full">{category?.label}</span>
+                        </div>
+                      </div>
+
+                      <div className="mb-4">
+                        <p className="text-sm text-gray-600 mb-2">Niveau de fierté :</p>
+                        <div className="flex space-x-2">
+                          {[1, 2, 3, 4, 5].map((level) => (
+                            <motion.button
+                              key={level}
+                              onClick={() => updateSuccessPride(success.id, level)}
+                              className={`w-8 h-8 rounded-full transition-all duration-300 ${
+                                success.pride >= level
+                                  ? 'bg-yellow-400 text-white'
+                                  : 'bg-gray-200 hover:bg-yellow-200'
+                              }`}
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              ⭐
+                            </motion.button>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Phase 3: Zone de confort */}
+        {currentPhase === 'comfort-zone' && (
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="learning-card p-8"
+            >
+              <h3 className="text-2xl font-bold text-learning-primary mb-6">
+                Explorez votre zone de confort
+              </h3>
+              <p className="text-gray-600 mb-8">
+                Évaluez votre niveau de confort actuel et choisissez des actions pour l'étendre progressivement.
+              </p>
+
+              {/* Échelle de confort */}
+              <div className="mb-8">
+                <h4 className="font-semibold text-learning-primary mb-4">Votre niveau de prise de risque actuel :</h4>
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-sm text-gray-500">Très prudent(e)</span>
+                  <span className="text-sm text-gray-500">Très audacieux(se)</span>
+                </div>
+                <div className="relative">
+                  <input
+                    type="range"
+                    min="1"
+                    max="5"
+                    value={comfortZoneLevel}
+                    onChange={(e) => setComfortZoneLevel(parseInt(e.target.value))}
+                    className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-2">
+                    {[1, 2, 3, 4, 5].map(num => (
+                      <span key={num} className={comfortZoneLevel >= num ? 'text-learning-primary font-bold' : ''}>
+                        {num}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions hors zone de confort */}
+              <div>
+                <h4 className="font-semibold text-learning-primary mb-4">
+                  Actions pour sortir de votre zone de confort (choisissez-en 2) :
+                </h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {comfortZoneActions.map((action, index) => (
+                    <motion.button
+                      key={index}
+                      onClick={() => {
+                        setComfortZoneActions(prev =>
+                          prev.includes(action)
+                            ? prev.filter(a => a !== action)
+                            : prev.length < 2 ? [...prev, action] : prev
+                        );
+                      }}
+                      className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
+                        comfortZoneActions.includes(action)
+                          ? 'border-learning-primary bg-learning-accent bg-opacity-20'
+                          : 'border-gray-200 hover:border-learning-primary'
+                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      disabled={!comfortZoneActions.includes(action) && comfortZoneActions.length >= 2}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700">{action}</span>
+                        {comfortZoneActions.includes(action) && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm"
+                          >
+                            ✓
+                          </motion.div>
+                        )}
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Résultat final */}
+        {isCompleted && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="learning-card p-8 text-center"
+          >
+            <h3 className="text-3xl font-bold text-learning-primary mb-6">
+              Votre profil de confiance
+            </h3>
+
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.3 }}
+              className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-learning-primary to-learning-accent flex items-center justify-center"
+            >
+              <span className="text-3xl font-bold text-white">{confidenceScore}%</span>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="p-4 bg-blue-50 rounded-xl">
+                <h4 className="font-bold text-learning-primary mb-2">Forces identifiées</h4>
+                <p className="text-sm text-gray-600">{selectedStrengths.length} forces principales</p>
+              </div>
+              <div className="p-4 bg-green-50 rounded-xl">
+                <h4 className="font-bold text-learning-primary mb-2">Réussites célébrées</h4>
+                <p className="text-sm text-gray-600">{successes.length} réussites reconnues</p>
+              </div>
+              <div className="p-4 bg-purple-50 rounded-xl">
+                <h4 className="font-bold text-learning-primary mb-2">Zone de croissance</h4>
+                <p className="text-sm text-gray-600">Niveau {comfortZoneLevel}/5</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                onComplete();
+                onNavigate(5);
+              }}
+              className="learning-button text-lg px-8 py-4"
+            >
+              Continuer vers le système de suivi
+            </button>
           </motion.div>
         )}
       </div>
