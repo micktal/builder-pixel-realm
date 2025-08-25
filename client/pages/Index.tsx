@@ -14,7 +14,7 @@ const SECTIONS = [
   { id: 0, title: "Accueil", icon: User },
   { id: 1, title: "Auto-bilan 360°", icon: Target },
   { id: 2, title: "Résilience face à l'imprévu", icon: Zap },
-  { id: 3, title: "Techniques de respiration", icon: Users },
+  { id: 3, title: "Techniques de respiration", icon: Heart },
   { id: 4, title: "Soutiens & ressources", icon: Shield },
   { id: 5, title: "Mon système de suivi", icon: Target },
   { id: 6, title: "Quiz final", icon: Award },
