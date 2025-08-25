@@ -70,9 +70,9 @@ export default function Index() {
         style={{ scaleX }}
       />
 
-      {/* Navigation Sidebar */}
-      <div className="fixed left-6 top-1/2 transform -translate-y-1/2 z-40 hidden lg:block">
-        <div className="flex flex-col space-y-4">
+      {/* Navigation Top Bar */}
+      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40 bg-white/90 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg border border-gray-200">
+        <div className="flex space-x-3">
           {SECTIONS.map((section) => {
             const isCompleted = progress.completedSections.has(section.id);
             const isCurrent = progress.currentSection === section.id;
@@ -81,21 +81,22 @@ export default function Index() {
               <motion.button
                 key={section.id}
                 onClick={() => navigateToSection(section.id)}
-                className={`relative group flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${
+                className={`relative group flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${
                   isCompleted
                     ? 'bg-learning-primary text-white'
                     : isCurrent
                     ? 'bg-learning-accent text-learning-primary ring-2 ring-learning-primary'
-                    : 'bg-white text-gray-400 hover:bg-learning-accent hover:text-learning-primary'
+                    : 'bg-gray-100 text-gray-400 hover:bg-learning-accent hover:text-learning-primary'
                 }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="text-sm font-bold">{section.id + 1}</span>
+                <span className="text-xs font-bold">{section.id + 1}</span>
 
                 {/* Tooltip */}
-                <div className="absolute left-16 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute top-14 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                   {section.title}
+                  <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-800 rotate-45"></div>
                 </div>
               </motion.button>
             );
@@ -756,7 +757,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
 
               <div className="prose max-w-none text-gray-700 space-y-6">
                 <p className="text-lg leading-relaxed">
-                  Développée par le Pr��sident américain <strong>Dwight D. Eisenhower</strong> et popularisée par Stephen Covey,
+                  Développée par le Président américain <strong>Dwight D. Eisenhower</strong> et popularisée par Stephen Covey,
                   cette matrice révolutionnaire distingue deux dimensions cruciales de toute tâche :
                   <strong className="text-learning-primary"> l'urgence et l'importance</strong>.
                 </p>
