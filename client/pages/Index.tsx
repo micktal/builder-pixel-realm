@@ -15,7 +15,7 @@ const SECTIONS = [
   { id: 2, title: "Résilience face à l'imprévu" },
   { id: 3, title: "Gestion des priorités" },
   { id: 4, title: "Gestion du stress" },
-  { id: 5, title: "Mon système de suivi" },
+  { id: 5, title: "Simulation stress extrême" },
   { id: 6, title: "Quiz final" },
 ];
 
@@ -229,10 +229,10 @@ export default function Index() {
         onNavigate={navigateToSection}
       />
       
-      <PlaceholderSection
-        sectionId={5}
-        title="Mon système de suivi"
-        description="Créez votre plan personnalisé de développement"
+      <StressSimulationSection
+        progress={progress}
+        onComplete={() => completeSection(5)}
+        onNavigate={navigateToSection}
       />
       
       <PlaceholderSection
