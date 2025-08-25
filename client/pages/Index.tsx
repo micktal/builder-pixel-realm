@@ -1429,7 +1429,7 @@ function ConfidenceSection({ progress, onComplete, onNavigate }: any) {
                   Actions pour sortir de votre zone de confort (choisissez-en 2) :
                 </h4>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {comfortZoneActions.map((action, index) => (
+                  {availableActions.map((action, index) => (
                     <motion.button
                       key={index}
                       onClick={() => {
