@@ -543,7 +543,7 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
             >
               <div className="bg-learning-accent bg-opacity-20 p-8 rounded-xl">
                 <h4 className="text-2xl font-bold text-learning-primary mb-4">
-                  💭 Feedback du coach
+                  Feedback du coach
                 </h4>
                 <p className="text-lg text-gray-700 leading-relaxed">
                   {getCurrentFeedback()}
