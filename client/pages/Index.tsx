@@ -240,7 +240,7 @@ export default function Index() {
       <PlaceholderSection 
         sectionId={5} 
         title="Mon système de suivi" 
-        description="Créez votre plan personnalisé de développement"
+        description="Cr��ez votre plan personnalisé de développement"
         icon={Target}
       />
       
@@ -605,110 +605,97 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
   );
 }
 
-// Breathing Techniques Section Component
-function BreathingSection({ progress, onComplete, onNavigate }: any) {
-  const [currentTechnique, setCurrentTechnique] = useState(0);
-  const [isBreathing, setIsBreathing] = useState(false);
-  const [breathingPhase, setBreathingPhase] = useState('');
-  const [completedTechniques, setCompletedTechniques] = useState<Set<number>>(new Set());
-  const [selectedFavorite, setSelectedFavorite] = useState<number | null>(null);
+// Priority Management Section Component
+function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
+  const [currentPhase, setCurrentPhase] = useState<'theory' | 'practice' | 'evaluation'>('theory');
+  const [userTasks, setUserTasks] = useState<Array<{id: number, text: string, quadrant: number | null}>>([]);
+  const [newTask, setNewTask] = useState('');
+  const [completedQuadrants, setCompletedQuadrants] = useState<Set<number>>(new Set());
+  const [currentDraggedTask, setCurrentDraggedTask] = useState<number | null>(null);
 
-  const techniques = [
-    {
-      id: 0,
-      name: "Respiration 4-7-8",
-      description: "Technique relaxante pour réduire l'anxiété et favoriser l'endormissement",
-      instructions: [
-        "Inspirez par le nez pendant 4 secondes",
-        "Retenez votre souffle pendant 7 secondes",
-        "Expirez par la bouche pendant 8 secondes"
-      ],
-      duration: 19, // 4+7+8
-      benefits: "Réduit l'anxiété, facilite l'endormissement, calme le système nerveux"
-    },
+  const sampleTasks = [
+    { id: 1, text: "Répondre aux emails non urgents", quadrant: null },
+    { id: 2, text: "Appel client mécontent", quadrant: null },
+    { id: 3, text: "Planifier les vacances", quadrant: null },
+    { id: 4, text: "Formation en ligne", quadrant: null },
+    { id: 5, text: "Réunion de crise", quadrant: null },
+    { id: 6, text: "Lecture professionnelle", quadrant: null },
+    { id: 7, text: "Réseaux sociaux", quadrant: null },
+    { id: 8, text: "Préparation présentation importante", quadrant: null }
+  ];
+
+  const quadrants = [
     {
       id: 1,
-      name: "Cohérence cardiaque",
-      description: "Respiration régulière pour équilibrer le système nerveux",
-      instructions: [
-        "Inspirez pendant 5 secondes",
-        "Expirez pendant 5 secondes",
-        "Répétez 6 fois par minute pendant 5 minutes"
-      ],
-      duration: 10, // 5+5
-      benefits: "Améliore la concentration, réduit le stress, régule les émotions"
+      title: "URGENT & IMPORTANT",
+      subtitle: "À FAIRE",
+      description: "Crises, urgences, problèmes pressants",
+      color: "bg-red-100 border-red-300",
+      examples: ["Urgences médicales", "Crises clients", "Deadlines imminents"]
     },
     {
       id: 2,
-      name: "Respiration du carré",
-      description: "Technique de concentration et d'ancrage dans le présent",
-      instructions: [
-        "Inspirez pendant 4 secondes",
-        "Retenez pendant 4 secondes",
-        "Expirez pendant 4 secondes",
-        "Retenez (poumons vides) pendant 4 secondes"
-      ],
-      duration: 16, // 4+4+4+4
-      benefits: "Améliore la concentration, procure un sentiment de contrôle"
+      title: "IMPORTANT & NON URGENT",
+      subtitle: "À PLANIFIER",
+      description: "Prévention, développement, opportunités",
+      color: "bg-green-100 border-green-300",
+      examples: ["Formation", "Planification", "Relations"]
+    },
+    {
+      id: 3,
+      title: "URGENT & NON IMPORTANT",
+      subtitle: "À DÉLÉGUER",
+      description: "Interruptions, certains appels, emails",
+      color: "bg-yellow-100 border-yellow-300",
+      examples: ["Certains emails", "Réunions inutiles", "Interruptions"]
+    },
+    {
+      id: 4,
+      title: "NON URGENT & NON IMPORTANT",
+      subtitle: "À ÉLIMINER",
+      description: "Activités triviales, distractions",
+      color: "bg-gray-100 border-gray-300",
+      examples: ["Réseaux sociaux", "TV excessive", "Conversations futiles"]
     }
   ];
 
-  const startBreathingExercise = (techniqueId: number) => {
-    setCurrentTechnique(techniqueId);
-    setIsBreathing(true);
+  useEffect(() => {
+    if (currentPhase === 'practice') {
+      setUserTasks(sampleTasks.map(task => ({ ...task })));
+    }
+  }, [currentPhase]);
 
-    const technique = techniques[techniqueId];
-    let cycleCount = 0;
-    const maxCycles = 3;
-
-    const runCycle = () => {
-      if (cycleCount >= maxCycles) {
-        setIsBreathing(false);
-        setBreathingPhase('');
-        setCompletedTechniques(prev => new Set([...prev, techniqueId]));
-        return;
-      }
-
-      // Phases de respiration selon la technique
-      if (techniqueId === 0) { // 4-7-8
-        setBreathingPhase('Inspirez (4s)');
-        setTimeout(() => setBreathingPhase('Retenez (7s)'), 4000);
-        setTimeout(() => setBreathingPhase('Expirez (8s)'), 11000);
-        setTimeout(() => {
-          cycleCount++;
-          runCycle();
-        }, 19000);
-      } else if (techniqueId === 1) { // Cohérence cardiaque
-        setBreathingPhase('Inspirez (5s)');
-        setTimeout(() => setBreathingPhase('Expirez (5s)'), 5000);
-        setTimeout(() => {
-          cycleCount++;
-          runCycle();
-        }, 10000);
-      } else if (techniqueId === 2) { // Respiration du carré
-        setBreathingPhase('Inspirez (4s)');
-        setTimeout(() => setBreathingPhase('Retenez (4s)'), 4000);
-        setTimeout(() => setBreathingPhase('Expirez (4s)'), 8000);
-        setTimeout(() => setBreathingPhase('Pause (4s)'), 12000);
-        setTimeout(() => {
-          cycleCount++;
-          runCycle();
-        }, 16000);
-      }
-    };
-
-    runCycle();
+  const addNewTask = () => {
+    if (newTask.trim()) {
+      setUserTasks(prev => [...prev, {
+        id: Date.now(),
+        text: newTask.trim(),
+        quadrant: null
+      }]);
+      setNewTask('');
+    }
   };
 
-  const selectFavorite = (techniqueId: number) => {
-    setSelectedFavorite(techniqueId);
+  const moveTaskToQuadrant = (taskId: number, quadrantId: number) => {
+    setUserTasks(prev => prev.map(task =>
+      task.id === taskId ? { ...task, quadrant: quadrantId } : task
+    ));
+    setCompletedQuadrants(prev => new Set([...prev, quadrantId]));
   };
 
-  const isCompleted = completedTechniques.size >= 2; // Au moins 2 techniques testées
+  const getTasksInQuadrant = (quadrantId: number) => {
+    return userTasks.filter(task => task.quadrant === quadrantId);
+  };
+
+  const getUnassignedTasks = () => {
+    return userTasks.filter(task => task.quadrant === null);
+  };
+
+  const isCompleted = userTasks.length > 0 && getUnassignedTasks().length === 0;
 
   return (
     <section id="section-3" className="min-h-screen py-20 px-4 bg-gradient-to-b from-white to-blue-50">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -717,167 +704,334 @@ function BreathingSection({ progress, onComplete, onNavigate }: any) {
           className="text-center mb-16"
         >
           <div className="flex items-center justify-center mb-6">
-            <div className="w-12 h-12 text-learning-primary mr-4 flex items-center justify-center">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-              </svg>
-            </div>
+            <Brain className="w-12 h-12 text-learning-primary mr-4" />
             <h2 className="text-4xl font-bold text-learning-primary">
-              Techniques de Respiration
+              Gestion des Priorités & Prise de Décision
             </h2>
           </div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Apprenez des techniques de respiration scientifiquement prouvées pour gérer le stress,
-            améliorer votre concentration et renforcer votre résilience au quotidien.
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Maîtrisez la Matrice d'Eisenhower pour prendre des décisions éclairées,
+            gérer efficacement votre temps et renforcer votre autonomie.
           </p>
         </motion.div>
 
-        {!isBreathing ? (
-          <div className="grid md:grid-cols-1 gap-8 mb-12">
-            {techniques.map((technique, index) => {
-              const isCompletedTechnique = completedTechniques.has(technique.id);
+        {/* Navigation des phases */}
+        <div className="flex justify-center mb-12">
+          <div className="flex space-x-4">
+            {[
+              { id: 'theory', label: '📚 Théorie', desc: 'Apprentissage' },
+              { id: 'practice', label: '🎯 Pratique', desc: 'Exercice' },
+              { id: 'evaluation', label: '✅ Évaluation', desc: 'Synthèse' }
+            ].map(phase => (
+              <button
+                key={phase.id}
+                onClick={() => setCurrentPhase(phase.id as any)}
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                  currentPhase === phase.id
+                    ? 'bg-learning-primary text-white'
+                    : 'bg-white text-learning-primary border-2 border-learning-primary hover:bg-learning-accent'
+                }`}
+              >
+                <div className="text-center">
+                  <div>{phase.label}</div>
+                  <div className="text-xs opacity-75">{phase.desc}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
 
-              return (
-                <motion.div
-                  key={technique.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className={`learning-card p-8 ${isCompletedTechnique ? 'ring-2 ring-learning-primary' : ''}`}
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-2xl font-bold text-learning-neutral flex items-center">
-                      {technique.name}
-                      {isCompletedTechnique && (
-                        <CheckCircle className="w-6 h-6 text-learning-primary ml-2" />
-                      )}
-                    </h3>
+        {/* Phase Théorie */}
+        {currentPhase === 'theory' && (
+          <div className="space-y-8">
+            {/* Introduction théorique */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="learning-card p-8"
+            >
+              <h3 className="text-2xl font-bold text-learning-primary mb-6">
+                📖 La Matrice d'Eisenhower : Fondements théoriques
+              </h3>
+
+              <div className="prose max-w-none text-gray-700 space-y-6">
+                <p className="text-lg leading-relaxed">
+                  Développée par le Président américain <strong>Dwight D. Eisenhower</strong> et popularisée par Stephen Covey,
+                  cette matrice révolutionnaire distingue deux dimensions cruciales de toute tâche :
+                  <strong className="text-learning-primary"> l'urgence et l'importance</strong>.
+                </p>
+
+                <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl">
+                  <h4 className="font-semibold text-learning-primary mb-3">🔍 Distinction fondamentale :</h4>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <h5 className="font-semibold text-learning-primary mb-2">⏰ URGENT</h5>
+                      <p>Ce qui demande une attention immédiate. L'urgence est souvent imposée par les autres ou les circonstances externes.</p>
+                    </div>
+                    <div>
+                      <h5 className="font-semibold text-learning-primary mb-2">🎯 IMPORTANT</h5>
+                      <p>Ce qui contribue à vos objectifs à long terme, vos valeurs et votre mission. L'importance est déterminée par vous.</p>
+                    </div>
                   </div>
+                </div>
 
-                  <p className="text-gray-600 mb-6">{technique.description}</p>
+                <p>
+                  Cette distinction permet de <strong>hiérarchiser objectivement</strong> vos activités et d'éviter le piège de la
+                  "tyrannie de l'urgent" qui nous fait sacrifier l'important au profit de l'urgent.
+                </p>
+              </div>
+            </motion.div>
 
-                  <div className="mb-6">
-                    <h4 className="font-semibold text-learning-primary mb-3">Instructions :</h4>
-                    <ul className="space-y-2">
-                      {technique.instructions.map((instruction, i) => (
-                        <li key={i} className="flex items-start">
-                          <span className="bg-learning-accent text-learning-primary w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0 mt-0.5">
-                            {i + 1}
-                          </span>
-                          <span className="text-gray-700">{instruction}</span>
+            {/* Les 4 quadrants expliqués */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="grid md:grid-cols-2 gap-6"
+            >
+              {quadrants.map((quadrant, index) => (
+                <motion.div
+                  key={quadrant.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1 * index }}
+                  className={`p-6 rounded-xl border-2 ${quadrant.color}`}
+                >
+                  <h4 className="font-bold text-learning-primary mb-2">
+                    Q{quadrant.id}: {quadrant.title}
+                  </h4>
+                  <p className="font-semibold text-sm text-learning-neutral mb-3">
+                    {quadrant.subtitle}
+                  </p>
+                  <p className="text-gray-700 mb-4">{quadrant.description}</p>
+
+                  <div>
+                    <h5 className="font-semibold text-learning-primary mb-2">Exemples :</h5>
+                    <ul className="space-y-1">
+                      {quadrant.examples.map((example, i) => (
+                        <li key={i} className="text-sm text-gray-600 flex items-center">
+                          <span className="w-2 h-2 bg-learning-primary rounded-full mr-2"></span>
+                          {example}
                         </li>
                       ))}
                     </ul>
                   </div>
-
-                  <div className="mb-6 p-4 bg-learning-accent bg-opacity-20 rounded-lg">
-                    <h4 className="font-semibold text-learning-primary mb-2">💡 Bienfaits :</h4>
-                    <p className="text-gray-700">{technique.benefits}</p>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <button
-                      onClick={() => startBreathingExercise(technique.id)}
-                      className="learning-button flex-1"
-                    >
-                      🧘‍♀️ Essayer cette technique
-                    </button>
-
-                    {isCompletedTechnique && (
-                      <button
-                        onClick={() => selectFavorite(technique.id)}
-                        className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                          selectedFavorite === technique.id
-                            ? 'bg-learning-primary text-white'
-                            : 'border-2 border-learning-primary text-learning-primary hover:bg-learning-primary hover:text-white'
-                        }`}
-                      >
-                        ⭐ {selectedFavorite === technique.id ? 'Technique favorite' : 'Marquer comme favorite'}
-                      </button>
-                    )}
-                  </div>
                 </motion.div>
-              );
-            })}
-          </div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="learning-card p-12 text-center"
-          >
-            <h3 className="text-3xl font-bold text-learning-primary mb-8">
-              {techniques[currentTechnique].name}
-            </h3>
+              ))}
+            </motion.div>
 
-            {/* Cercle de respiration animé */}
-            <div className="relative w-64 h-64 mx-auto mb-8">
-              <motion.div
-                className="absolute inset-0 rounded-full border-4 border-learning-primary"
-                animate={{
-                  scale: breathingPhase.includes('Inspirez') ? 1.2 :
-                         breathingPhase.includes('Retenez') ? 1.2 : 0.8
-                }}
-                transition={{ duration: breathingPhase.includes('Retenez') ? 0 : 3, ease: "easeInOut" }}
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  className="w-32 h-32 rounded-full bg-learning-primary bg-opacity-20 flex items-center justify-center"
-                  animate={{
-                    scale: breathingPhase.includes('Inspirez') ? 1.3 :
-                           breathingPhase.includes('Retenez') ? 1.3 : 0.7
-                  }}
-                  transition={{ duration: breathingPhase.includes('Retenez') ? 0 : 3, ease: "easeInOut" }}
-                >
-                  <span className="text-learning-primary font-bold text-lg">
-                    🧘‍♀️
-                  </span>
-                </motion.div>
+            {/* Principes d'action */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="learning-card p-8"
+            >
+              <h3 className="text-2xl font-bold text-learning-primary mb-6">
+                ⚡ Principes d'action pour chaque quadrant
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-semibold text-red-600 mb-3">Q1 - FAIRE immédiatement</h4>
+                  <p className="text-gray-700 mb-4">Minimisez ce quadrant par une meilleure prévention (Q2).</p>
+
+                  <h4 className="font-semibold text-green-600 mb-3">Q2 - PLANIFIER et prioriser</h4>
+                  <p className="text-gray-700">Le quadrant de l'excellence ! Investissez 60-70% de votre temps ici.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-yellow-600 mb-3">Q3 - DÉLÉGUER ou dire NON</h4>
+                  <p className="text-gray-700 mb-4">Apprenez à déléguer efficacement ou à refuser poliment.</p>
+
+                  <h4 className="font-semibold text-gray-600 mb-3">Q4 - ÉLIMINER</h4>
+                  <p className="text-gray-700">Activités qui volent votre temps sans valeur ajoutée.</p>
+                </div>
               </div>
+
+              <div className="mt-8 p-6 bg-learning-primary bg-opacity-10 rounded-xl">
+                <h4 className="font-semibold text-learning-primary mb-3">💡 Clé du succès :</h4>
+                <p className="text-gray-700">
+                  <strong>Passez progressivement du Quadrant 1 au Quadrant 2.</strong> Plus vous investissez dans Q2
+                  (planification, prévention, développement), moins vous aurez de crises en Q1. C'est le secret d'une
+                  autonomie durable et d'une résilience renforcée.
+                </p>
+              </div>
+            </motion.div>
+
+            <div className="text-center">
+              <button
+                onClick={() => setCurrentPhase('practice')}
+                className="learning-button text-lg px-8 py-4"
+              >
+                Passer à la pratique →
+              </button>
             </div>
-
-            <p className="text-2xl font-semibold text-learning-primary mb-4">
-              {breathingPhase}
-            </p>
-
-            <p className="text-gray-600">
-              Suivez le rythme du cercle et concentrez-vous sur votre respiration
-            </p>
-          </motion.div>
+          </div>
         )}
 
-        {isCompleted && !isBreathing && (
+        {/* Phase Pratique */}
+        {currentPhase === 'practice' && (
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="learning-card p-8"
+            >
+              <h3 className="text-2xl font-bold text-learning-primary mb-6">
+                🎯 Exercice pratique : Classez vos tâches
+              </h3>
+
+              <p className="text-gray-600 mb-6">
+                Glissez-déposez les tâches suivantes dans le bon quadrant. Vous pouvez aussi ajouter vos propres tâches !
+              </p>
+
+              {/* Ajout de nouvelles tâches */}
+              <div className="flex gap-4 mb-8">
+                <input
+                  type="text"
+                  value={newTask}
+                  onChange={(e) => setNewTask(e.target.value)}
+                  placeholder="Ajoutez votre propre tâche..."
+                  className="flex-1 p-3 border-2 border-gray-200 rounded-lg focus:border-learning-primary focus:outline-none"
+                  onKeyPress={(e) => e.key === 'Enter' && addNewTask()}
+                />
+                <button
+                  onClick={addNewTask}
+                  className="learning-button-secondary px-6"
+                >
+                  Ajouter
+                </button>
+              </div>
+
+              {/* Tâches non assignées */}
+              {getUnassignedTasks().length > 0 && (
+                <div className="mb-8">
+                  <h4 className="font-semibold text-learning-primary mb-4">📝 Tâches à classer :</h4>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {getUnassignedTasks().map(task => (
+                      <motion.div
+                        key={task.id}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="p-3 bg-white rounded-lg border-2 border-gray-200 cursor-move hover:border-learning-primary transition-colors"
+                        draggable
+                        onDragStart={() => setCurrentDraggedTask(task.id)}
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        {task.text}
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Matrice interactive */}
+              <div className="grid grid-cols-2 gap-4">
+                {quadrants.map(quadrant => (
+                  <div
+                    key={quadrant.id}
+                    className={`p-4 rounded-xl border-2 min-h-[200px] ${quadrant.color}`}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      if (currentDraggedTask) {
+                        moveTaskToQuadrant(currentDraggedTask, quadrant.id);
+                        setCurrentDraggedTask(null);
+                      }
+                    }}
+                  >
+                    <h4 className="font-bold text-learning-primary mb-2 text-sm">
+                      Q{quadrant.id}: {quadrant.subtitle}
+                    </h4>
+                    <p className="text-xs text-gray-600 mb-4">{quadrant.description}</p>
+
+                    <div className="space-y-2">
+                      {getTasksInQuadrant(quadrant.id).map(task => (
+                        <motion.div
+                          key={task.id}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="p-2 bg-white rounded text-sm"
+                        >
+                          {task.text}
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {isCompleted && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center"
+              >
+                <button
+                  onClick={() => setCurrentPhase('evaluation')}
+                  className="learning-button text-lg px-8 py-4"
+                >
+                  Voir mon évaluation →
+                </button>
+              </motion.div>
+            )}
+          </div>
+        )}
+
+        {/* Phase Évaluation */}
+        {currentPhase === 'evaluation' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="learning-card p-8 text-center"
+            className="space-y-8"
           >
-            <h3 className="text-2xl font-bold text-learning-primary mb-4">
-              🎉 Félicitations !
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Vous avez découvert et pratiqué des techniques de respiration.
-              {selectedFavorite !== null && ` Votre technique favorite est : ${techniques[selectedFavorite].name}.`}
-            </p>
+            <div className="learning-card p-8 text-center">
+              <h3 className="text-3xl font-bold text-learning-primary mb-6">
+                🎉 Analyse de votre classification
+              </h3>
 
-            <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl mb-6">
-              <h4 className="font-semibold text-learning-primary mb-3">💡 Conseil pour la suite</h4>
-              <p className="text-gray-700">
-                Pratiquez votre technique favorite 5 minutes par jour pendant une semaine.
-                Utilisez-la notamment dans les moments de stress pour retrouver rapidement votre calme.
-              </p>
+              <div className="grid md:grid-cols-4 gap-6 mb-8">
+                {quadrants.map(quadrant => {
+                  const tasksCount = getTasksInQuadrant(quadrant.id).length;
+                  return (
+                    <div key={quadrant.id} className={`p-4 rounded-xl ${quadrant.color}`}>
+                      <h4 className="font-bold text-learning-primary mb-2">Q{quadrant.id}</h4>
+                      <div className="text-2xl font-bold text-learning-neutral">{tasksCount}</div>
+                      <p className="text-xs">tâches classées</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl mb-8">
+                <h4 className="font-semibold text-learning-primary mb-3">💡 Recommandations personnalisées</h4>
+                <div className="text-left space-y-3">
+                  {getTasksInQuadrant(1).length > 3 && (
+                    <p className="text-gray-700">⚠️ <strong>Trop de tâches urgentes :</strong> Investissez plus dans la planification (Q2) pour réduire les crises.</p>
+                  )}
+                  {getTasksInQuadrant(2).length < 2 && (
+                    <p className="text-gray-700">📈 <strong>Développez Q2 :</strong> Ajoutez plus d'activités de développement et de prévention.</p>
+                  )}
+                  {getTasksInQuadrant(4).length > 0 && (
+                    <p className="text-gray-700">🎯 <strong>Éliminez Q4 :</strong> Ces activités nuisent à votre productivité.</p>
+                  )}
+                  {getTasksInQuadrant(2).length >= getTasksInQuadrant(1).length && (
+                    <p className="text-gray-700">✅ <strong>Excellent équilibre :</strong> Vous priorisez l'important sur l'urgent !</p>
+                  )}
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  onComplete();
+                  onNavigate(4);
+                }}
+                className="learning-button text-lg px-8 py-4"
+              >
+                Continuer vers les ressources de soutien →
+              </button>
             </div>
-
-            <button
-              onClick={() => {
-                onComplete();
-                onNavigate(4);
-              }}
-              className="learning-button"
-            >
-              Continuer vers les ressources de soutien →
-            </button>
           </motion.div>
         )}
       </div>
