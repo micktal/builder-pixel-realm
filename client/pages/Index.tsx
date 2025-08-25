@@ -1124,7 +1124,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
     },
     {
       id: 'conflict-colleague',
-      title: 'Conflit avec un coll��gue',
+      title: 'Conflit avec un collègue',
       situation: 'Un collègue critique systématiquement vos propositions en réunion. Vous commencez à redouter ces moments.',
       options: [
         { id: 'A', text: 'Avant la réunion, visualiser une interaction positive', technique: 'cognitive' },
@@ -2040,6 +2040,343 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
             </div>
           </motion.div>
         )}
+      </div>
+    </section>
+  );
+}
+
+// Relational Map Section Component
+function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
+  const [contacts, setContacts] = useState<Array<{id: string, name: string, relationship: string, supportType: 'emotional' | 'practical' | 'professional', zone: 'unassigned' | 'family' | 'close-friends' | 'colleagues' | 'professionals', position?: {x: number, y: number}}>>([
+    { id: '1', name: 'Marie', relationship: 'Mère', supportType: 'emotional', zone: 'unassigned' },
+    { id: '2', name: 'Paul', relationship: 'Conjoint(e)', supportType: 'emotional', zone: 'unassigned' },
+    { id: '3', name: 'Sophie', relationship: 'Meilleure amie', supportType: 'emotional', zone: 'unassigned' },
+    { id: '4', name: 'David', relationship: 'Collègue', supportType: 'professional', zone: 'unassigned' },
+    { id: '5', name: 'Dr. Martin', relationship: 'Médecin', supportType: 'professional', zone: 'unassigned' },
+    { id: '6', name: 'Lisa', relationship: 'Coach', supportType: 'professional', zone: 'unassigned' },
+    { id: '7', name: 'Tom', relationship: 'Ami proche', supportType: 'practical', zone: 'unassigned' },
+    { id: '8', name: 'Julie', relationship: 'Manager', supportType: 'professional', zone: 'unassigned' },
+    { id: '9', name: 'Alex', relationship: 'Frère/Sœur', supportType: 'emotional', zone: 'unassigned' },
+    { id: '10', name: 'Emma', relationship: 'Voisine', supportType: 'practical', zone: 'unassigned' }
+  ]);
+
+  const [draggedContact, setDraggedContact] = useState<string | null>(null);
+  const [hoveredZone, setHoveredZone] = useState<string | null>(null);
+
+  const supportZones = [
+    {
+      id: 'family',
+      title: 'Famille',
+      description: 'Soutien inconditionnel et émotionnel',
+      color: 'bg-red-100 border-red-300 text-red-700',
+      radius: 120,
+      centerOffset: 0
+    },
+    {
+      id: 'close-friends',
+      title: 'Amis proches',
+      description: 'Complicité et partage',
+      color: 'bg-blue-100 border-blue-300 text-blue-700',
+      radius: 160,
+      centerOffset: 40
+    },
+    {
+      id: 'colleagues',
+      title: 'Collègues',
+      description: 'Soutien professionnel et collaboration',
+      color: 'bg-green-100 border-green-300 text-green-700',
+      radius: 200,
+      centerOffset: 80
+    },
+    {
+      id: 'professionals',
+      title: 'Professionnels',
+      description: 'Expertise et conseils spécialisés',
+      color: 'bg-purple-100 border-purple-300 text-purple-700',
+      radius: 240,
+      centerOffset: 120
+    }
+  ];
+
+  const supportTypeColors = {
+    emotional: 'bg-pink-200 border-pink-400 text-pink-800',
+    practical: 'bg-orange-200 border-orange-400 text-orange-800',
+    professional: 'bg-indigo-200 border-indigo-400 text-indigo-800'
+  };
+
+  const handleDragStart = (contactId: string) => {
+    setDraggedContact(contactId);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedContact(null);
+    setHoveredZone(null);
+  };
+
+  const handleDrop = (zoneId: string) => {
+    if (draggedContact) {
+      setContacts(prev => prev.map(contact =>
+        contact.id === draggedContact
+          ? { ...contact, zone: zoneId as any }
+          : contact
+      ));
+    }
+    setDraggedContact(null);
+    setHoveredZone(null);
+  };
+
+  const getContactsInZone = (zoneId: string) => {
+    return contacts.filter(contact => contact.zone === zoneId);
+  };
+
+  const getUnassignedContacts = () => {
+    return contacts.filter(contact => contact.zone === 'unassigned');
+  };
+
+  const isCompleted = getUnassignedContacts().length === 0;
+
+  const resetMap = () => {
+    setContacts(prev => prev.map(contact => ({ ...contact, zone: 'unassigned' })));
+  };
+
+  return (
+    <section id="section-6" className="min-h-screen py-20 px-4 bg-gradient-to-b from-blue-50 to-white">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl font-bold text-learning-primary mb-6">
+            Votre Réseau de Soutien
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Cartographiez visuellement votre réseau de soutien en glissant vos contacts
+            dans les cercles appropriés selon leur proximité et le type de soutien qu'ils vous apportent.
+          </p>
+        </motion.div>
+
+        {/* Légende des types de soutien */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="learning-card p-6 mb-8"
+        >
+          <h3 className="text-xl font-bold text-learning-primary mb-4 text-center">Types de soutien</h3>
+          <div className="flex flex-wrap justify-center gap-6">
+            <div className="flex items-center space-x-2">
+              <div className="w-4 h-4 bg-pink-200 border border-pink-400 rounded-full"></div>
+              <span className="text-sm font-medium">Émotionnel</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-4 h-4 bg-orange-200 border border-orange-400 rounded-full"></div>
+              <span className="text-sm font-medium">Pratique</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-4 h-4 bg-indigo-200 border border-indigo-400 rounded-full"></div>
+              <span className="text-sm font-medium">Professionnel</span>
+            </div>
+          </div>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Contacts non assignés */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="learning-card p-6"
+          >
+            <h3 className="text-xl font-bold text-learning-primary mb-4">
+              Contacts à organiser ({getUnassignedContacts().length})
+            </h3>
+            <div className="space-y-3 max-h-96 overflow-y-auto">
+              {getUnassignedContacts().map((contact, index) => (
+                <motion.div
+                  key={contact.id}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1 }}
+                  draggable
+                  onDragStart={() => handleDragStart(contact.id)}
+                  onDragEnd={handleDragEnd}
+                  className={`p-3 rounded-lg border-2 cursor-move transition-all duration-300 hover:scale-105 ${
+                    supportTypeColors[contact.supportType]
+                  } ${draggedContact === contact.id ? 'opacity-50 scale-95' : ''}`}
+                >
+                  <div className="font-semibold">{contact.name}</div>
+                  <div className="text-xs opacity-75">{contact.relationship}</div>
+                </motion.div>
+              ))}
+            </div>
+
+            {getUnassignedContacts().length === 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-8 text-gray-500"
+              >
+                <div className="text-4xl mb-2">🎉</div>
+                <p>Tous vos contacts sont organisés !</p>
+              </motion.div>
+            )}
+          </motion.div>
+
+          {/* Carte relationnelle - Cercles concentriques */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="learning-card p-8 lg:col-span-2"
+          >
+            <h3 className="text-xl font-bold text-learning-primary mb-6 text-center">
+              Carte de votre réseau de soutien
+            </h3>
+
+            <div className="relative w-full h-96 flex items-center justify-center">
+              {/* Cercles concentriques */}
+              {supportZones.map((zone, index) => (
+                <motion.div
+                  key={zone.id}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.2, duration: 0.6 }}
+                  className={`absolute rounded-full border-2 border-dashed transition-all duration-300 ${
+                    zone.color
+                  } ${hoveredZone === zone.id ? 'border-solid shadow-lg scale-105' : ''}`}
+                  style={{
+                    width: zone.radius * 2,
+                    height: zone.radius * 2,
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setHoveredZone(zone.id);
+                  }}
+                  onDragLeave={() => setHoveredZone(null)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    handleDrop(zone.id);
+                  }}
+                >
+                  {/* Label du cercle */}
+                  <div className="absolute top-2 left-1/2 transform -translate-x-1/2 text-center">
+                    <div className="font-bold text-sm">{zone.title}</div>
+                    <div className="text-xs opacity-75">{getContactsInZone(zone.id).length} contacts</div>
+                  </div>
+
+                  {/* Contacts dans cette zone */}
+                  {getContactsInZone(zone.id).map((contact, contactIndex) => {
+                    const angle = (contactIndex * 360) / Math.max(getContactsInZone(zone.id).length, 1);
+                    const radian = (angle * Math.PI) / 180;
+                    const contactRadius = zone.radius - 60;
+                    const x = Math.cos(radian) * contactRadius;
+                    const y = Math.sin(radian) * contactRadius;
+
+                    return (
+                      <motion.div
+                        key={contact.id}
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: contactIndex * 0.1 }}
+                        className={`absolute w-16 h-16 rounded-full border-2 flex items-center justify-center text-xs font-bold cursor-move transition-all duration-300 hover:scale-110 ${
+                          supportTypeColors[contact.supportType]
+                        }`}
+                        style={{
+                          left: `calc(50% + ${x}px - 32px)`,
+                          top: `calc(50% + ${y}px - 32px)`,
+                        }}
+                        draggable
+                        onDragStart={() => handleDragStart(contact.id)}
+                        onDragEnd={handleDragEnd}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <span className="text-center leading-tight">
+                          {contact.name.split(' ')[0]}
+                        </span>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+              ))}
+
+              {/* Centre "Vous" */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1, duration: 0.6 }}
+                className="absolute w-20 h-20 bg-learning-primary text-white rounded-full flex items-center justify-center font-bold text-lg z-10 shadow-lg"
+              >
+                Vous
+              </motion.div>
+            </div>
+
+            {/* Légende des zones */}
+            <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+              {supportZones.map((zone) => (
+                <div key={zone.id} className={`p-3 rounded-lg text-center ${zone.color}`}>
+                  <div className="font-bold text-sm">{zone.title}</div>
+                  <div className="text-xs mt-1">{zone.description}</div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          viewport={{ once: true }}
+          className="text-center mt-8"
+        >
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={resetMap}
+              className="learning-button-secondary px-6 py-3"
+            >
+              🔄 Réorganiser
+            </button>
+
+            {isCompleted && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                onClick={() => {
+                  onComplete();
+                  // Navigation vers la fin ou une section de synthèse
+                }}
+                className="learning-button px-8 py-3"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                ✅ Terminer le module
+              </motion.button>
+            )}
+          </div>
+
+          {isCompleted && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mt-6 p-6 bg-green-50 rounded-xl"
+            >
+              <h4 className="font-bold text-green-700 mb-2">🎉 Félicitations !</h4>
+              <p className="text-green-600">
+                Vous avez cartographié votre réseau de soutien. Cette visualisation vous aidera
+                à mieux identifier vers qui vous tourner selon vos besoins.
+              </p>
+            </motion.div>
+          )}
+        </motion.div>
       </div>
     </section>
   );
