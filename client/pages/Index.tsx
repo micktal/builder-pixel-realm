@@ -278,6 +278,13 @@ function SelfAssessmentSection({ progress, onComplete, onNavigate }: any) {
   const generateResults = () => {
     if (Object.keys(responses).length === questions.length) {
       setShowResults(true);
+      // Scroll automatiquement vers le haut de la section pour voir les résultats
+      setTimeout(() => {
+        const section = document.getElementById('section-1');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
     }
   };
 
