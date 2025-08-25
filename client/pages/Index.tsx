@@ -128,7 +128,7 @@ export default function Index() {
             <h1 className="text-5xl md:text-7xl font-bold text-learning-primary mb-6 leading-tight">
               Autonomie &<br />
               <span className="bg-gradient-to-r from-learning-primary to-learning-accent bg-clip-text text-transparent">
-                Résilience Durable
+                R��silience Durable
               </span>
             </h1>
             
@@ -187,7 +187,7 @@ export default function Index() {
               animate={{ x: [0, 5, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
             >
-              →
+              ➤
             </motion.div>
           </motion.button>
 
@@ -430,7 +430,7 @@ function ResultsDisplay({ responses, questions, onComplete, onContinue }: any) {
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <button className="learning-button-secondary">
-          📄 Exporter mon bilan PDF
+          Exporter mon bilan PDF
         </button>
         <button 
           onClick={() => {
@@ -439,7 +439,7 @@ function ResultsDisplay({ responses, questions, onComplete, onContinue }: any) {
           }}
           className="learning-button"
         >
-          Continuer vers la résilience →
+          Continuer vers la résilience
         </button>
       </div>
     </motion.div>
@@ -561,7 +561,7 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
             className="learning-card p-8"
           >
             <h3 className="text-2xl font-bold text-learning-primary mb-6 text-center">
-              ✨ Créez votre rituel minute
+              Créez votre rituel minute
             </h3>
             <p className="text-gray-600 mb-6 text-center">
               Décrivez en quelques mots votre stratégie personnelle pour reprendre le contrôle en 60 secondes :
@@ -583,7 +583,7 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
                 className="learning-button"
                 disabled={!ritual.trim()}
               >
-                Sauvegarder et continuer →
+                Sauvegarder et continuer
               </button>
             </div>
           </motion.div>
@@ -695,7 +695,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
             Gestion des Priorités & Prise de Décision
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Maîtrisez la Matrice d'Eisenhower pour prendre des décisions éclairées,
+            Maîtrisez la Matrice d'Eisenhower pour prendre des décisions éclair��es,
             gérer efficacement votre temps et renforcer votre autonomie.
           </p>
         </motion.div>
@@ -736,7 +736,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
               className="learning-card p-8"
             >
               <h3 className="text-2xl font-bold text-learning-primary mb-6">
-                📖 La Matrice d'Eisenhower : Fondements théoriques
+                La Matrice d'Eisenhower : Fondements théoriques
               </h3>
 
               <div className="prose max-w-none text-gray-700 space-y-6">
@@ -747,7 +747,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                 </p>
 
                 <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl">
-                  <h4 className="font-semibold text-learning-primary mb-3">🔍 Distinction fondamentale :</h4>
+                  <h4 className="font-semibold text-learning-primary mb-3">Distinction fondamentale :</h4>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <h5 className="font-semibold text-learning-primary mb-2">⏰ URGENT</h5>
@@ -848,7 +848,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                 onClick={() => setCurrentPhase('practice')}
                 className="learning-button text-lg px-8 py-4"
               >
-                Passer à la pratique →
+                Passer à la pratique
               </button>
             </div>
           </div>
@@ -957,7 +957,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                   onClick={() => setCurrentPhase('evaluation')}
                   className="learning-button text-lg px-8 py-4"
                 >
-                  Voir mon évaluation →
+                  Voir mon évaluation
                 </button>
               </motion.div>
             )}
@@ -1014,7 +1014,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                 }}
                 className="learning-button text-lg px-8 py-4"
               >
-                Continuer vers les ressources de soutien →
+                Continuer vers les ressources de soutien
               </button>
             </div>
           </motion.div>
