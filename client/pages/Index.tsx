@@ -2404,28 +2404,28 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
       title: "Auto-bilan 360°",
       keyLearning: "Conscience de soi et identification des forces personnelles",
       concepts: ["Auto-évaluation", "Forces personnelles", "Zones d'amélioration"],
-      icon: "TARGET"
+      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" strokeWidth="1"/></svg>
     },
     {
       id: 2,
       title: "Résilience face à l'imprévu",
       keyLearning: "Stratégies d'adaptation et développement du rituel minute",
       concepts: ["Gestion de l'imprévu", "Techniques d'adaptation", "Rituel de recadrage"],
-      icon: "LIGHTNING"
+      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
     },
     {
       id: 3,
       title: "Gestion des priorités",
       keyLearning: "Matrice d'Eisenhower pour optimiser son temps et ses décisions",
       concepts: ["Urgent vs Important", "Planification", "Prise de décision"],
-      icon: "BRAIN"
+      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M21.33 12.91c.09-.44.15-.89.15-1.35 0-3.87-3.13-7-7-7-.2 0-.4.01-.59.03A6.003 6.003 0 0 0 8.5 2C5.42 2 3 4.42 3 7.5c0 1.11.32 2.14.87 3.02C2.87 12.18 2 14.21 2 16.5 2 19.58 4.42 22 7.5 22c1.11 0 2.14-.32 3.02-.87.66.9 1.58 1.65 2.68 2.17.44.21.94.32 1.45.32.89 0 1.73-.35 2.36-.99.63-.64.99-1.47.99-2.36 0-.51-.11-1.01-.32-1.45A6.89 6.89 0 0 0 20 15.5c0-1.11-.32-2.14-.87-3.02.55-.88.87-1.91.87-3.02 0-.89-.19-1.73-.67-2.55z"/></svg>
     },
     {
       id: 4,
       title: "Gestion du stress",
       keyLearning: "4 techniques concrètes pour adapter sa réponse au stress",
       concepts: ["Mécanismes du stress", "Techniques d'adaptation", "Profil personnel"],
-      icon: "WAVE"
+      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
     },
     {
       id: 5,
@@ -2633,7 +2633,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                     className="p-6 bg-gradient-to-r from-learning-accent to-white rounded-xl border-l-4 border-learning-primary"
                   >
                     <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-learning-primary rounded-full flex items-center justify-center text-white font-bold text-xs">{section.icon}</div>
+                      <div className="w-12 h-12 bg-learning-primary rounded-full flex items-center justify-center text-white">{section.icon}</div>
                       <div className="flex-1">
                         <h4 className="font-bold text-learning-primary mb-2">{section.title}</h4>
                         <p className="text-gray-700 mb-3">{section.keyLearning}</p>
