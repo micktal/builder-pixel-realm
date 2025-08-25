@@ -2802,7 +2802,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                 transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
                 className={`w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-br ${getBadgeColor(completionBadge)} flex items-center justify-center shadow-lg`}
               >
-                <span className="text-4xl">{getBadgeEmoji(completionBadge)}</span>
+                <span className="text-lg font-bold text-white">{getBadgeEmoji(completionBadge)}</span>
               </motion.div>
 
               <div className="mb-8">
