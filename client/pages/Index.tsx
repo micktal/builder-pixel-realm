@@ -594,7 +594,7 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
 
 // Priority Management Section Component
 function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
-  const [currentPhase, setCurrentPhase] = useState<'theory' | 'practice' | 'evaluation'>('theory');
+  const [currentPhase, setCurrentPhase] = useState<'theory' | 'practice' | 'evaluation'>('practice');
   const [userTasks, setUserTasks] = useState<Array<{id: number, text: string, quadrant: number | null}>>([]);
   const [newTask, setNewTask] = useState('');
   const [completedQuadrants, setCompletedQuadrants] = useState<Set<number>>(new Set());
@@ -703,13 +703,22 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
         <div className="flex justify-center mb-12">
           <div className="flex space-x-4">
             {[
-              { id: 'theory', label: 'Théorie', desc: 'Apprentissage' },
               { id: 'practice', label: 'Pratique', desc: 'Exercice' },
+              { id: 'theory', label: 'Théorie', desc: 'Apprentissage' },
               { id: 'evaluation', label: 'Évaluation', desc: 'Synthèse' }
             ].map(phase => (
               <button
                 key={phase.id}
-                onClick={() => setCurrentPhase(phase.id as any)}
+                onClick={() => {
+                  setCurrentPhase(phase.id as any);
+                  // Scroll vers le haut de la section quand on change de phase
+                  setTimeout(() => {
+                    const section = document.getElementById('section-3');
+                    if (section) {
+                      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }, 100);
+                }}
                 className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
                   currentPhase === phase.id
                     ? 'bg-learning-primary text-white'
