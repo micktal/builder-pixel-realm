@@ -20,12 +20,16 @@ const SECTIONS = [
 ];
 
 // PDF Export function
-const exportToPDF = (avgScore: number, questions: any[], responses: Record<string, number>) => {
+const exportToPDF = (
+  avgScore: number,
+  questions: any[],
+  responses: Record<string, number>,
+) => {
   // Create PDF content as HTML that can be converted
   const getScoreColor = (score: number) => {
-    if (score >= 4) return '#22c55e'; // green
-    if (score >= 3) return '#f59e0b'; // amber
-    return '#ef4444'; // red
+    if (score >= 4) return "#22c55e"; // green
+    if (score >= 3) return "#f59e0b"; // amber
+    return "#ef4444"; // red
   };
 
   const getPersonalizedAdvice = (avgScore: number) => {
@@ -47,19 +51,23 @@ const exportToPDF = (avgScore: number, questions: any[], responses: Record<strin
           ${avgScore.toFixed(1)}/5
         </div>
         <p style="color: #666; font-size: 16px;">Score moyen de résilience</p>
-        <p style="color: #666; font-size: 14px;">Généré le ${new Date().toLocaleDateString('fr-FR')}</p>
+        <p style="color: #666; font-size: 14px;">Généré le ${new Date().toLocaleDateString("fr-FR")}</p>
       </div>
 
       <div style="margin-bottom: 30px;">
         <h2 style="color: #1e40af; font-size: 20px; margin-bottom: 20px;">Détail par dimension</h2>
-        ${questions.map(question => `
+        ${questions
+          .map(
+            (question) => `
           <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background-color: #f9fafb; margin-bottom: 8px; border-radius: 8px;">
             <span style="font-weight: 500; color: #374151;">${question.label}</span>
             <span style="font-weight: bold; color: ${getScoreColor(responses[question.id])}; font-size: 18px;">
               ${responses[question.id]}/5
             </span>
           </div>
-        `).join('')}
+        `,
+          )
+          .join("")}
       </div>
 
       <div style="background-color: #dbeafe; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
@@ -78,7 +86,7 @@ const exportToPDF = (avgScore: number, questions: any[], responses: Record<strin
   `;
 
   // Open content in new window for printing/saving as PDF
-  const printWindow = window.open('', '_blank');
+  const printWindow = window.open("", "_blank");
   if (printWindow) {
     printWindow.document.write(`
       <!DOCTYPE html>
@@ -117,38 +125,38 @@ export default function Index() {
     personalPlan: null,
   });
   const [showBackToTop, setShowBackToTop] = useState(false);
-  
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   useEffect(() => {
     const handleScroll = () => {
       setShowBackToTop(window.scrollY > 500);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const navigateToSection = (sectionId: number) => {
     const element = document.getElementById(`section-${sectionId}`);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setProgress(prev => ({ ...prev, currentSection: sectionId }));
+      element.scrollIntoView({ behavior: "smooth" });
+      setProgress((prev) => ({ ...prev, currentSection: sectionId }));
     }
   };
 
   const completeSection = (sectionId: number) => {
-    setProgress(prev => ({
+    setProgress((prev) => ({
       ...prev,
-      completedSections: new Set([...prev.completedSections, sectionId])
+      completedSections: new Set([...prev.completedSections, sectionId]),
     }));
   };
 
@@ -173,10 +181,10 @@ export default function Index() {
                 onClick={() => navigateToSection(section.id)}
                 className={`relative group flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${
                   isCompleted
-                    ? 'bg-learning-primary text-white'
+                    ? "bg-learning-primary text-white"
                     : isCurrent
-                    ? 'bg-learning-accent text-learning-primary ring-2 ring-learning-primary'
-                    : 'bg-gray-100 text-gray-400 hover:bg-learning-accent hover:text-learning-primary'
+                      ? "bg-learning-accent text-learning-primary ring-2 ring-learning-primary"
+                      : "bg-gray-100 text-gray-400 hover:bg-learning-accent hover:text-learning-primary"
                 }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
@@ -209,7 +217,10 @@ export default function Index() {
       )}
 
       {/* Welcome Section */}
-      <section id="section-0" className="min-h-screen flex items-center justify-center px-4">
+      <section
+        id="section-0"
+        className="min-h-screen flex items-center justify-center px-4"
+      >
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -222,14 +233,15 @@ export default function Index() {
                 Résilience Durable
               </span>
             </h1>
-            
+
             <h2 className="text-2xl md:text-3xl text-learning-neutral mb-8 font-medium">
               Module 4 - Votre parcours vers l'autonomie
             </h2>
-            
+
             <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Découvrez vos forces, renforcez votre résilience et construisez votre système personnel 
-              de soutien dans ce module interactif de 30 minutes.
+              Découvrez vos forces, renforcez votre résilience et construisez
+              votre système personnel de soutien dans ce module interactif de 30
+              minutes.
             </p>
           </motion.div>
 
@@ -249,7 +261,13 @@ export default function Index() {
                   fill="currentColor"
                 >
                   {/* Simple illustration of person climbing steps */}
-                  <path d="M50 150 L75 125 L100 100 L125 75 L150 50" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round"/>
+                  <path
+                    d="M50 150 L75 125 L100 100 L125 75 L150 50"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                    strokeLinecap="round"
+                  />
                   <circle cx="80" cy="140" r="8" />
                   <path d="M72 148 L88 148 L88 180 L82 180 L82 165 L78 165 L78 180 L72 180 Z" />
                   <path d="M80 132 L75 140 L85 140 Z" />
@@ -277,8 +295,7 @@ export default function Index() {
             <motion.div
               animate={{ x: [0, 5, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
-            >
-            </motion.div>
+            ></motion.div>
           </motion.button>
 
           {/* Module Duration */}
@@ -294,15 +311,15 @@ export default function Index() {
       </section>
 
       {/* Section 1: Auto-bilan 360° */}
-      <SelfAssessmentSection 
-        progress={progress} 
+      <SelfAssessmentSection
+        progress={progress}
         onComplete={() => completeSection(1)}
         onNavigate={navigateToSection}
       />
 
       {/* Section 2: Résilience face à l'imprévu */}
-      <ResilienceSection 
-        progress={progress} 
+      <ResilienceSection
+        progress={progress}
         onComplete={() => completeSection(2)}
         onNavigate={navigateToSection}
       />
@@ -313,19 +330,19 @@ export default function Index() {
         onComplete={() => completeSection(3)}
         onNavigate={navigateToSection}
       />
-      
+
       <StressManagementSection
         progress={progress}
         onComplete={() => completeSection(4)}
         onNavigate={navigateToSection}
       />
-      
+
       <StressSimulationSection
         progress={progress}
         onComplete={() => completeSection(5)}
         onNavigate={navigateToSection}
       />
-      
+
       <RelationalMapSection
         progress={progress}
         onComplete={() => completeSection(6)}
@@ -346,20 +363,52 @@ export default function Index() {
 function SelfAssessmentSection({ progress, onComplete, onNavigate }: any) {
   const [responses, setResponses] = useState<Record<string, number>>({});
   const [showResults, setShowResults] = useState(false);
-  
+
   const questions = [
-    { id: 'emotion', label: 'Gestion émotionnelle', description: 'Je gère mes émotions avec sérénité' },
-    { id: 'energy', label: 'Niveau d\'énergie', description: 'Je maintiens mon énergie au quotidien' },
-    { id: 'relations', label: 'Relations interpersonnelles', description: 'J\'entretiens des relations harmonieuses' },
-    { id: 'stress', label: 'Gestion du stress', description: 'Je fais face au stress efficacement' },
-    { id: 'adaptation', label: 'Capacité d\'adaptation', description: 'Je m\'adapte facilement aux changements' },
-    { id: 'motivation', label: 'Motivation personnelle', description: 'Je reste motivé(e) face aux défis' },
-    { id: 'equilibre', label: 'Équilibre vie/travail', description: 'Je maintiens un bon équilibre de vie' },
-    { id: 'apprentissage', label: 'Apprentissage continu', description: 'J\'apprends continuellement de mes expériences' },
+    {
+      id: "emotion",
+      label: "Gestion émotionnelle",
+      description: "Je gère mes émotions avec sérénité",
+    },
+    {
+      id: "energy",
+      label: "Niveau d'énergie",
+      description: "Je maintiens mon énergie au quotidien",
+    },
+    {
+      id: "relations",
+      label: "Relations interpersonnelles",
+      description: "J'entretiens des relations harmonieuses",
+    },
+    {
+      id: "stress",
+      label: "Gestion du stress",
+      description: "Je fais face au stress efficacement",
+    },
+    {
+      id: "adaptation",
+      label: "Capacité d'adaptation",
+      description: "Je m'adapte facilement aux changements",
+    },
+    {
+      id: "motivation",
+      label: "Motivation personnelle",
+      description: "Je reste motivé(e) face aux défis",
+    },
+    {
+      id: "equilibre",
+      label: "Équilibre vie/travail",
+      description: "Je maintiens un bon équilibre de vie",
+    },
+    {
+      id: "apprentissage",
+      label: "Apprentissage continu",
+      description: "J'apprends continuellement de mes expériences",
+    },
   ];
 
   const handleResponse = (questionId: string, value: number) => {
-    setResponses(prev => ({ ...prev, [questionId]: value }));
+    setResponses((prev) => ({ ...prev, [questionId]: value }));
   };
 
   const generateResults = () => {
@@ -367,9 +416,9 @@ function SelfAssessmentSection({ progress, onComplete, onNavigate }: any) {
       setShowResults(true);
       // Scroll automatiquement vers le haut de la section pour voir les résultats
       setTimeout(() => {
-        const section = document.getElementById('section-1');
+        const section = document.getElementById("section-1");
         if (section) {
-          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          section.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       }, 100);
     }
@@ -377,7 +426,9 @@ function SelfAssessmentSection({ progress, onComplete, onNavigate }: any) {
 
   const getAverageScore = () => {
     const scores = Object.values(responses);
-    return scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+    return scores.length > 0
+      ? scores.reduce((a, b) => a + b, 0) / scores.length
+      : 0;
   };
 
   return (
@@ -394,8 +445,9 @@ function SelfAssessmentSection({ progress, onComplete, onNavigate }: any) {
             Auto-bilan 360°
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Évaluez votre niveau actuel dans différentes dimensions de l'autonomie et de la résilience. 
-            Soyez honnête avec vous-même pour obtenir un bilan personnalisé.
+            Évaluez votre niveau actuel dans différentes dimensions de
+            l'autonomie et de la résilience. Soyez honnête avec vous-même pour
+            obtenir un bilan personnalisé.
           </p>
         </motion.div>
 
@@ -414,7 +466,7 @@ function SelfAssessmentSection({ progress, onComplete, onNavigate }: any) {
                   {question.label}
                 </h3>
                 <p className="text-gray-600 mb-4">{question.description}</p>
-                
+
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">Pas du tout</span>
                   <div className="flex space-x-2">
@@ -424,8 +476,8 @@ function SelfAssessmentSection({ progress, onComplete, onNavigate }: any) {
                         onClick={() => handleResponse(question.id, value)}
                         className={`w-12 h-12 rounded-full border-2 transition-all duration-300 ${
                           responses[question.id] === value
-                            ? 'bg-learning-primary border-learning-primary text-white'
-                            : 'border-gray-300 hover:border-learning-primary hover:bg-learning-accent'
+                            ? "bg-learning-primary border-learning-primary text-white"
+                            : "border-gray-300 hover:border-learning-primary hover:bg-learning-accent"
                         }`}
                       >
                         {value}
@@ -453,9 +505,9 @@ function SelfAssessmentSection({ progress, onComplete, onNavigate }: any) {
             )}
           </div>
         ) : (
-          <ResultsDisplay 
-            responses={responses} 
-            questions={questions} 
+          <ResultsDisplay
+            responses={responses}
+            questions={questions}
             onComplete={onComplete}
             onContinue={() => onNavigate(2)}
           />
@@ -473,9 +525,9 @@ function ResultsDisplay({ responses, questions, onComplete, onContinue }: any) {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 4) return 'text-green-600';
-    if (score >= 3) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 4) return "text-green-600";
+    if (score >= 3) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const avgScore = getAverageScore();
@@ -503,8 +555,13 @@ function ResultsDisplay({ responses, questions, onComplete, onContinue }: any) {
         {questions.map((question: any) => {
           const score = responses[question.id];
           return (
-            <div key={question.id} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-              <span className="font-medium text-gray-700">{question.label}</span>
+            <div
+              key={question.id}
+              className="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
+            >
+              <span className="font-medium text-gray-700">
+                {question.label}
+              </span>
               <span className={`font-bold text-lg ${getScoreColor(score)}`}>
                 {score}/5
               </span>
@@ -514,14 +571,15 @@ function ResultsDisplay({ responses, questions, onComplete, onContinue }: any) {
       </div>
 
       <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl mb-8">
-        <h4 className="font-semibold text-learning-primary mb-3">Conseil personnalisé</h4>
+        <h4 className="font-semibold text-learning-primary mb-3">
+          Conseil personnalisé
+        </h4>
         <p className="text-gray-700">
-          {avgScore >= 4 
+          {avgScore >= 4
             ? "Excellent ! Vous montrez une grande résilience. Continuez à cultiver ces forces et partagez votre expérience avec d'autres."
             : avgScore >= 3
-            ? "Bonne base ! Identifiez 1-2 domaines à renforcer en priorité. Votre parcours de développement sera très bénéfique."
-            : "Potentiel d'amélioration important ! Ce module vous donnera des outils concrets pour développer votre résilience. Restez motivé(e) !"
-          }
+              ? "Bonne base ! Identifiez 1-2 domaines à renforcer en priorité. Votre parcours de développement sera très bénéfique."
+              : "Potentiel d'amélioration important ! Ce module vous donnera des outils concrets pour développer votre résilience. Restez motivé(e) !"}
         </p>
       </div>
 
@@ -532,7 +590,7 @@ function ResultsDisplay({ responses, questions, onComplete, onContinue }: any) {
         >
           Exporter mon bilan PDF
         </button>
-        <button 
+        <button
           onClick={() => {
             onComplete();
             onContinue();
@@ -551,24 +609,40 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
   const [currentScenario, setCurrentScenario] = useState(0);
   const [choices, setChoices] = useState<Record<number, string>>({});
   const [showFeedback, setShowFeedback] = useState(false);
-  const [ritual, setRitual] = useState('');
+  const [ritual, setRitual] = useState("");
 
   const scenarios = [
     {
       id: 0,
-      situation: "Votre réunion importante déborde de 30 minutes, mais vous avez un autre engagement familial prévu juste après...",
+      situation:
+        "Votre réunion importante déborde de 30 minutes, mais vous avez un autre engagement familial prévu juste après...",
       choices: [
-        { id: 'A', text: "J'interromps poliment la réunion pour respecter mon engagement", feedback: "Excellent ! Vous savez poser vos limites et honorer vos engagements personnels." },
-        { id: 'B', text: "Je reste en réunion et j'annule mon engagement familial", feedback: "Attention à l'équilibre ! Vos proches méritent aussi votre respect des engagements." },
-        { id: 'C', text: "Je négocie 10 minutes de plus et trouve un compromis", feedback: "Parfait ! Vous trouvez des solutions créatives qui respectent toutes les parties." },
-      ]
+        {
+          id: "A",
+          text: "J'interromps poliment la réunion pour respecter mon engagement",
+          feedback:
+            "Excellent ! Vous savez poser vos limites et honorer vos engagements personnels.",
+        },
+        {
+          id: "B",
+          text: "Je reste en réunion et j'annule mon engagement familial",
+          feedback:
+            "Attention à l'équilibre ! Vos proches méritent aussi votre respect des engagements.",
+        },
+        {
+          id: "C",
+          text: "Je négocie 10 minutes de plus et trouve un compromis",
+          feedback:
+            "Parfait ! Vous trouvez des solutions créatives qui respectent toutes les parties.",
+        },
+      ],
     },
   ];
 
   const handleChoice = (scenarioId: number, choiceId: string) => {
-    setChoices(prev => ({ ...prev, [scenarioId]: choiceId }));
+    setChoices((prev) => ({ ...prev, [scenarioId]: choiceId }));
     setShowFeedback(true);
-    
+
     setTimeout(() => {
       setShowFeedback(false);
       if (scenarioId < scenarios.length - 1) {
@@ -580,11 +654,14 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
   const getCurrentFeedback = () => {
     const choice = choices[currentScenario];
     const scenario = scenarios[currentScenario];
-    return scenario?.choices.find(c => c.id === choice)?.feedback;
+    return scenario?.choices.find((c) => c.id === choice)?.feedback;
   };
 
   return (
-    <section id="section-2" className="min-h-screen py-20 px-4 bg-gradient-to-b from-purple-50 to-white">
+    <section
+      id="section-2"
+      className="min-h-screen py-20 px-4 bg-gradient-to-b from-purple-50 to-white"
+    >
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -597,7 +674,8 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
             Résilience face à l'imprévu
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Testez vos réflexes face aux situations inattendues et développez votre capacité d'adaptation.
+            Testez vos réflexes face aux situations inattendues et développez
+            votre capacité d'adaptation.
           </p>
         </motion.div>
 
@@ -615,7 +693,7 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
               <p className="text-lg text-gray-700 mb-8 leading-relaxed">
                 {scenarios[currentScenario].situation}
               </p>
-              
+
               <div className="space-y-4">
                 {scenarios[currentScenario].choices.map((choice) => (
                   <motion.button
@@ -664,18 +742,19 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
               Créez votre rituel minute
             </h3>
             <p className="text-gray-600 mb-6 text-center">
-              Décrivez en quelques mots votre stratégie personnelle pour reprendre le contrôle en 60 secondes :
+              Décrivez en quelques mots votre stratégie personnelle pour
+              reprendre le contrôle en 60 secondes :
             </p>
-            
+
             <textarea
               value={ritual}
               onChange={(e) => setRitual(e.target.value)}
               placeholder="Ex: Respirer profondément 3 fois, me poser la question 'Qu'est-ce qui est vraiment important maintenant ?', puis agir..."
               className="w-full h-32 p-4 border-2 border-gray-200 rounded-xl focus:border-learning-primary focus:outline-none resize-none"
             />
-            
+
             <div className="flex justify-center mt-6">
-              <button 
+              <button
                 onClick={() => {
                   onComplete();
                   onNavigate(3);
@@ -695,11 +774,19 @@ function ResilienceSection({ progress, onComplete, onNavigate }: any) {
 
 // Priority Management Section Component
 function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
-  const [currentPhase, setCurrentPhase] = useState<'theory' | 'practice' | 'evaluation'>('theory');
-  const [userTasks, setUserTasks] = useState<Array<{id: number, text: string, quadrant: number | null}>>([]);
-  const [newTask, setNewTask] = useState('');
-  const [completedQuadrants, setCompletedQuadrants] = useState<Set<number>>(new Set());
-  const [currentDraggedTask, setCurrentDraggedTask] = useState<number | null>(null);
+  const [currentPhase, setCurrentPhase] = useState<
+    "theory" | "practice" | "evaluation"
+  >("theory");
+  const [userTasks, setUserTasks] = useState<
+    Array<{ id: number; text: string; quadrant: number | null }>
+  >([]);
+  const [newTask, setNewTask] = useState("");
+  const [completedQuadrants, setCompletedQuadrants] = useState<Set<number>>(
+    new Set(),
+  );
+  const [currentDraggedTask, setCurrentDraggedTask] = useState<number | null>(
+    null,
+  );
 
   const sampleTasks = [
     { id: 1, text: "Répondre aux emails non urgents", quadrant: null },
@@ -709,7 +796,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
     { id: 5, text: "Réunion de crise", quadrant: null },
     { id: 6, text: "Lecture professionnelle", quadrant: null },
     { id: 7, text: "Réseaux sociaux", quadrant: null },
-    { id: 8, text: "Préparation présentation importante", quadrant: null }
+    { id: 8, text: "Préparation présentation importante", quadrant: null },
   ];
 
   const quadrants = [
@@ -719,7 +806,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
       subtitle: "À FAIRE",
       description: "Crises, urgences, problèmes pressants",
       color: "bg-red-100 border-red-300",
-      examples: ["Urgences médicales", "Crises clients", "Deadlines imminents"]
+      examples: ["Urgences médicales", "Crises clients", "Deadlines imminents"],
     },
     {
       id: 2,
@@ -727,7 +814,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
       subtitle: "À PLANIFIER",
       description: "Prévention, développement, opportunités",
       color: "bg-green-100 border-green-300",
-      examples: ["Formation", "Planification", "Relations"]
+      examples: ["Formation", "Planification", "Relations"],
     },
     {
       id: 3,
@@ -735,7 +822,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
       subtitle: "À DÉLÉGUER",
       description: "Interruptions, certains appels, emails",
       color: "bg-yellow-100 border-yellow-300",
-      examples: ["Certains emails", "Réunions inutiles", "Interruptions"]
+      examples: ["Certains emails", "Réunions inutiles", "Interruptions"],
     },
     {
       id: 4,
@@ -743,46 +830,54 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
       subtitle: "À ÉLIMINER",
       description: "Activités triviales, distractions",
       color: "bg-gray-100 border-gray-300",
-      examples: ["Réseaux sociaux", "TV excessive", "Conversations futiles"]
-    }
+      examples: ["Réseaux sociaux", "TV excessive", "Conversations futiles"],
+    },
   ];
 
   useEffect(() => {
-    if (currentPhase === 'practice') {
-      setUserTasks(sampleTasks.map(task => ({ ...task })));
+    if (currentPhase === "practice") {
+      setUserTasks(sampleTasks.map((task) => ({ ...task })));
     }
   }, [currentPhase]);
 
   const addNewTask = () => {
     if (newTask.trim()) {
-      setUserTasks(prev => [...prev, {
-        id: Date.now(),
-        text: newTask.trim(),
-        quadrant: null
-      }]);
-      setNewTask('');
+      setUserTasks((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          text: newTask.trim(),
+          quadrant: null,
+        },
+      ]);
+      setNewTask("");
     }
   };
 
   const moveTaskToQuadrant = (taskId: number, quadrantId: number) => {
-    setUserTasks(prev => prev.map(task =>
-      task.id === taskId ? { ...task, quadrant: quadrantId } : task
-    ));
-    setCompletedQuadrants(prev => new Set([...prev, quadrantId]));
+    setUserTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskId ? { ...task, quadrant: quadrantId } : task,
+      ),
+    );
+    setCompletedQuadrants((prev) => new Set([...prev, quadrantId]));
   };
 
   const getTasksInQuadrant = (quadrantId: number) => {
-    return userTasks.filter(task => task.quadrant === quadrantId);
+    return userTasks.filter((task) => task.quadrant === quadrantId);
   };
 
   const getUnassignedTasks = () => {
-    return userTasks.filter(task => task.quadrant === null);
+    return userTasks.filter((task) => task.quadrant === null);
   };
 
   const isCompleted = userTasks.length > 0 && getUnassignedTasks().length === 0;
 
   return (
-    <section id="section-3" className="min-h-screen py-20 px-4 bg-gradient-to-b from-white to-blue-50">
+    <section
+      id="section-3"
+      className="min-h-screen py-20 px-4 bg-gradient-to-b from-white to-blue-50"
+    >
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -795,8 +890,9 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
             Gestion des Priorités & Prise de Décision
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Maîtrisez la Matrice d'Eisenhower pour prendre des décisions éclairées,
-            gérer efficacement votre temps et renforcer votre autonomie.
+            Maîtrisez la Matrice d'Eisenhower pour prendre des décisions
+            éclairées, gérer efficacement votre temps et renforcer votre
+            autonomie.
           </p>
         </motion.div>
 
@@ -804,26 +900,29 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
         <div className="flex justify-center mb-12">
           <div className="flex space-x-4">
             {[
-              { id: 'theory', label: 'Théorie', desc: 'Apprentissage' },
-              { id: 'practice', label: 'Pratique', desc: 'Exercice' },
-              { id: 'evaluation', label: 'Évaluation', desc: 'Synthèse' }
-            ].map(phase => (
+              { id: "theory", label: "Théorie", desc: "Apprentissage" },
+              { id: "practice", label: "Pratique", desc: "Exercice" },
+              { id: "evaluation", label: "Évaluation", desc: "Synthèse" },
+            ].map((phase) => (
               <button
                 key={phase.id}
                 onClick={() => {
                   setCurrentPhase(phase.id as any);
                   // Scroll vers le haut de la section quand on change de phase
                   setTimeout(() => {
-                    const section = document.getElementById('section-3');
+                    const section = document.getElementById("section-3");
                     if (section) {
-                      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      section.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
                     }
                   }, 100);
                 }}
                 className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
                   currentPhase === phase.id
-                    ? 'bg-learning-primary text-white'
-                    : 'bg-white text-learning-primary border-2 border-learning-primary hover:bg-learning-accent'
+                    ? "bg-learning-primary text-white"
+                    : "bg-white text-learning-primary border-2 border-learning-primary hover:bg-learning-accent"
                 }`}
               >
                 <div className="text-center">
@@ -836,7 +935,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
         </div>
 
         {/* Phase Théorie */}
-        {currentPhase === 'theory' && (
+        {currentPhase === "theory" && (
           <div className="space-y-8">
             {/* Introduction théorique */}
             <motion.div
@@ -850,28 +949,50 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
 
               <div className="prose max-w-none text-gray-700 space-y-6">
                 <p className="text-lg leading-relaxed">
-                  Développée par le Président américain <strong>Dwight D. Eisenhower</strong> et popularisée par Stephen Covey,
-                  cette matrice révolutionnaire distingue deux dimensions cruciales de toute tâche :
-                  <strong className="text-learning-primary"> l'urgence et l'importance</strong>.
+                  Développée par le Président américain{" "}
+                  <strong>Dwight D. Eisenhower</strong> et popularisée par
+                  Stephen Covey, cette matrice révolutionnaire distingue deux
+                  dimensions cruciales de toute tâche :
+                  <strong className="text-learning-primary">
+                    {" "}
+                    l'urgence et l'importance
+                  </strong>
+                  .
                 </p>
 
                 <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl">
-                  <h4 className="font-semibold text-learning-primary mb-3">Distinction fondamentale :</h4>
+                  <h4 className="font-semibold text-learning-primary mb-3">
+                    Distinction fondamentale :
+                  </h4>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h5 className="font-semibold text-learning-primary mb-2">URGENT</h5>
-                      <p>Ce qui demande une attention immédiate. L'urgence est souvent imposée par les autres ou les circonstances externes.</p>
+                      <h5 className="font-semibold text-learning-primary mb-2">
+                        URGENT
+                      </h5>
+                      <p>
+                        Ce qui demande une attention immédiate. L'urgence est
+                        souvent imposée par les autres ou les circonstances
+                        externes.
+                      </p>
                     </div>
                     <div>
-                      <h5 className="font-semibold text-learning-primary mb-2">IMPORTANT</h5>
-                      <p>Ce qui contribue à vos objectifs à long terme, vos valeurs et votre mission. L'importance est déterminée par vous.</p>
+                      <h5 className="font-semibold text-learning-primary mb-2">
+                        IMPORTANT
+                      </h5>
+                      <p>
+                        Ce qui contribue à vos objectifs à long terme, vos
+                        valeurs et votre mission. L'importance est déterminée
+                        par vous.
+                      </p>
                     </div>
                   </div>
                 </div>
 
                 <p>
-                  Cette distinction permet de <strong>hiérarchiser objectivement</strong> vos activités et d'éviter le piège de la
-                  "tyrannie de l'urgent" qui nous fait sacrifier l'important au profit de l'urgent.
+                  Cette distinction permet de{" "}
+                  <strong>hiérarchiser objectivement</strong> vos activités et
+                  d'éviter le piège de la "tyrannie de l'urgent" qui nous fait
+                  sacrifier l'important au profit de l'urgent.
                 </p>
               </div>
             </motion.div>
@@ -900,10 +1021,15 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                   <p className="text-gray-700 mb-4">{quadrant.description}</p>
 
                   <div>
-                    <h5 className="font-semibold text-learning-primary mb-2">Exemples :</h5>
+                    <h5 className="font-semibold text-learning-primary mb-2">
+                      Exemples :
+                    </h5>
                     <ul className="space-y-1">
                       {quadrant.examples.map((example, i) => (
-                        <li key={i} className="text-sm text-gray-600 flex items-center">
+                        <li
+                          key={i}
+                          className="text-sm text-gray-600 flex items-center"
+                        >
                           <span className="w-2 h-2 bg-learning-primary rounded-full mr-2"></span>
                           {example}
                         </li>
@@ -927,34 +1053,56 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h4 className="font-semibold text-red-600 mb-3">Q1 - FAIRE immédiatement</h4>
-                  <p className="text-gray-700 mb-4">Minimisez ce quadrant par une meilleure prévention (Q2).</p>
+                  <h4 className="font-semibold text-red-600 mb-3">
+                    Q1 - FAIRE immédiatement
+                  </h4>
+                  <p className="text-gray-700 mb-4">
+                    Minimisez ce quadrant par une meilleure prévention (Q2).
+                  </p>
 
-                  <h4 className="font-semibold text-green-600 mb-3">Q2 - PLANIFIER et prioriser</h4>
-                  <p className="text-gray-700">Le quadrant de l'excellence ! Investissez 60-70% de votre temps ici.</p>
+                  <h4 className="font-semibold text-green-600 mb-3">
+                    Q2 - PLANIFIER et prioriser
+                  </h4>
+                  <p className="text-gray-700">
+                    Le quadrant de l'excellence ! Investissez 60-70% de votre
+                    temps ici.
+                  </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-yellow-600 mb-3">Q3 - DÉLÉGUER ou dire NON</h4>
-                  <p className="text-gray-700 mb-4">Apprenez à déléguer efficacement ou à refuser poliment.</p>
+                  <h4 className="font-semibold text-yellow-600 mb-3">
+                    Q3 - DÉLÉGUER ou dire NON
+                  </h4>
+                  <p className="text-gray-700 mb-4">
+                    Apprenez à déléguer efficacement ou à refuser poliment.
+                  </p>
 
-                  <h4 className="font-semibold text-gray-600 mb-3">Q4 - ÉLIMINER</h4>
-                  <p className="text-gray-700">Activités qui volent votre temps sans valeur ajoutée.</p>
+                  <h4 className="font-semibold text-gray-600 mb-3">
+                    Q4 - ÉLIMINER
+                  </h4>
+                  <p className="text-gray-700">
+                    Activités qui volent votre temps sans valeur ajoutée.
+                  </p>
                 </div>
               </div>
 
               <div className="mt-8 p-6 bg-learning-primary bg-opacity-10 rounded-xl">
-                <h4 className="font-semibold text-learning-primary mb-3">Clé du succès :</h4>
+                <h4 className="font-semibold text-learning-primary mb-3">
+                  Clé du succès :
+                </h4>
                 <p className="text-gray-700">
-                  <strong>Passez progressivement du Quadrant 1 au Quadrant 2.</strong> Plus vous investissez dans Q2
-                  (planification, prévention, développement), moins vous aurez de crises en Q1. C'est le secret d'une
-                  autonomie durable et d'une résilience renforcée.
+                  <strong>
+                    Passez progressivement du Quadrant 1 au Quadrant 2.
+                  </strong>{" "}
+                  Plus vous investissez dans Q2 (planification, prévention,
+                  développement), moins vous aurez de crises en Q1. C'est le
+                  secret d'une autonomie durable et d'une résilience renforcée.
                 </p>
               </div>
             </motion.div>
 
             <div className="text-center">
               <button
-                onClick={() => setCurrentPhase('practice')}
+                onClick={() => setCurrentPhase("practice")}
                 className="learning-button text-lg px-8 py-4"
               >
                 Passer à la pratique
@@ -964,7 +1112,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
         )}
 
         {/* Phase Pratique */}
-        {currentPhase === 'practice' && (
+        {currentPhase === "practice" && (
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -976,7 +1124,8 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
               </h3>
 
               <p className="text-gray-600 mb-6">
-                Glissez-déposez les tâches suivantes dans le bon quadrant. Vous pouvez aussi ajouter vos propres tâches !
+                Glissez-déposez les tâches suivantes dans le bon quadrant. Vous
+                pouvez aussi ajouter vos propres tâches !
               </p>
 
               {/* Ajout de nouvelles tâches */}
@@ -987,7 +1136,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                   onChange={(e) => setNewTask(e.target.value)}
                   placeholder="Ajoutez votre propre tâche..."
                   className="flex-1 p-3 border-2 border-gray-200 rounded-lg focus:border-learning-primary focus:outline-none"
-                  onKeyPress={(e) => e.key === 'Enter' && addNewTask()}
+                  onKeyPress={(e) => e.key === "Enter" && addNewTask()}
                 />
                 <button
                   onClick={addNewTask}
@@ -1000,9 +1149,11 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
               {/* Tâches non assignées */}
               {getUnassignedTasks().length > 0 && (
                 <div className="mb-8">
-                  <h4 className="font-semibold text-learning-primary mb-4">Tâches à classer :</h4>
+                  <h4 className="font-semibold text-learning-primary mb-4">
+                    Tâches à classer :
+                  </h4>
                   <div className="grid md:grid-cols-2 gap-3">
-                    {getUnassignedTasks().map(task => (
+                    {getUnassignedTasks().map((task) => (
                       <motion.div
                         key={task.id}
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -1021,7 +1172,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
 
               {/* Matrice interactive */}
               <div className="grid grid-cols-2 gap-4">
-                {quadrants.map(quadrant => (
+                {quadrants.map((quadrant) => (
                   <div
                     key={quadrant.id}
                     className={`p-4 rounded-xl border-2 min-h-[200px] ${quadrant.color}`}
@@ -1037,10 +1188,12 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                     <h4 className="font-bold text-learning-primary mb-2 text-sm">
                       Q{quadrant.id}: {quadrant.subtitle}
                     </h4>
-                    <p className="text-xs text-gray-600 mb-4">{quadrant.description}</p>
+                    <p className="text-xs text-gray-600 mb-4">
+                      {quadrant.description}
+                    </p>
 
                     <div className="space-y-2">
-                      {getTasksInQuadrant(quadrant.id).map(task => (
+                      {getTasksInQuadrant(quadrant.id).map((task) => (
                         <motion.div
                           key={task.id}
                           initial={{ opacity: 0, scale: 0.8 }}
@@ -1063,7 +1216,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                 className="text-center"
               >
                 <button
-                  onClick={() => setCurrentPhase('evaluation')}
+                  onClick={() => setCurrentPhase("evaluation")}
                   className="learning-button text-lg px-8 py-4"
                 >
                   Voir mon évaluation
@@ -1074,7 +1227,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
         )}
 
         {/* Phase Évaluation */}
-        {currentPhase === 'evaluation' && (
+        {currentPhase === "evaluation" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1086,12 +1239,19 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
               </h3>
 
               <div className="grid md:grid-cols-4 gap-6 mb-8">
-                {quadrants.map(quadrant => {
+                {quadrants.map((quadrant) => {
                   const tasksCount = getTasksInQuadrant(quadrant.id).length;
                   return (
-                    <div key={quadrant.id} className={`p-4 rounded-xl ${quadrant.color}`}>
-                      <h4 className="font-bold text-learning-primary mb-2">Q{quadrant.id}</h4>
-                      <div className="text-2xl font-bold text-learning-neutral">{tasksCount}</div>
+                    <div
+                      key={quadrant.id}
+                      className={`p-4 rounded-xl ${quadrant.color}`}
+                    >
+                      <h4 className="font-bold text-learning-primary mb-2">
+                        Q{quadrant.id}
+                      </h4>
+                      <div className="text-2xl font-bold text-learning-neutral">
+                        {tasksCount}
+                      </div>
                       <p className="text-xs">tâches classées</p>
                     </div>
                   );
@@ -1099,19 +1259,34 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
               </div>
 
               <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl mb-8">
-                <h4 className="font-semibold text-learning-primary mb-3">Recommandations personnalisées</h4>
+                <h4 className="font-semibold text-learning-primary mb-3">
+                  Recommandations personnalisées
+                </h4>
                 <div className="text-left space-y-3">
                   {getTasksInQuadrant(1).length > 3 && (
-                    <p className="text-gray-700"><strong>Trop de tâches urgentes :</strong> Investissez plus dans la planification (Q2) pour réduire les crises.</p>
+                    <p className="text-gray-700">
+                      <strong>Trop de tâches urgentes :</strong> Investissez
+                      plus dans la planification (Q2) pour réduire les crises.
+                    </p>
                   )}
                   {getTasksInQuadrant(2).length < 2 && (
-                    <p className="text-gray-700"><strong>Développez Q2 :</strong> Ajoutez plus d'activités de développement et de prévention.</p>
+                    <p className="text-gray-700">
+                      <strong>Développez Q2 :</strong> Ajoutez plus d'activités
+                      de développement et de prévention.
+                    </p>
                   )}
                   {getTasksInQuadrant(4).length > 0 && (
-                    <p className="text-gray-700"><strong>Éliminez Q4 :</strong> Ces activités nuisent à votre productivité.</p>
+                    <p className="text-gray-700">
+                      <strong>Éliminez Q4 :</strong> Ces activités nuisent à
+                      votre productivité.
+                    </p>
                   )}
-                  {getTasksInQuadrant(2).length >= getTasksInQuadrant(1).length && (
-                    <p className="text-gray-700"><strong>Excellent équilibre :</strong> Vous priorisez l'important sur l'urgent !</p>
+                  {getTasksInQuadrant(2).length >=
+                    getTasksInQuadrant(1).length && (
+                    <p className="text-gray-700">
+                      <strong>Excellent équilibre :</strong> Vous priorisez
+                      l'important sur l'urgent !
+                    </p>
                   )}
                 </div>
               </div>
@@ -1135,141 +1310,217 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
 
 // Stress Management Section Component
 function StressManagementSection({ progress, onComplete, onNavigate }: any) {
-  const [currentPhase, setCurrentPhase] = useState<'theory' | 'techniques' | 'scenarios' | 'evaluation'>('theory');
-  const [stressFactors, setStressFactors] = useState<Record<string, number>>({});
+  const [currentPhase, setCurrentPhase] = useState<
+    "theory" | "techniques" | "scenarios" | "evaluation"
+  >("theory");
+  const [stressFactors, setStressFactors] = useState<Record<string, number>>(
+    {},
+  );
   const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
-  const [scenarioResults, setScenarioResults] = useState<Record<string, string>>({});
+  const [scenarioResults, setScenarioResults] = useState<
+    Record<string, string>
+  >({});
   const [personalPlan, setPersonalPlan] = useState<string[]>([]);
 
   const stressTypes = [
-    { id: 'workload', label: 'Surcharge de travail', description: 'Trop de tâches à accomplir dans un temps limité' },
-    { id: 'deadlines', label: 'Pression temporelle', description: 'Stress lié aux échéances et délais serrés' },
-    { id: 'conflict', label: 'Conflits relationnels', description: 'Tensions avec collègues, famille ou amis' },
-    { id: 'uncertainty', label: 'Incertitude', description: 'Manque de clarté sur l\'avenir ou les attentes' },
-    { id: 'perfectionism', label: 'Perfectionnisme', description: 'Exigences personnelles trop élevées' },
-    { id: 'change', label: 'Résistance au changement', description: 'Difficulté à s\'adapter aux nouveautés' }
+    {
+      id: "workload",
+      label: "Surcharge de travail",
+      description: "Trop de tâches à accomplir dans un temps limité",
+    },
+    {
+      id: "deadlines",
+      label: "Pression temporelle",
+      description: "Stress lié aux échéances et délais serrés",
+    },
+    {
+      id: "conflict",
+      label: "Conflits relationnels",
+      description: "Tensions avec collègues, famille ou amis",
+    },
+    {
+      id: "uncertainty",
+      label: "Incertitude",
+      description: "Manque de clarté sur l'avenir ou les attentes",
+    },
+    {
+      id: "perfectionism",
+      label: "Perfectionnisme",
+      description: "Exigences personnelles trop élevées",
+    },
+    {
+      id: "change",
+      label: "Résistance au changement",
+      description: "Difficulté à s'adapter aux nouveautés",
+    },
   ];
 
   const stressTechniques = [
     {
-      id: 'cognitive',
-      name: 'Restructuration cognitive',
-      description: 'Identifier et modifier les pensées négatives automatiques',
+      id: "cognitive",
+      name: "Restructuration cognitive",
+      description: "Identifier et modifier les pensées négatives automatiques",
       steps: [
-        'Identifier la pensée stressante',
-        'Questionner sa validité',
-        'Rechercher des preuves contradictoires',
-        'Formuler une pensée plus réaliste'
+        "Identifier la pensée stressante",
+        "Questionner sa validité",
+        "Rechercher des preuves contradictoires",
+        "Formuler une pensée plus réaliste",
       ],
-      example: 'Pensée: "Je vais échouer" → "J\'ai les compétences nécessaires et je peux demander de l\'aide"'
+      example:
+        'Pensée: "Je vais échouer" → "J\'ai les compétences nécessaires et je peux demander de l\'aide"',
     },
     {
-      id: 'anchoring',
-      name: 'Technique d\'ancrage 5-4-3-2-1',
-      description: 'Recentrage immédiat par stimulation sensorielle',
+      id: "anchoring",
+      name: "Technique d'ancrage 5-4-3-2-1",
+      description: "Recentrage immédiat par stimulation sensorielle",
       steps: [
-        '5 choses que vous voyez',
-        '4 choses que vous touchez',
-        '3 choses que vous entendez',
-        '2 choses que vous sentez',
-        '1 chose que vous goûtez'
+        "5 choses que vous voyez",
+        "4 choses que vous touchez",
+        "3 choses que vous entendez",
+        "2 choses que vous sentez",
+        "1 chose que vous goûtez",
       ],
-      example: 'Utilisée en cas d\'anxiété soudaine pour revenir au moment présent'
+      example:
+        "Utilisée en cas d'anxiété soudaine pour revenir au moment présent",
     },
     {
-      id: 'planning',
-      name: 'Planification adaptative',
-      description: 'Organiser ses tâches pour réduire la surcharge mentale',
+      id: "planning",
+      name: "Planification adaptative",
+      description: "Organiser ses tâches pour réduire la surcharge mentale",
       steps: [
-        'Lister toutes les tâches',
-        'Estimer le temps réaliste',
-        'Prioriser selon l\'urgence/importance',
-        'Prévoir des marges de sécurité'
+        "Lister toutes les tâches",
+        "Estimer le temps réaliste",
+        "Prioriser selon l'urgence/importance",
+        "Prévoir des marges de sécurité",
       ],
-      example: 'Bloquer 15min entre chaque réunion pour décompresser'
+      example: "Bloquer 15min entre chaque réunion pour décompresser",
     },
     {
-      id: 'boundaries',
-      name: 'Définition des limites',
-      description: 'Apprendre à dire non et protéger son énergie',
+      id: "boundaries",
+      name: "Définition des limites",
+      description: "Apprendre à dire non et protéger son énergie",
       steps: [
-        'Identifier ses valeurs prioritaires',
-        'Reconnaître ses signaux de surcharge',
+        "Identifier ses valeurs prioritaires",
+        "Reconnaître ses signaux de surcharge",
         'Formuler un "non" bienveillant',
-        'Proposer des alternatives si possible'
+        "Proposer des alternatives si possible",
       ],
-      example: '"Je ne peux pas prendre ce projet maintenant, mais je serai disponible la semaine prochaine"'
-    }
+      example:
+        '"Je ne peux pas prendre ce projet maintenant, mais je serai disponible la semaine prochaine"',
+    },
   ];
 
   const stressScenarios = [
     {
-      id: 'meeting-overload',
-      title: 'Journée surchargée de réunions',
-      situation: 'Vous avez 6 réunions consécutives programmées aujourd\'hui. Vous sentez déjà l\'anxiété monter en regardant votre agenda.',
+      id: "meeting-overload",
+      title: "Journée surchargée de réunions",
+      situation:
+        "Vous avez 6 réunions consécutives programmées aujourd'hui. Vous sentez déjà l'anxiété monter en regardant votre agenda.",
       options: [
-        { id: 'A', text: 'Annuler certaines réunions non-critiques', technique: 'boundaries' },
-        { id: 'B', text: 'Prendre 2 minutes entre chaque réunion pour la technique 5-4-3-2-1', technique: 'anchoring' },
-        { id: 'C', text: 'Recadrer positivement: "C\'est une journée intense mais productive"', technique: 'cognitive' }
-      ]
+        {
+          id: "A",
+          text: "Annuler certaines réunions non-critiques",
+          technique: "boundaries",
+        },
+        {
+          id: "B",
+          text: "Prendre 2 minutes entre chaque réunion pour la technique 5-4-3-2-1",
+          technique: "anchoring",
+        },
+        {
+          id: "C",
+          text: 'Recadrer positivement: "C\'est une journée intense mais productive"',
+          technique: "cognitive",
+        },
+      ],
     },
     {
-      id: 'project-deadline',
-      title: 'Projet en retard',
-      situation: 'Un projet important a pris du retard et l\'échéance approche. Votre manager commence à s\'impatienter.',
+      id: "project-deadline",
+      title: "Projet en retard",
+      situation:
+        "Un projet important a pris du retard et l'échéance approche. Votre manager commence à s'impatienter.",
       options: [
-        { id: 'A', text: 'Refaire une planification réaliste avec des étapes micro', technique: 'planning' },
-        { id: 'B', text: 'Communiquer proactivement les défis et négocier l\'échéance', technique: 'boundaries' },
-        { id: 'C', text: 'Remplacer "Je n\'y arriverai jamais" par "Je progresse étape par étape"', technique: 'cognitive' }
-      ]
+        {
+          id: "A",
+          text: "Refaire une planification réaliste avec des étapes micro",
+          technique: "planning",
+        },
+        {
+          id: "B",
+          text: "Communiquer proactivement les défis et négocier l'échéance",
+          technique: "boundaries",
+        },
+        {
+          id: "C",
+          text: 'Remplacer "Je n\'y arriverai jamais" par "Je progresse étape par étape"',
+          technique: "cognitive",
+        },
+      ],
     },
     {
-      id: 'conflict-colleague',
-      title: 'Conflit avec un collègue',
-      situation: 'Un collègue critique systématiquement vos propositions en réunion. Vous commencez à redouter ces moments.',
+      id: "conflict-colleague",
+      title: "Conflit avec un collègue",
+      situation:
+        "Un collègue critique systématiquement vos propositions en réunion. Vous commencez à redouter ces moments.",
       options: [
-        { id: 'A', text: 'Avant la réunion, visualiser une interaction positive', technique: 'cognitive' },
-        { id: 'B', text: 'Utiliser l\'ancrage sensoriel si la tension monte', technique: 'anchoring' },
-        { id: 'C', text: 'Définir des limites claires sur le type de feedback acceptable', technique: 'boundaries' }
-      ]
-    }
+        {
+          id: "A",
+          text: "Avant la réunion, visualiser une interaction positive",
+          technique: "cognitive",
+        },
+        {
+          id: "B",
+          text: "Utiliser l'ancrage sensoriel si la tension monte",
+          technique: "anchoring",
+        },
+        {
+          id: "C",
+          text: "Définir des limites claires sur le type de feedback acceptable",
+          technique: "boundaries",
+        },
+      ],
+    },
   ];
 
   const rateStressFactor = (factorId: string, level: number) => {
-    setStressFactors(prev => ({ ...prev, [factorId]: level }));
+    setStressFactors((prev) => ({ ...prev, [factorId]: level }));
   };
 
   const toggleTechnique = (techniqueId: string) => {
-    setSelectedTechniques(prev =>
+    setSelectedTechniques((prev) =>
       prev.includes(techniqueId)
-        ? prev.filter(t => t !== techniqueId)
-        : [...prev, techniqueId]
+        ? prev.filter((t) => t !== techniqueId)
+        : [...prev, techniqueId],
     );
   };
 
   const handleScenarioChoice = (scenarioId: string, choice: string) => {
-    setScenarioResults(prev => ({ ...prev, [scenarioId]: choice }));
+    setScenarioResults((prev) => ({ ...prev, [scenarioId]: choice }));
   };
 
   const generatePersonalPlan = () => {
     const plan = [];
 
     // Techniques sélectionnées
-    selectedTechniques.forEach(techId => {
-      const technique = stressTechniques.find(t => t.id === techId);
+    selectedTechniques.forEach((techId) => {
+      const technique = stressTechniques.find((t) => t.id === techId);
       if (technique) {
-        plan.push(`Pratiquer la ${technique.name.toLowerCase()} quotidiennement`);
+        plan.push(
+          `Pratiquer la ${technique.name.toLowerCase()} quotidiennement`,
+        );
       }
     });
 
     // Facteurs de stress les plus élevés
     const highStressFactors = Object.entries(stressFactors)
       .filter(([_, level]) => level >= 4)
-      .map(([factorId]) => stressTypes.find(t => t.id === factorId))
+      .map(([factorId]) => stressTypes.find((t) => t.id === factorId))
       .filter(Boolean);
 
-    highStressFactors.forEach(factor => {
-      plan.push(`Développer des stratégies spécifiques pour ${factor?.label.toLowerCase()}`);
+    highStressFactors.forEach((factor) => {
+      plan.push(
+        `Développer des stratégies spécifiques pour ${factor?.label.toLowerCase()}`,
+      );
     });
 
     setPersonalPlan(plan);
@@ -1277,15 +1528,23 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
 
   const isPhaseComplete = (phase: string) => {
     switch (phase) {
-      case 'theory': return true; // Toujours considéré comme lu
-      case 'techniques': return selectedTechniques.length >= 2;
-      case 'scenarios': return Object.keys(scenarioResults).length >= 2;
-      case 'evaluation': return Object.keys(stressFactors).length >= 4;
-      default: return false;
+      case "theory":
+        return true; // Toujours considéré comme lu
+      case "techniques":
+        return selectedTechniques.length >= 2;
+      case "scenarios":
+        return Object.keys(scenarioResults).length >= 2;
+      case "evaluation":
+        return Object.keys(stressFactors).length >= 4;
+      default:
+        return false;
     }
   };
 
-  const isCompleted = isPhaseComplete('techniques') && isPhaseComplete('scenarios') && isPhaseComplete('evaluation');
+  const isCompleted =
+    isPhaseComplete("techniques") &&
+    isPhaseComplete("scenarios") &&
+    isPhaseComplete("evaluation");
 
   useEffect(() => {
     if (isCompleted) {
@@ -1294,7 +1553,10 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
   }, [stressFactors, selectedTechniques, scenarioResults]);
 
   return (
-    <section id="section-4" className="min-h-screen py-20 px-4 bg-gradient-to-b from-orange-50 to-white">
+    <section
+      id="section-4"
+      className="min-h-screen py-20 px-4 bg-gradient-to-b from-orange-50 to-white"
+    >
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -1307,8 +1569,8 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
             Notre stress et notre adaptation
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            le stress avec des techniques concrètes
-            et des stratégies personnalisées pour votre bien-être durable.
+            le stress avec des techniques concrètes et des stratégies
+            personnalisées pour votre bien-être durable.
           </p>
         </motion.div>
 
@@ -1320,22 +1582,35 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
           viewport={{ once: true }}
           className="learning-card p-6 mb-12"
         >
-          <h3 className="text-xl font-bold text-learning-primary mb-4">Objectifs de cette section :</h3>
+          <h3 className="text-xl font-bold text-learning-primary mb-4">
+            Objectifs de cette section :
+          </h3>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="flex items-start">
-              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">1</div>
-              <span>Adapter sa réponse aux mécanismes physiologiques et psychologiques du stress</span>
+              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">
+                1
+              </div>
+              <span>
+                Adapter sa réponse aux mécanismes physiologiques et
+                psychologiques du stress
+              </span>
             </div>
             <div className="flex items-start">
-              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">2</div>
+              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">
+                2
+              </div>
               <span>Maîtriser 4 techniques concrètes de gestion du stress</span>
             </div>
             <div className="flex items-start">
-              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">3</div>
+              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">
+                3
+              </div>
               <span>Appliquer ces techniques dans des situations réelles</span>
             </div>
             <div className="flex items-start">
-              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">4</div>
+              <div className="w-6 h-6 bg-learning-primary rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">
+                4
+              </div>
               <span>Élaborer votre plan personnel de gestion du stress</span>
             </div>
           </div>
@@ -1344,32 +1619,40 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
         {/* Navigation des phases */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {[
-            { id: 'theory', label: 'Adapter', desc: 'Théorie' },
-            { id: 'techniques', label: 'Apprendre', desc: 'Techniques' },
-            { id: 'scenarios', label: 'Pratiquer', desc: 'Scénarios' },
-            { id: 'evaluation', label: 'Personnaliser', desc: 'Mon profil' }
-          ].map(phase => (
+            { id: "theory", label: "Adapter", desc: "Théorie" },
+            { id: "techniques", label: "Apprendre", desc: "Techniques" },
+            { id: "scenarios", label: "Pratiquer", desc: "Scénarios" },
+            { id: "evaluation", label: "Personnaliser", desc: "Mon profil" },
+          ].map((phase) => (
             <motion.button
               key={phase.id}
               onClick={() => {
                 setCurrentPhase(phase.id as any);
                 setTimeout(() => {
-                  const targetElement = document.getElementById(`stress-${phase.id}`);
+                  const targetElement = document.getElementById(
+                    `stress-${phase.id}`,
+                  );
                   if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    targetElement.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
                   } else {
                     // Fallback vers la section principale
-                    const section = document.getElementById('section-4');
+                    const section = document.getElementById("section-4");
                     if (section) {
-                      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      section.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
                     }
                   }
                 }, 100);
               }}
               className={`px-6 py-4 rounded-xl font-medium transition-all duration-300 flex flex-col items-center ${
                 currentPhase === phase.id
-                  ? 'bg-learning-primary text-white shadow-lg scale-105'
-                  : 'bg-white text-learning-primary border-2 border-learning-primary hover:bg-learning-accent'
+                  ? "bg-learning-primary text-white shadow-lg scale-105"
+                  : "bg-white text-learning-primary border-2 border-learning-primary hover:bg-learning-accent"
               }`}
               whileHover={{ scale: currentPhase === phase.id ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -1388,7 +1671,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
         </div>
 
         {/* Phase Théorie */}
-        {currentPhase === 'theory' && (
+        {currentPhase === "theory" && (
           <div id="stress-theory" className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -1401,17 +1684,24 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
 
               <div className="prose max-w-none text-gray-700 space-y-6">
                 <div className="bg-orange-50 p-6 rounded-xl">
-                  <h4 className="font-semibold text-learning-primary mb-3">Qu'est-ce que le stress ?</h4>
+                  <h4 className="font-semibold text-learning-primary mb-3">
+                    Qu'est-ce que le stress ?
+                  </h4>
                   <p>
-                    Le stress est une <strong>réaction d'adaptation naturelle</strong> de notre organisme face à une situation
-                    perçue comme menaçante ou exigeante. Il se manifeste par une cascade de réactions physiologiques,
-                    émotionnelles et comportementales destinées à nous préparer à l'action.
+                    Le stress est une{" "}
+                    <strong>réaction d'adaptation naturelle</strong> de notre
+                    organisme face à une situation perçue comme menaçante ou
+                    exigeante. Il se manifeste par une cascade de réactions
+                    physiologiques, émotionnelles et comportementales destinées
+                    à nous préparer à l'action.
                   </p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="p-6 bg-red-50 rounded-xl">
-                    <h4 className="font-semibold text-learning-primary mb-3">Phase d'alarme</h4>
+                    <h4 className="font-semibold text-learning-primary mb-3">
+                      Phase d'alarme
+                    </h4>
                     <ul className="space-y-2 text-sm">
                       <li>• Libération d'adrénaline et cortisol</li>
                       <li>• Accélération cardiaque et respiratoire</li>
@@ -1420,7 +1710,9 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                     </ul>
                   </div>
                   <div className="p-6 bg-yellow-50 rounded-xl">
-                    <h4 className="font-semibold text-learning-primary mb-3">Phase de résistance</h4>
+                    <h4 className="font-semibold text-learning-primary mb-3">
+                      Phase de résistance
+                    </h4>
                     <ul className="space-y-2 text-sm">
                       <li>• Adaptation à la situation</li>
                       <li>• Mobilisation des ressources</li>
@@ -1431,27 +1723,43 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                 </div>
 
                 <div className="bg-learning-accent bg-opacity-20 p-6 rounded-xl">
-                  <h4 className="font-semibold text-learning-primary mb-3">Stress aigu vs chronique</h4>
+                  <h4 className="font-semibold text-learning-primary mb-3">
+                    Stress aigu vs chronique
+                  </h4>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h5 className="font-semibold text-learning-primary mb-2">Stress aigu (positif)</h5>
-                      <p className="text-sm">Réaction ponctuelle qui améliore les performances et disparaît rapidement.
-                      Exemple : présentation importante, entretien d'embauche.</p>
+                      <h5 className="font-semibold text-learning-primary mb-2">
+                        Stress aigu (positif)
+                      </h5>
+                      <p className="text-sm">
+                        Réaction ponctuelle qui améliore les performances et
+                        disparaît rapidement. Exemple : présentation importante,
+                        entretien d'embauche.
+                      </p>
                     </div>
                     <div>
-                      <h5 className="font-semibold text-learning-primary mb-2">Stress chronique (nocif)</h5>
-                      <p className="text-sm">Exposition prolongée aux facteurs stressants qui épuise l'organisme
-                      et peut mener au burnout, anxiété et problèmes de santé.</p>
+                      <h5 className="font-semibold text-learning-primary mb-2">
+                        Stress chronique (nocif)
+                      </h5>
+                      <p className="text-sm">
+                        Exposition prolongée aux facteurs stressants qui épuise
+                        l'organisme et peut mener au burnout, anxiété et
+                        problèmes de santé.
+                      </p>
                     </div>
                   </div>
                 </div>
 
                 <div className="p-6 bg-learning-primary bg-opacity-10 rounded-xl">
-                  <h4 className="font-semibold text-learning-primary mb-3">Impact sur la performance</h4>
+                  <h4 className="font-semibold text-learning-primary mb-3">
+                    Impact sur la performance
+                  </h4>
                   <p>
-                    La <strong>courbe de performance de Yerkes-Dodson</strong> montre qu'un niveau modéré de stress
-                    optimise nos capacités, mais qu'au-delà d'un seuil, la performance chute drastiquement.
-                    L'objectif n'est donc pas d'éliminer tout stress, mais de le maintenir dans une zone optimale.
+                    La <strong>courbe de performance de Yerkes-Dodson</strong>{" "}
+                    montre qu'un niveau modéré de stress optimise nos capacités,
+                    mais qu'au-delà d'un seuil, la performance chute
+                    drastiquement. L'objectif n'est donc pas d'éliminer tout
+                    stress, mais de le maintenir dans une zone optimale.
                   </p>
                 </div>
               </div>
@@ -1460,7 +1768,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
         )}
 
         {/* Phase Techniques */}
-        {currentPhase === 'techniques' && (
+        {currentPhase === "techniques" && (
           <div id="stress-techniques" className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -1471,7 +1779,8 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                 4 Techniques essentielles de gestion du stress
               </h3>
               <p className="text-gray-600 mb-8">
-                Sélectionnez au moins 2 techniques que vous souhaitez intégrer dans votre quotidien.
+                Sélectionnez au moins 2 techniques que vous souhaitez intégrer
+                dans votre quotidien.
               </p>
 
               <div className="space-y-6">
@@ -1483,32 +1792,44 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                     transition={{ delay: index * 0.2 }}
                     className={`p-6 rounded-xl border-2 transition-all duration-300 ${
                       selectedTechniques.includes(technique.id)
-                        ? 'border-learning-primary bg-learning-accent bg-opacity-20 ring-2 ring-learning-primary'
-                        : 'border-gray-200 hover:border-learning-primary'
+                        ? "border-learning-primary bg-learning-accent bg-opacity-20 ring-2 ring-learning-primary"
+                        : "border-gray-200 hover:border-learning-primary"
                     }`}
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
-                        <h4 className="text-xl font-semibold text-learning-primary mb-2">{technique.name}</h4>
-                        <p className="text-gray-600 mb-4">{technique.description}</p>
+                        <h4 className="text-xl font-semibold text-learning-primary mb-2">
+                          {technique.name}
+                        </h4>
+                        <p className="text-gray-600 mb-4">
+                          {technique.description}
+                        </p>
 
                         <div className="mb-4">
-                          <h5 className="font-semibold text-learning-primary mb-2">Étapes :</h5>
+                          <h5 className="font-semibold text-learning-primary mb-2">
+                            Étapes :
+                          </h5>
                           <ol className="space-y-1">
                             {technique.steps.map((step, i) => (
                               <li key={i} className="flex items-start">
                                 <span className="bg-learning-primary text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold mr-2 mt-0.5">
                                   {i + 1}
                                 </span>
-                                <span className="text-sm text-gray-700">{step}</span>
+                                <span className="text-sm text-gray-700">
+                                  {step}
+                                </span>
                               </li>
                             ))}
                           </ol>
                         </div>
 
                         <div className="p-3 bg-gray-50 rounded-lg">
-                          <h5 className="font-semibold text-learning-primary mb-1">Exemple concret :</h5>
-                          <p className="text-sm text-gray-700 italic">{technique.example}</p>
+                          <h5 className="font-semibold text-learning-primary mb-1">
+                            Exemple concret :
+                          </h5>
+                          <p className="text-sm text-gray-700 italic">
+                            {technique.example}
+                          </p>
                         </div>
                       </div>
 
@@ -1516,13 +1837,13 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                         onClick={() => toggleTechnique(technique.id)}
                         className={`ml-4 w-12 h-12 rounded-full border-2 transition-all duration-300 flex items-center justify-center ${
                           selectedTechniques.includes(technique.id)
-                            ? 'bg-learning-primary border-learning-primary text-white'
-                            : 'border-gray-300 hover:border-learning-primary'
+                            ? "bg-learning-primary border-learning-primary text-white"
+                            : "border-gray-300 hover:border-learning-primary"
                         }`}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                       >
-                        {selectedTechniques.includes(technique.id) ? '✓' : '+'}
+                        {selectedTechniques.includes(technique.id) ? "✓" : "+"}
                       </motion.button>
                     </div>
                   </motion.div>
@@ -1535,10 +1856,14 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-8 p-6 bg-learning-primary bg-opacity-10 rounded-xl text-center"
                 >
-                  <h4 className="font-bold text-learning-primary mb-3">Techniques sélectionnées :</h4>
+                  <h4 className="font-bold text-learning-primary mb-3">
+                    Techniques sélectionnées :
+                  </h4>
                   <div className="flex flex-wrap justify-center gap-3">
-                    {selectedTechniques.map(techId => {
-                      const technique = stressTechniques.find(t => t.id === techId);
+                    {selectedTechniques.map((techId) => {
+                      const technique = stressTechniques.find(
+                        (t) => t.id === techId,
+                      );
                       return (
                         <motion.div
                           key={techId}
@@ -1558,7 +1883,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
         )}
 
         {/* Phase Scénarios */}
-        {currentPhase === 'scenarios' && (
+        {currentPhase === "scenarios" && (
           <div id="stress-scenarios" className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -1569,7 +1894,8 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                 Scénarios pratiques d'application
               </h3>
               <p className="text-gray-600 mb-8">
-                Choisissez la meilleure stratégie pour chaque situation stressante.
+                Choisissez la meilleure stratégie pour chaque situation
+                stressante.
               </p>
 
               <div className="space-y-8">
@@ -1581,25 +1907,36 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                     transition={{ delay: index * 0.2 }}
                     className="p-6 border-2 border-gray-200 rounded-xl"
                   >
-                    <h4 className="text-xl font-semibold text-learning-primary mb-4">{scenario.title}</h4>
+                    <h4 className="text-xl font-semibold text-learning-primary mb-4">
+                      {scenario.title}
+                    </h4>
                     <div className="p-4 bg-orange-50 rounded-lg mb-6">
-                      <p className="text-gray-700 italic">{scenario.situation}</p>
+                      <p className="text-gray-700 italic">
+                        {scenario.situation}
+                      </p>
                     </div>
 
                     <div className="space-y-3">
-                      <h5 className="font-semibold text-learning-primary">Quelle stratégie choisissez-vous ?</h5>
-                      {scenario.options.map(option => {
-                        const technique = stressTechniques.find(t => t.id === option.technique);
-                        const isSelected = scenarioResults[scenario.id] === option.id;
+                      <h5 className="font-semibold text-learning-primary">
+                        Quelle stratégie choisissez-vous ?
+                      </h5>
+                      {scenario.options.map((option) => {
+                        const technique = stressTechniques.find(
+                          (t) => t.id === option.technique,
+                        );
+                        const isSelected =
+                          scenarioResults[scenario.id] === option.id;
 
                         return (
                           <motion.button
                             key={option.id}
-                            onClick={() => handleScenarioChoice(scenario.id, option.id)}
+                            onClick={() =>
+                              handleScenarioChoice(scenario.id, option.id)
+                            }
                             className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-300 ${
                               isSelected
-                                ? 'border-learning-primary bg-learning-accent bg-opacity-20'
-                                : 'border-gray-200 hover:border-learning-primary'
+                                ? "border-learning-primary bg-learning-accent bg-opacity-20"
+                                : "border-gray-200 hover:border-learning-primary"
                             }`}
                             whileHover={{ scale: 1.01 }}
                             whileTap={{ scale: 0.99 }}
@@ -1610,7 +1947,9 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                                   <span className="bg-learning-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mr-3">
                                     {option.id}
                                   </span>
-                                  <span className="font-medium">{option.text}</span>
+                                  <span className="font-medium">
+                                    {option.text}
+                                  </span>
                                 </div>
                                 <div className="ml-9">
                                   <span className="text-xs px-2 py-1 bg-learning-primary text-white rounded-full">
@@ -1640,8 +1979,9 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                         className="mt-4 p-4 bg-green-50 rounded-lg"
                       >
                         <p className="text-green-700">
-                          <strong>Excellent choix !</strong> Cette approche vous permettra de gérer efficacement
-                          la situation en utilisant une technique concrète.
+                          <strong>Excellent choix !</strong> Cette approche vous
+                          permettra de gérer efficacement la situation en
+                          utilisant une technique concrète.
                         </p>
                       </motion.div>
                     )}
@@ -1653,7 +1993,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
         )}
 
         {/* Phase Évaluation */}
-        {currentPhase === 'evaluation' && (
+        {currentPhase === "evaluation" && (
           <div id="stress-evaluation" className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -1664,7 +2004,8 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                 Votre profil de stress personnel
               </h3>
               <p className="text-gray-600 mb-8">
-                Évaluez l'intensité de ces facteurs de stress dans votre quotidien (1 = faible, 5 = très élevé).
+                Évaluez l'intensité de ces facteurs de stress dans votre
+                quotidien (1 = faible, 5 = très élevé).
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -1676,8 +2017,12 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                     transition={{ delay: index * 0.1 }}
                     className="p-6 rounded-xl border-2 border-gray-200 hover:border-learning-primary transition-colors"
                   >
-                    <h4 className="font-semibold text-learning-primary mb-2">{stressType.label}</h4>
-                    <p className="text-sm text-gray-600 mb-4">{stressType.description}</p>
+                    <h4 className="font-semibold text-learning-primary mb-2">
+                      {stressType.label}
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-4">
+                      {stressType.description}
+                    </p>
 
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">Faible</span>
@@ -1685,11 +2030,13 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
                         {[1, 2, 3, 4, 5].map((level) => (
                           <motion.button
                             key={level}
-                            onClick={() => rateStressFactor(stressType.id, level)}
+                            onClick={() =>
+                              rateStressFactor(stressType.id, level)
+                            }
                             className={`w-8 h-8 rounded-full transition-all duration-300 ${
                               stressFactors[stressType.id] >= level
-                                ? 'bg-orange-500 text-white'
-                                : 'bg-gray-200 hover:bg-orange-200'
+                                ? "bg-orange-500 text-white"
+                                : "bg-gray-200 hover:bg-orange-200"
                             }`}
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
@@ -1720,21 +2067,35 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="p-4 bg-orange-50 rounded-xl">
-                <h4 className="font-bold text-learning-primary mb-2">Techniques maîtrisées</h4>
-                <p className="text-sm text-gray-600">{selectedTechniques.length} techniques sélectionnées</p>
+                <h4 className="font-bold text-learning-primary mb-2">
+                  Techniques maîtrisées
+                </h4>
+                <p className="text-sm text-gray-600">
+                  {selectedTechniques.length} techniques sélectionnées
+                </p>
               </div>
               <div className="p-4 bg-green-50 rounded-xl">
-                <h4 className="font-bold text-learning-primary mb-2">Scénarios pratiqués</h4>
-                <p className="text-sm text-gray-600">{Object.keys(scenarioResults).length} situations résolues</p>
+                <h4 className="font-bold text-learning-primary mb-2">
+                  Scénarios pratiqués
+                </h4>
+                <p className="text-sm text-gray-600">
+                  {Object.keys(scenarioResults).length} situations résolues
+                </p>
               </div>
               <div className="p-4 bg-blue-50 rounded-xl">
-                <h4 className="font-bold text-learning-primary mb-2">Profil évalué</h4>
-                <p className="text-sm text-gray-600">{Object.keys(stressFactors).length} facteurs identifiés</p>
+                <h4 className="font-bold text-learning-primary mb-2">
+                  Profil évalué
+                </h4>
+                <p className="text-sm text-gray-600">
+                  {Object.keys(stressFactors).length} facteurs identifiés
+                </p>
               </div>
             </div>
 
             <div className="mb-8">
-              <h4 className="font-bold text-learning-primary mb-4">Actions recommandées :</h4>
+              <h4 className="font-bold text-learning-primary mb-4">
+                Actions recommandées :
+              </h4>
               <div className="space-y-2">
                 {personalPlan.map((action, index) => (
                   <motion.div
@@ -1771,10 +2132,19 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
 
 // Stress Simulation Section Component
 function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
-  const [gameState, setGameState] = useState<'intro' | 'playing' | 'results'>('intro');
+  const [gameState, setGameState] = useState<"intro" | "playing" | "results">(
+    "intro",
+  );
   const [currentScenario, setCurrentScenario] = useState(0);
   const [timeLeft, setTimeLeft] = useState(120); // 2 minutes
-  const [responses, setResponses] = useState<Array<{scenarioId: number, choice: string, responseTime: number, type: 'resilient' | 'reactive'}>>([]);
+  const [responses, setResponses] = useState<
+    Array<{
+      scenarioId: number;
+      choice: string;
+      responseTime: number;
+      type: "resilient" | "reactive";
+    }>
+  >([]);
   const [startTime, setStartTime] = useState<number>(0);
   const [resilienceScore, setResilienceScore] = useState(0);
   const [totalPressure, setTotalPressure] = useState(0);
@@ -1783,67 +2153,132 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
     {
       id: 0,
       situation: "UN CLIENT HURLE AU TÉLÉPHONE",
-      context: "Il est furieux car sa commande n'est pas arrivée. Votre manager vous regarde. Que faites-vous ?",
+      context:
+        "Il est furieux car sa commande n'est pas arrivée. Votre manager vous regarde. Que faites-vous ?",
       urgency: "RÉACTION IMMÉDIATE REQUISE !",
       choices: [
-        { id: 'A', text: "Je lui dis de se calmer ou je raccroche", type: 'reactive' as const },
-        { id: 'B', text: "J'écoute activement et reformule son problème", type: 'resilient' as const },
-        { id: 'C', text: "Je transfère immédiatement à mon manager", type: 'reactive' as const }
-      ]
+        {
+          id: "A",
+          text: "Je lui dis de se calmer ou je raccroche",
+          type: "reactive" as const,
+        },
+        {
+          id: "B",
+          text: "J'écoute activement et reformule son problème",
+          type: "resilient" as const,
+        },
+        {
+          id: "C",
+          text: "Je transfère immédiatement à mon manager",
+          type: "reactive" as const,
+        },
+      ],
     },
     {
       id: 1,
       situation: "DEADLINE IMPOSSIBLE",
-      context: "Votre manager vous demande un rapport complet pour dans 30 minutes. C'est physiquement impossible.",
+      context:
+        "Votre manager vous demande un rapport complet pour dans 30 minutes. C'est physiquement impossible.",
       urgency: "DÉCISION RAPIDE !",
       choices: [
-        { id: 'A', text: "Je dis oui et je panique en silence", type: 'reactive' as const },
-        { id: 'B', text: "J'explique les contraintes et propose une alternative", type: 'resilient' as const },
-        { id: 'C', text: "Je fais semblant de comprendre et j'improvise", type: 'reactive' as const }
-      ]
+        {
+          id: "A",
+          text: "Je dis oui et je panique en silence",
+          type: "reactive" as const,
+        },
+        {
+          id: "B",
+          text: "J'explique les contraintes et propose une alternative",
+          type: "resilient" as const,
+        },
+        {
+          id: "C",
+          text: "Je fais semblant de comprendre et j'improvise",
+          type: "reactive" as const,
+        },
+      ],
     },
     {
       id: 2,
       situation: "CONFLIT ÉQUIPE EN RÉUNION",
-      context: "Deux collègues se disputent violemment devant tout le monde. L'atmosphère est électrique.",
+      context:
+        "Deux collègues se disputent violemment devant tout le monde. L'atmosphère est électrique.",
       urgency: "INTERVENTION NÉCESSAIRE !",
       choices: [
-        { id: 'A', text: "Je sors de la réunion discrètement", type: 'reactive' as const },
-        { id: 'B', text: "Je propose une pause et recentre sur l'objectif", type: 'resilient' as const },
-        { id: 'C', text: "Je prends parti pour le plus convaincant", type: 'reactive' as const }
-      ]
+        {
+          id: "A",
+          text: "Je sors de la réunion discrètement",
+          type: "reactive" as const,
+        },
+        {
+          id: "B",
+          text: "Je propose une pause et recentre sur l'objectif",
+          type: "resilient" as const,
+        },
+        {
+          id: "C",
+          text: "Je prends parti pour le plus convaincant",
+          type: "reactive" as const,
+        },
+      ],
     },
     {
       id: 3,
       situation: "PROBLÈME TECHNIQUE CRITIQUE",
-      context: "Le système plante 1h avant une présentation majeure. Tout le monde compte sur vous.",
+      context:
+        "Le système plante 1h avant une présentation majeure. Tout le monde compte sur vous.",
       urgency: "PRESSION MAXIMALE !",
       choices: [
-        { id: 'A', text: "Je panique et cherche quelqu'un d'autre", type: 'reactive' as const },
-        { id: 'B', text: "Je respire, évalue les options et communique", type: 'resilient' as const },
-        { id: 'C', text: "J'essaie tout et n'importe quoi rapidement", type: 'reactive' as const }
-      ]
+        {
+          id: "A",
+          text: "Je panique et cherche quelqu'un d'autre",
+          type: "reactive" as const,
+        },
+        {
+          id: "B",
+          text: "Je respire, évalue les options et communique",
+          type: "resilient" as const,
+        },
+        {
+          id: "C",
+          text: "J'essaie tout et n'importe quoi rapidement",
+          type: "reactive" as const,
+        },
+      ],
     },
     {
       id: 4,
       situation: "CRITIQUE PUBLIQUE INATTENDUE",
-      context: "En pleine présentation, un participant critique violemment votre travail devant 20 personnes.",
+      context:
+        "En pleine présentation, un participant critique violemment votre travail devant 20 personnes.",
       urgency: "TOUS LES REGARDS SUR VOUS !",
       choices: [
-        { id: 'A', text: "Je contre-attaque et défends mon travail", type: 'reactive' as const },
-        { id: 'B', text: "J'accueille la critique et demande des précisions", type: 'resilient' as const },
-        { id: 'C', text: "Je minimise et passe rapidement au suivant", type: 'reactive' as const }
-      ]
-    }
+        {
+          id: "A",
+          text: "Je contre-attaque et défends mon travail",
+          type: "reactive" as const,
+        },
+        {
+          id: "B",
+          text: "J'accueille la critique et demande des précisions",
+          type: "resilient" as const,
+        },
+        {
+          id: "C",
+          text: "Je minimise et passe rapidement au suivant",
+          type: "reactive" as const,
+        },
+      ],
+    },
   ];
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
-    if (gameState === 'playing' && timeLeft > 0) {
+    if (gameState === "playing" && timeLeft > 0) {
       timer = setTimeout(() => {
-        setTimeLeft(prev => {
+        setTimeLeft((prev) => {
           if (prev <= 1) {
-            setGameState('results');
+            setGameState("results");
             calculateResults();
             return 0;
           }
@@ -1855,7 +2290,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
   }, [gameState, timeLeft]);
 
   const startSimulation = () => {
-    setGameState('playing');
+    setGameState("playing");
     setStartTime(Date.now());
     setCurrentScenario(0);
     setTimeLeft(120);
@@ -1870,26 +2305,28 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
       scenarioId: currentScenario,
       choice: choice.id,
       responseTime,
-      type: choice.type
+      type: choice.type,
     };
 
-    setResponses(prev => [...prev, newResponse]);
+    setResponses((prev) => [...prev, newResponse]);
 
     // Calcul de la pression (plus on répond vite sous stress, plus c'est intense)
     const pressureBonus = responseTime < 10 ? 20 : responseTime < 20 ? 10 : 5;
-    setTotalPressure(prev => prev + pressureBonus);
+    setTotalPressure((prev) => prev + pressureBonus);
 
     if (currentScenario < stressScenarios.length - 1) {
-      setCurrentScenario(prev => prev + 1);
+      setCurrentScenario((prev) => prev + 1);
       setStartTime(Date.now()); // Reset timer for next scenario
     } else {
-      setGameState('results');
+      setGameState("results");
       calculateResults();
     }
   };
 
   const calculateResults = () => {
-    const resilientResponses = responses.filter(r => r.type === 'resilient').length;
+    const resilientResponses = responses.filter(
+      (r) => r.type === "resilient",
+    ).length;
     const totalResponses = responses.length || stressScenarios.length;
     const baseScore = (resilientResponses / totalResponses) * 100;
 
@@ -1900,25 +2337,28 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getScoreLabel = (score: number) => {
-    if (score >= 80) return 'RÉSISTANT AU STRESS';
-    if (score >= 60) return 'RÉSILIENCE MODÉRÉE';
-    return 'RÉACTIF SOUS PRESSION';
+    if (score >= 80) return "RÉSISTANT AU STRESS";
+    if (score >= 60) return "RÉSILIENCE MODÉRÉE";
+    return "RÉACTIF SOUS PRESSION";
   };
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
-    <section id="section-5" className="min-h-screen py-20 px-4 bg-gradient-to-b from-red-50 to-white">
+    <section
+      id="section-5"
+      className="min-h-screen py-20 px-4 bg-gradient-to-b from-red-50 to-white"
+    >
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -1931,13 +2371,13 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
             Simulation de Stress Extrême
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Testez votre résilience dans des situations de haute pression.
-            Vous avez 2 minutes pour gérer 5 crises consécutives !
+            Testez votre résilience dans des situations de haute pression. Vous
+            avez 2 minutes pour gérer 5 crises consécutives !
           </p>
         </motion.div>
 
         {/* Phase Introduction */}
-        {gameState === 'intro' && (
+        {gameState === "intro" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1953,7 +2393,9 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 <div className="p-4 bg-red-50 rounded-xl">
                   <h4 className="font-bold text-red-600 mb-2">2 Minutes</h4>
-                  <p className="text-sm text-gray-600">Chronomètre impitoyable</p>
+                  <p className="text-sm text-gray-600">
+                    Chronomètre impitoyable
+                  </p>
                 </div>
                 <div className="p-4 bg-orange-50 rounded-xl">
                   <h4 className="font-bold text-orange-600 mb-2">5 Crises</h4>
@@ -1965,9 +2407,11 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
                 </div>
               </div>
               <p className="text-gray-600 mb-8">
-                Chaque seconde compte ! Vos réactions seront analysées pour déterminer
-                si vous êtes <strong className="text-green-600">résilient</strong> ou
-                <strong className="text-red-600"> réactif</strong> sous pression.
+                Chaque seconde compte ! Vos réactions seront analysées pour
+                déterminer si vous êtes{" "}
+                <strong className="text-green-600">résilient</strong> ou
+                <strong className="text-red-600"> réactif</strong> sous
+                pression.
               </p>
             </div>
 
@@ -1983,7 +2427,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
         )}
 
         {/* Phase Jeu */}
-        {gameState === 'playing' && (
+        {gameState === "playing" && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -1993,9 +2437,12 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
             <div className="flex justify-between items-center mb-8">
               <div className="flex items-center space-x-4">
                 <motion.div
-                  className={`text-3xl font-bold ${timeLeft <= 30 ? 'text-red-500' : 'text-learning-primary'}`}
+                  className={`text-3xl font-bold ${timeLeft <= 30 ? "text-red-500" : "text-learning-primary"}`}
                   animate={timeLeft <= 30 ? { scale: [1, 1.1, 1] } : {}}
-                  transition={{ repeat: timeLeft <= 30 ? Infinity : 0, duration: 1 }}
+                  transition={{
+                    repeat: timeLeft <= 30 ? Infinity : 0,
+                    duration: 1,
+                  }}
                 >
                   {formatTime(timeLeft)}
                 </motion.div>
@@ -2008,9 +2455,11 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
                   <div
                     key={index}
                     className={`w-4 h-4 rounded-full ${
-                      index < currentScenario ? 'bg-green-500' :
-                      index === currentScenario ? 'bg-red-500 animate-pulse' :
-                      'bg-gray-300'
+                      index < currentScenario
+                        ? "bg-green-500"
+                        : index === currentScenario
+                          ? "bg-red-500 animate-pulse"
+                          : "bg-gray-300"
                     }`}
                   />
                 ))}
@@ -2038,25 +2487,27 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
                 </div>
 
                 <div className="grid gap-4 max-w-2xl mx-auto">
-                  {stressScenarios[currentScenario].choices.map((choice, index) => (
-                    <motion.button
-                      key={choice.id}
-                      onClick={() => handleChoice(choice)}
-                      className="p-4 text-left border-2 border-gray-300 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <div className="flex items-center">
-                        <span className="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4">
-                          {choice.id}
-                        </span>
-                        <span className="text-gray-700">{choice.text}</span>
-                      </div>
-                    </motion.button>
-                  ))}
+                  {stressScenarios[currentScenario].choices.map(
+                    (choice, index) => (
+                      <motion.button
+                        key={choice.id}
+                        onClick={() => handleChoice(choice)}
+                        className="p-4 text-left border-2 border-gray-300 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <div className="flex items-center">
+                          <span className="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4">
+                            {choice.id}
+                          </span>
+                          <span className="text-gray-700">{choice.text}</span>
+                        </div>
+                      </motion.button>
+                    ),
+                  )}
                 </div>
               </motion.div>
             </div>
@@ -2064,7 +2515,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
         )}
 
         {/* Phase Résultats */}
-        {gameState === 'results' && (
+        {gameState === "results" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -2085,40 +2536,52 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
               </span>
             </motion.div>
 
-            <div className={`text-2xl font-bold mb-8 ${getScoreColor(resilienceScore)}`}>
+            <div
+              className={`text-2xl font-bold mb-8 ${getScoreColor(resilienceScore)}`}
+            >
               {getScoreLabel(resilienceScore)}
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="p-4 bg-blue-50 rounded-xl">
-                <h4 className="font-bold text-blue-600 mb-2">Choix résilients</h4>
+                <h4 className="font-bold text-blue-600 mb-2">
+                  Choix résilients
+                </h4>
                 <div className="text-2xl font-bold">
-                  {responses.filter(r => r.type === 'resilient').length}/{responses.length}
+                  {responses.filter((r) => r.type === "resilient").length}/
+                  {responses.length}
                 </div>
               </div>
               <div className="p-4 bg-green-50 rounded-xl">
-                <h4 className="font-bold text-green-600 mb-2">Pression gérée</h4>
+                <h4 className="font-bold text-green-600 mb-2">
+                  Pression gérée
+                </h4>
                 <div className="text-2xl font-bold">{totalPressure} pts</div>
               </div>
               <div className="p-4 bg-purple-50 rounded-xl">
                 <h4 className="font-bold text-purple-600 mb-2">Temps moyen</h4>
                 <div className="text-2xl font-bold">
-                  {responses.length > 0 ?
-                    (responses.reduce((sum, r) => sum + r.responseTime, 0) / responses.length).toFixed(1)
-                    : '0'}s
+                  {responses.length > 0
+                    ? (
+                        responses.reduce((sum, r) => sum + r.responseTime, 0) /
+                        responses.length
+                      ).toFixed(1)
+                    : "0"}
+                  s
                 </div>
               </div>
             </div>
 
             <div className="mb-8 p-6 bg-learning-accent bg-opacity-20 rounded-xl">
-              <h4 className="font-semibold text-learning-primary mb-3">Feedback personnalisé</h4>
+              <h4 className="font-semibold text-learning-primary mb-3">
+                Feedback personnalisé
+              </h4>
               <p className="text-gray-700">
-                {resilienceScore >= 80 ?
-                  "Excellent ! Vous gardez votre sang-froid même sous pression extrême. Votre capacité à prendre du recul et choisir des réponses constructives est remarquable." :
-                  resilienceScore >= 60 ?
-                  "Bien ! Vous montrez une résilience correcte, mais vous pourriez encore améliorer votre gestion du stress en vous entraînant à prendre du recul avant de réagir." :
-                  "À améliorer ! Sous pression, vous tendez vers des réactions impulsives. Pratiquez les techniques de respiration et de recadrage cognitif pour développer plus de résilience."
-                }
+                {resilienceScore >= 80
+                  ? "Excellent ! Vous gardez votre sang-froid même sous pression extrême. Votre capacité à prendre du recul et choisir des réponses constructives est remarquable."
+                  : resilienceScore >= 60
+                    ? "Bien ! Vous montrez une résilience correcte, mais vous pourriez encore améliorer votre gestion du stress en vous entraînant à prendre du recul avant de réagir."
+                    : "À améliorer ! Sous pression, vous tendez vers des réactions impulsives. Pratiquez les techniques de respiration et de recadrage cognitif pour développer plus de résilience."}
               </p>
             </div>
 
@@ -2148,17 +2611,91 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
 
 // Relational Map Section Component
 function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
-  const [contacts, setContacts] = useState<Array<{id: string, name: string, relationship: string, supportType: 'emotional' | 'practical' | 'professional', zone: 'unassigned' | 'family' | 'close-friends' | 'colleagues' | 'professionals', position?: {x: number, y: number}}>>([
-    { id: '1', name: 'Marie', relationship: 'Mère', supportType: 'emotional', zone: 'unassigned' },
-    { id: '2', name: 'Paul', relationship: 'Conjoint(e)', supportType: 'emotional', zone: 'unassigned' },
-    { id: '3', name: 'Sophie', relationship: 'Meilleure amie', supportType: 'emotional', zone: 'unassigned' },
-    { id: '4', name: 'David', relationship: 'Collègue', supportType: 'professional', zone: 'unassigned' },
-    { id: '5', name: 'Dr. Martin', relationship: 'Médecin', supportType: 'professional', zone: 'unassigned' },
-    { id: '6', name: 'Lisa', relationship: 'Coach', supportType: 'professional', zone: 'unassigned' },
-    { id: '7', name: 'Tom', relationship: 'Ami proche', supportType: 'practical', zone: 'unassigned' },
-    { id: '8', name: 'Julie', relationship: 'Manager', supportType: 'professional', zone: 'unassigned' },
-    { id: '9', name: 'Alex', relationship: 'Frère/Sœur', supportType: 'emotional', zone: 'unassigned' },
-    { id: '10', name: 'Emma', relationship: 'Voisine', supportType: 'practical', zone: 'unassigned' }
+  const [contacts, setContacts] = useState<
+    Array<{
+      id: string;
+      name: string;
+      relationship: string;
+      supportType: "emotional" | "practical" | "professional";
+      zone:
+        | "unassigned"
+        | "family"
+        | "close-friends"
+        | "colleagues"
+        | "professionals";
+      position?: { x: number; y: number };
+    }>
+  >([
+    {
+      id: "1",
+      name: "Marie",
+      relationship: "Mère",
+      supportType: "emotional",
+      zone: "unassigned",
+    },
+    {
+      id: "2",
+      name: "Paul",
+      relationship: "Conjoint(e)",
+      supportType: "emotional",
+      zone: "unassigned",
+    },
+    {
+      id: "3",
+      name: "Sophie",
+      relationship: "Meilleure amie",
+      supportType: "emotional",
+      zone: "unassigned",
+    },
+    {
+      id: "4",
+      name: "David",
+      relationship: "Collègue",
+      supportType: "professional",
+      zone: "unassigned",
+    },
+    {
+      id: "5",
+      name: "Dr. Martin",
+      relationship: "Médecin",
+      supportType: "professional",
+      zone: "unassigned",
+    },
+    {
+      id: "6",
+      name: "Lisa",
+      relationship: "Coach",
+      supportType: "professional",
+      zone: "unassigned",
+    },
+    {
+      id: "7",
+      name: "Tom",
+      relationship: "Ami proche",
+      supportType: "practical",
+      zone: "unassigned",
+    },
+    {
+      id: "8",
+      name: "Julie",
+      relationship: "Manager",
+      supportType: "professional",
+      zone: "unassigned",
+    },
+    {
+      id: "9",
+      name: "Alex",
+      relationship: "Frère/Sœur",
+      supportType: "emotional",
+      zone: "unassigned",
+    },
+    {
+      id: "10",
+      name: "Emma",
+      relationship: "Voisine",
+      supportType: "practical",
+      zone: "unassigned",
+    },
   ]);
 
   const [draggedContact, setDraggedContact] = useState<string | null>(null);
@@ -2166,43 +2703,43 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
 
   const supportZones = [
     {
-      id: 'family',
-      title: 'Famille',
-      description: 'Soutien inconditionnel et émotionnel',
-      color: 'bg-red-100 border-red-300 text-red-700',
+      id: "family",
+      title: "Famille",
+      description: "Soutien inconditionnel et émotionnel",
+      color: "bg-red-100 border-red-300 text-red-700",
       radius: 120,
-      centerOffset: 0
+      centerOffset: 0,
     },
     {
-      id: 'close-friends',
-      title: 'Amis proches',
-      description: 'Complicité et partage',
-      color: 'bg-blue-100 border-blue-300 text-blue-700',
+      id: "close-friends",
+      title: "Amis proches",
+      description: "Complicité et partage",
+      color: "bg-blue-100 border-blue-300 text-blue-700",
       radius: 160,
-      centerOffset: 40
+      centerOffset: 40,
     },
     {
-      id: 'colleagues',
-      title: 'Collègues',
-      description: 'Soutien professionnel et collaboration',
-      color: 'bg-green-100 border-green-300 text-green-700',
+      id: "colleagues",
+      title: "Collègues",
+      description: "Soutien professionnel et collaboration",
+      color: "bg-green-100 border-green-300 text-green-700",
       radius: 200,
-      centerOffset: 80
+      centerOffset: 80,
     },
     {
-      id: 'professionals',
-      title: 'Professionnels',
-      description: 'Expertise et conseils spécialisés',
-      color: 'bg-purple-100 border-purple-300 text-purple-700',
+      id: "professionals",
+      title: "Professionnels",
+      description: "Expertise et conseils spécialisés",
+      color: "bg-purple-100 border-purple-300 text-purple-700",
       radius: 240,
-      centerOffset: 120
-    }
+      centerOffset: 120,
+    },
   ];
 
   const supportTypeColors = {
-    emotional: 'bg-pink-200 border-pink-400 text-pink-800',
-    practical: 'bg-orange-200 border-orange-400 text-orange-800',
-    professional: 'bg-indigo-200 border-indigo-400 text-indigo-800'
+    emotional: "bg-pink-200 border-pink-400 text-pink-800",
+    practical: "bg-orange-200 border-orange-400 text-orange-800",
+    professional: "bg-indigo-200 border-indigo-400 text-indigo-800",
   };
 
   const handleDragStart = (contactId: string) => {
@@ -2216,32 +2753,39 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
 
   const handleDrop = (zoneId: string) => {
     if (draggedContact) {
-      setContacts(prev => prev.map(contact =>
-        contact.id === draggedContact
-          ? { ...contact, zone: zoneId as any }
-          : contact
-      ));
+      setContacts((prev) =>
+        prev.map((contact) =>
+          contact.id === draggedContact
+            ? { ...contact, zone: zoneId as any }
+            : contact,
+        ),
+      );
     }
     setDraggedContact(null);
     setHoveredZone(null);
   };
 
   const getContactsInZone = (zoneId: string) => {
-    return contacts.filter(contact => contact.zone === zoneId);
+    return contacts.filter((contact) => contact.zone === zoneId);
   };
 
   const getUnassignedContacts = () => {
-    return contacts.filter(contact => contact.zone === 'unassigned');
+    return contacts.filter((contact) => contact.zone === "unassigned");
   };
 
   const isCompleted = getUnassignedContacts().length === 0;
 
   const resetMap = () => {
-    setContacts(prev => prev.map(contact => ({ ...contact, zone: 'unassigned' })));
+    setContacts((prev) =>
+      prev.map((contact) => ({ ...contact, zone: "unassigned" })),
+    );
   };
 
   return (
-    <section id="section-6" className="min-h-screen py-20 px-4 bg-gradient-to-b from-blue-50 to-white">
+    <section
+      id="section-6"
+      className="min-h-screen py-20 px-4 bg-gradient-to-b from-blue-50 to-white"
+    >
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -2254,8 +2798,9 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
             Votre Réseau de Soutien
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Cartographiez visuellement votre réseau de soutien en glissant vos contacts
-            dans les cercles appropriés selon leur proximité et le type de soutien qu'ils vous apportent.
+            Cartographiez visuellement votre réseau de soutien en glissant vos
+            contacts dans les cercles appropriés selon leur proximité et le type
+            de soutien qu'ils vous apportent.
           </p>
         </motion.div>
 
@@ -2267,7 +2812,9 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
           viewport={{ once: true }}
           className="learning-card p-6 mb-8"
         >
-          <h3 className="text-xl font-bold text-learning-primary mb-4 text-center">Types de soutien</h3>
+          <h3 className="text-xl font-bold text-learning-primary mb-4 text-center">
+            Types de soutien
+          </h3>
           <div className="flex flex-wrap justify-center gap-6">
             <div className="flex items-center space-x-2">
               <div className="w-4 h-4 bg-pink-200 border border-pink-400 rounded-full"></div>
@@ -2308,10 +2855,12 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
                   onDragEnd={handleDragEnd}
                   className={`p-3 rounded-lg border-2 cursor-move transition-all duration-300 hover:scale-105 ${
                     supportTypeColors[contact.supportType]
-                  } ${draggedContact === contact.id ? 'opacity-50 scale-95' : ''}`}
+                  } ${draggedContact === contact.id ? "opacity-50 scale-95" : ""}`}
                 >
                   <div className="font-semibold">{contact.name}</div>
-                  <div className="text-xs opacity-75">{contact.relationship}</div>
+                  <div className="text-xs opacity-75">
+                    {contact.relationship}
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -2322,7 +2871,9 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
                 animate={{ opacity: 1 }}
                 className="text-center py-8 text-gray-500"
               >
-                <div className="text-2xl font-bold text-green-600 mb-2">BRAVO</div>
+                <div className="text-2xl font-bold text-green-600 mb-2">
+                  BRAVO
+                </div>
                 <p>Tous vos contacts sont organisés !</p>
               </motion.div>
             )}
@@ -2350,7 +2901,7 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
                   transition={{ delay: index * 0.2, duration: 0.6 }}
                   className={`absolute rounded-full border-2 border-dashed transition-all duration-300 ${
                     zone.color
-                  } ${hoveredZone === zone.id ? 'border-solid shadow-lg scale-105' : ''}`}
+                  } ${hoveredZone === zone.id ? "border-solid shadow-lg scale-105" : ""}`}
                   style={{
                     width: zone.radius * 2,
                     height: zone.radius * 2,
@@ -2368,12 +2919,16 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
                   {/* Label du cercle */}
                   <div className="absolute top-2 left-1/2 transform -translate-x-1/2 text-center">
                     <div className="font-bold text-sm">{zone.title}</div>
-                    <div className="text-xs opacity-75">{getContactsInZone(zone.id).length} contacts</div>
+                    <div className="text-xs opacity-75">
+                      {getContactsInZone(zone.id).length} contacts
+                    </div>
                   </div>
 
                   {/* Contacts dans cette zone */}
                   {getContactsInZone(zone.id).map((contact, contactIndex) => {
-                    const angle = (contactIndex * 360) / Math.max(getContactsInZone(zone.id).length, 1);
+                    const angle =
+                      (contactIndex * 360) /
+                      Math.max(getContactsInZone(zone.id).length, 1);
                     const radian = (angle * Math.PI) / 180;
                     const contactRadius = zone.radius - 60;
                     const x = Math.cos(radian) * contactRadius;
@@ -2399,7 +2954,7 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
                         whileTap={{ scale: 0.95 }}
                       >
                         <span className="text-center leading-tight">
-                          {contact.name.split(' ')[0]}
+                          {contact.name.split(" ")[0]}
                         </span>
                       </motion.div>
                     );
@@ -2421,7 +2976,10 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
             {/* Légende des zones */}
             <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
               {supportZones.map((zone) => (
-                <div key={zone.id} className={`p-3 rounded-lg text-center ${zone.color}`}>
+                <div
+                  key={zone.id}
+                  className={`p-3 rounded-lg text-center ${zone.color}`}
+                >
                   <div className="font-bold text-sm">{zone.title}</div>
                   <div className="text-xs mt-1">{zone.description}</div>
                 </div>
@@ -2472,8 +3030,9 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
             >
               <h4 className="font-bold text-green-700 mb-2">Félicitations !</h4>
               <p className="text-green-600">
-                Vous avez cartographié votre réseau de soutien. Cette visualisation vous aidera
-                à mieux identifier vers qui vous tourner selon vos besoins.
+                Vous avez cartographié votre réseau de soutien. Cette
+                visualisation vous aidera à mieux identifier vers qui vous
+                tourner selon vos besoins.
               </p>
             </motion.div>
           )}
@@ -2485,145 +3044,234 @@ function RelationalMapSection({ progress, onComplete, onNavigate }: any) {
 
 // Module Synthesis Section Component
 function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
-  const [currentPhase, setCurrentPhase] = useState<'recap' | 'concepts' | 'quiz' | 'completion'>('recap');
+  const [currentPhase, setCurrentPhase] = useState<
+    "recap" | "concepts" | "quiz" | "completion"
+  >("recap");
   const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
   const [quizScore, setQuizScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
-  const [completionBadge, setCompletionBadge] = useState<'bronze' | 'silver' | 'gold' | 'none'>('none');
+  const [completionBadge, setCompletionBadge] = useState<
+    "bronze" | "silver" | "gold" | "none"
+  >("none");
 
   const moduleRecap = [
     {
       id: 1,
       title: "Auto-bilan 360°",
-      keyLearning: "Conscience de soi et identification des forces personnelles",
-      concepts: ["Auto-évaluation", "Forces personnelles", "Zones d'amélioration"],
-      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" strokeWidth="1"/></svg>
+      keyLearning:
+        "Conscience de soi et identification des forces personnelles",
+      concepts: [
+        "Auto-évaluation",
+        "Forces personnelles",
+        "Zones d'amélioration",
+      ],
+      icon: (
+        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+          <circle cx="12" cy="12" r="3" />
+          <circle
+            cx="12"
+            cy="12"
+            r="6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+        </svg>
+      ),
     },
     {
       id: 2,
       title: "Résilience face à l'imprévu",
       keyLearning: "Stratégies d'adaptation et développement du rituel minute",
-      concepts: ["Gestion de l'imprévu", "Techniques d'adaptation", "Rituel de recadrage"],
-      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+      concepts: [
+        "Gestion de l'imprévu",
+        "Techniques d'adaptation",
+        "Rituel de recadrage",
+      ],
+      icon: (
+        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M7 2v11h3v9l7-12h-4l4-8z" />
+        </svg>
+      ),
     },
     {
       id: 3,
       title: "Gestion des priorités",
-      keyLearning: "Matrice d'Eisenhower pour optimiser son temps et ses décisions",
+      keyLearning:
+        "Matrice d'Eisenhower pour optimiser son temps et ses décisions",
       concepts: ["Urgent vs Important", "Planification", "Prise de décision"],
-      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M21.33 12.91c.09-.44.15-.89.15-1.35 0-3.87-3.13-7-7-7-.2 0-.4.01-.59.03A6.003 6.003 0 0 0 8.5 2C5.42 2 3 4.42 3 7.5c0 1.11.32 2.14.87 3.02C2.87 12.18 2 14.21 2 16.5 2 19.58 4.42 22 7.5 22c1.11 0 2.14-.32 3.02-.87.66.9 1.58 1.65 2.68 2.17.44.21.94.32 1.45.32.89 0 1.73-.35 2.36-.99.63-.64.99-1.47.99-2.36 0-.51-.11-1.01-.32-1.45A6.89 6.89 0 0 0 20 15.5c0-1.11-.32-2.14-.87-3.02.55-.88.87-1.91.87-3.02 0-.89-.19-1.73-.67-2.55z"/></svg>
+      icon: (
+        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M21.33 12.91c.09-.44.15-.89.15-1.35 0-3.87-3.13-7-7-7-.2 0-.4.01-.59.03A6.003 6.003 0 0 0 8.5 2C5.42 2 3 4.42 3 7.5c0 1.11.32 2.14.87 3.02C2.87 12.18 2 14.21 2 16.5 2 19.58 4.42 22 7.5 22c1.11 0 2.14-.32 3.02-.87.66.9 1.58 1.65 2.68 2.17.44.21.94.32 1.45.32.89 0 1.73-.35 2.36-.99.63-.64.99-1.47.99-2.36 0-.51-.11-1.01-.32-1.45A6.89 6.89 0 0 0 20 15.5c0-1.11-.32-2.14-.87-3.02.55-.88.87-1.91.87-3.02 0-.89-.19-1.73-.67-2.55z" />
+        </svg>
+      ),
     },
     {
       id: 4,
       title: "Gestion du stress",
       keyLearning: "4 techniques concrètes pour adapter sa réponse au stress",
-      concepts: ["Mécanismes du stress", "Techniques d'adaptation", "Profil personnel"],
-      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+      concepts: [
+        "Mécanismes du stress",
+        "Techniques d'adaptation",
+        "Profil personnel",
+      ],
+      icon: (
+        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z" />
+        </svg>
+      ),
     },
     {
       id: 5,
       title: "Simulation stress extrême",
       keyLearning: "Test de résilience sous pression avec feedback immédiat",
-      concepts: ["Résilience vs Réactivité", "Gestion de la pression", "Choix sous stress"],
-      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM12 20c-3.31 0-6-2.69-6-6 0-1.53.3-3.04.86-4.43.14 1.73 1.63 3.1 3.47 3.1 1.85 0 3.34-1.38 3.47-3.1.56 1.39.86 2.9.86 4.43 0 3.31-2.69 6-6 6z"/></svg>
+      concepts: [
+        "Résilience vs Réactivité",
+        "Gestion de la pression",
+        "Choix sous stress",
+      ],
+      icon: (
+        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM12 20c-3.31 0-6-2.69-6-6 0-1.53.3-3.04.86-4.43.14 1.73 1.63 3.1 3.47 3.1 1.85 0 3.34-1.38 3.47-3.1.56 1.39.86 2.9.86 4.43 0 3.31-2.69 6-6 6z" />
+        </svg>
+      ),
     },
     {
       id: 6,
       title: "Réseau de soutien",
-      keyLearning: "Cartographie des relations et identification des ressources humaines",
-      concepts: ["Types de soutien", "Proximité relationnelle", "Mobilisation du réseau"],
-      icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V9C3 10.1 3.9 11 5 11H7V13H5C3.9 13 3 13.9 3 15V21C3 22.1 3.9 23 5 23H11C12.1 23 13 22.1 13 21V15C13 13.9 12.1 13 11 13H9V11H15C16.1 11 17 10.1 17 9V7H19C20.1 7 21 7.9 21 9ZM7 9H5V3H7V9ZM11 21H5V15H11V21ZM15 9H9V7H15V9Z"/></svg>
-    }
+      keyLearning:
+        "Cartographie des relations et identification des ressources humaines",
+      concepts: [
+        "Types de soutien",
+        "Proximité relationnelle",
+        "Mobilisation du réseau",
+      ],
+      icon: (
+        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V9C3 10.1 3.9 11 5 11H7V13H5C3.9 13 3 13.9 3 15V21C3 22.1 3.9 23 5 23H11C12.1 23 13 22.1 13 21V15C13 13.9 12.1 13 11 13H9V11H15C16.1 11 17 10.1 17 9V7H19C20.1 7 21 7.9 21 9ZM7 9H5V3H7V9ZM11 21H5V15H11V21ZM15 9H9V7H15V9Z" />
+        </svg>
+      ),
+    },
   ];
 
   const fundamentalConcepts = [
     {
       concept: "Autonomie",
-      definition: "Capacité à agir de manière indépendante tout en sachant solliciter de l'aide au bon moment",
-      applications: ["Prendre des décisions éclairées", "Gérer ses priorités", "Développer sa résilience"]
+      definition:
+        "Capacité à agir de manière indépendante tout en sachant solliciter de l'aide au bon moment",
+      applications: [
+        "Prendre des décisions éclairées",
+        "Gérer ses priorités",
+        "Développer sa résilience",
+      ],
     },
     {
       concept: "Résilience",
-      definition: "Aptitude à rebondir face aux difficultés et à s'adapter aux changements",
-      applications: ["Gérer le stress efficacement", "Apprendre de l'échec", "Maintenir son équilibre"]
+      definition:
+        "Aptitude à rebondir face aux difficultés et à s'adapter aux changements",
+      applications: [
+        "Gérer le stress efficacement",
+        "Apprendre de l'échec",
+        "Maintenir son équilibre",
+      ],
     },
     {
       concept: "Adaptation",
-      definition: "Ajustement intelligent de ses stratégies selon le contexte et les défis",
-      applications: ["Modifier ses approches", "Utiliser les bonnes techniques", "Évoluer continuellement"]
-    }
+      definition:
+        "Ajustement intelligent de ses stratégies selon le contexte et les défis",
+      applications: [
+        "Modifier ses approches",
+        "Utiliser les bonnes techniques",
+        "Évoluer continuellement",
+      ],
+    },
   ];
 
   const quizQuestions = [
     {
-      id: 'q1',
-      type: 'qcm',
-      question: "Dans la matrice d'Eisenhower, les tâches importantes mais non urgentes doivent être :",
+      id: "q1",
+      type: "qcm",
+      question:
+        "Dans la matrice d'Eisenhower, les tâches importantes mais non urgentes doivent être :",
       options: [
-        { id: 'a', text: "Éliminées immédiatement" },
-        { id: 'b', text: "Planifiées et priorisées" },
-        { id: 'c', text: "Déléguées à d'autres" },
-        { id: 'd', text: "Faites en urgence" }
+        { id: "a", text: "Éliminées immédiatement" },
+        { id: "b", text: "Planifiées et priorisées" },
+        { id: "c", text: "Déléguées à d'autres" },
+        { id: "d", text: "Faites en urgence" },
       ],
-      correct: 'b'
+      correct: "b",
     },
     {
-      id: 'q2',
-      type: 'vrai-faux',
-      question: "Le stress est toujours négatif et doit être complètement éliminé.",
-      correct: 'false'
+      id: "q2",
+      type: "vrai-faux",
+      question:
+        "Le stress est toujours négatif et doit être complètement éliminé.",
+      correct: "false",
     },
     {
-      id: 'q3',
-      type: 'qcm',
-      question: "Qu'est-ce qui caractérise une réponse 'résiliente' face au stress ?",
+      id: "q3",
+      type: "qcm",
+      question:
+        "Qu'est-ce qui caractérise une réponse 'résiliente' face au stress ?",
       options: [
-        { id: 'a', text: "Réagir immédiatement sans réfléchir" },
-        { id: 'b', text: "Éviter complètement la situation" },
-        { id: 'c', text: "Prendre du recul et choisir consciemment sa réponse" },
-        { id: 'd', text: "Déléguer systématiquement le problème" }
+        { id: "a", text: "Réagir immédiatement sans réfléchir" },
+        { id: "b", text: "Éviter complètement la situation" },
+        {
+          id: "c",
+          text: "Prendre du recul et choisir consciemment sa réponse",
+        },
+        { id: "d", text: "Déléguer systématiquement le problème" },
       ],
-      correct: 'c'
+      correct: "c",
     },
     {
-      id: 'q4',
-      type: 'vrai-faux',
-      question: "L'auto-bilan 360° permet uniquement d'identifier ses faiblesses.",
-      correct: 'false'
+      id: "q4",
+      type: "vrai-faux",
+      question:
+        "L'auto-bilan 360° permet uniquement d'identifier ses faiblesses.",
+      correct: "false",
     },
     {
-      id: 'q5',
-      type: 'qcm',
-      question: "Dans votre réseau de soutien, le cercle de la famille représente :",
+      id: "q5",
+      type: "qcm",
+      question:
+        "Dans votre réseau de soutien, le cercle de la famille représente :",
       options: [
-        { id: 'a', text: "Un soutien principalement professionnel" },
-        { id: 'b', text: "Un soutien inconditionnel et émotionnel" },
-        { id: 'c', text: "Un soutien uniquement pratique" },
-        { id: 'd', text: "Un soutien temporaire" }
+        { id: "a", text: "Un soutien principalement professionnel" },
+        { id: "b", text: "Un soutien inconditionnel et émotionnel" },
+        { id: "c", text: "Un soutien uniquement pratique" },
+        { id: "d", text: "Un soutien temporaire" },
       ],
-      correct: 'b'
+      correct: "b",
     },
     {
-      id: 'q6',
-      type: 'qcm',
+      id: "q6",
+      type: "qcm",
       question: "Le 'rituel minute' en situation d'imprévu consiste à :",
       options: [
-        { id: 'a', text: "Paniquer pendant une minute puis agir" },
-        { id: 'b', text: "Attendre une minute avant de faire quoi que ce soit" },
-        { id: 'c', text: "Prendre 60 secondes pour se recentrer et choisir sa stratégie" },
-        { id: 'd', text: "Déléguer la décision à quelqu'un d'autre" }
+        { id: "a", text: "Paniquer pendant une minute puis agir" },
+        {
+          id: "b",
+          text: "Attendre une minute avant de faire quoi que ce soit",
+        },
+        {
+          id: "c",
+          text: "Prendre 60 secondes pour se recentrer et choisir sa stratégie",
+        },
+        { id: "d", text: "Déléguer la décision à quelqu'un d'autre" },
       ],
-      correct: 'c'
-    }
+      correct: "c",
+    },
   ];
 
   const handleQuizAnswer = (questionId: string, answer: string) => {
-    setQuizAnswers(prev => ({ ...prev, [questionId]: answer }));
+    setQuizAnswers((prev) => ({ ...prev, [questionId]: answer }));
   };
 
   const submitQuiz = () => {
     let correct = 0;
-    quizQuestions.forEach(question => {
+    quizQuestions.forEach((question) => {
       if (quizAnswers[question.id] === question.correct) {
         correct++;
       }
@@ -2634,34 +3282,50 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
     setShowResults(true);
 
     // Déterminer le badge selon le score
-    if (score >= 85) setCompletionBadge('gold');
-    else if (score >= 70) setCompletionBadge('silver');
-    else if (score >= 50) setCompletionBadge('bronze');
-    else setCompletionBadge('none');
+    if (score >= 85) setCompletionBadge("gold");
+    else if (score >= 70) setCompletionBadge("silver");
+    else if (score >= 50) setCompletionBadge("bronze");
+    else setCompletionBadge("none");
 
-    setCurrentPhase('completion');
+    setCurrentPhase("completion");
   };
 
   const getBadgeColor = (badge: string) => {
     switch (badge) {
-      case 'gold': return 'from-yellow-400 to-yellow-600';
-      case 'silver': return 'from-gray-300 to-gray-500';
-      case 'bronze': return 'from-orange-400 to-orange-600';
-      default: return 'from-gray-200 to-gray-400';
+      case "gold":
+        return "from-yellow-400 to-yellow-600";
+      case "silver":
+        return "from-gray-300 to-gray-500";
+      case "bronze":
+        return "from-orange-400 to-orange-600";
+      default:
+        return "from-gray-200 to-gray-400";
     }
   };
 
   const getBadgeEmoji = (badge: string) => {
     switch (badge) {
-      case 'gold': return 'OR';
-      case 'silver': return 'ARGENT';
-      case 'bronze': return 'BRONZE';
-      default: return <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/><path d="M9,15V17H15V15H9M9,11V13H15V11H9Z"/></svg>;
+      case "gold":
+        return "OR";
+      case "silver":
+        return "ARGENT";
+      case "bronze":
+        return "BRONZE";
+      default:
+        return (
+          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+            <path d="M9,15V17H15V15H9M9,11V13H15V11H9Z" />
+          </svg>
+        );
     }
   };
 
   return (
-    <section id="section-7" className="min-h-screen py-20 px-4 bg-gradient-to-b from-purple-50 to-white">
+    <section
+      id="section-7"
+      className="min-h-screen py-20 px-4 bg-gradient-to-b from-purple-50 to-white"
+    >
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -2682,18 +3346,18 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
         {/* Navigation des phases */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {[
-            { id: 'recap', label: 'Récapitulatif', desc: 'Vos apprentissages' },
-            { id: 'concepts', label: 'Concepts clés', desc: 'Fondamentaux' },
-            { id: 'quiz', label: 'Mini-quiz', desc: 'Validation' },
-            { id: 'completion', label: 'Certificat', desc: 'Réussite' }
-          ].map(phase => (
+            { id: "recap", label: "Récapitulatif", desc: "Vos apprentissages" },
+            { id: "concepts", label: "Concepts clés", desc: "Fondamentaux" },
+            { id: "quiz", label: "Mini-quiz", desc: "Validation" },
+            { id: "completion", label: "Certificat", desc: "Réussite" },
+          ].map((phase) => (
             <motion.button
               key={phase.id}
               onClick={() => setCurrentPhase(phase.id as any)}
               className={`px-6 py-4 rounded-xl font-medium transition-all duration-300 flex flex-col items-center ${
                 currentPhase === phase.id
-                  ? 'bg-learning-primary text-white shadow-lg scale-105'
-                  : 'bg-white text-learning-primary border-2 border-learning-primary hover:bg-learning-accent'
+                  ? "bg-learning-primary text-white shadow-lg scale-105"
+                  : "bg-white text-learning-primary border-2 border-learning-primary hover:bg-learning-accent"
               }`}
               whileHover={{ scale: currentPhase === phase.id ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -2705,7 +3369,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
         </div>
 
         {/* Phase Récapitulatif */}
-        {currentPhase === 'recap' && (
+        {currentPhase === "recap" && (
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -2726,13 +3390,22 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                     className="p-6 bg-gradient-to-r from-learning-accent to-white rounded-xl border-l-4 border-learning-primary"
                   >
                     <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-learning-primary rounded-full flex items-center justify-center text-white">{section.icon}</div>
+                      <div className="w-12 h-12 bg-learning-primary rounded-full flex items-center justify-center text-white">
+                        {section.icon}
+                      </div>
                       <div className="flex-1">
-                        <h4 className="font-bold text-learning-primary mb-2">{section.title}</h4>
-                        <p className="text-gray-700 mb-3">{section.keyLearning}</p>
+                        <h4 className="font-bold text-learning-primary mb-2">
+                          {section.title}
+                        </h4>
+                        <p className="text-gray-700 mb-3">
+                          {section.keyLearning}
+                        </p>
                         <div className="flex flex-wrap gap-2">
                           {section.concepts.map((concept, i) => (
-                            <span key={i} className="text-xs px-2 py-1 bg-learning-primary text-white rounded-full">
+                            <span
+                              key={i}
+                              className="text-xs px-2 py-1 bg-learning-primary text-white rounded-full"
+                            >
                               {concept}
                             </span>
                           ))}
@@ -2747,7 +3420,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
         )}
 
         {/* Phase Concepts clés */}
-        {currentPhase === 'concepts' && (
+        {currentPhase === "concepts" && (
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -2775,7 +3448,10 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                     </p>
                     <div className="grid md:grid-cols-3 gap-3">
                       {item.applications.map((app, i) => (
-                        <div key={i} className="p-3 bg-learning-accent bg-opacity-20 rounded-lg text-center">
+                        <div
+                          key={i}
+                          className="p-3 bg-learning-accent bg-opacity-20 rounded-lg text-center"
+                        >
                           <span className="text-sm font-medium">{app}</span>
                         </div>
                       ))}
@@ -2788,7 +3464,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
         )}
 
         {/* Phase Quiz */}
-        {currentPhase === 'quiz' && (
+        {currentPhase === "quiz" && (
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -2799,7 +3475,8 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                 Mini-quiz de validation des acquis
               </h3>
               <p className="text-gray-600 text-center mb-8">
-                6 questions pour valider votre compréhension du module. Seuil de réussite : 50%
+                6 questions pour valider votre compréhension du module. Seuil de
+                réussite : 50%
               </p>
 
               <div className="space-y-6">
@@ -2815,42 +3492,46 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                       Question {index + 1}: {question.question}
                     </h4>
 
-                    {question.type === 'qcm' && question.options && (
+                    {question.type === "qcm" && question.options && (
                       <div className="space-y-3">
-                        {question.options.map(option => (
+                        {question.options.map((option) => (
                           <motion.button
                             key={option.id}
-                            onClick={() => handleQuizAnswer(question.id, option.id)}
+                            onClick={() =>
+                              handleQuizAnswer(question.id, option.id)
+                            }
                             className={`w-full text-left p-3 rounded-lg border-2 transition-all duration-300 ${
                               quizAnswers[question.id] === option.id
-                                ? 'border-learning-primary bg-learning-accent bg-opacity-20'
-                                : 'border-gray-200 hover:border-learning-primary'
+                                ? "border-learning-primary bg-learning-accent bg-opacity-20"
+                                : "border-gray-200 hover:border-learning-primary"
                             }`}
                             whileHover={{ scale: 1.01 }}
                             whileTap={{ scale: 0.99 }}
                           >
-                            <span className="font-medium mr-3">{option.id.toUpperCase()})</span>
+                            <span className="font-medium mr-3">
+                              {option.id.toUpperCase()})
+                            </span>
                             {option.text}
                           </motion.button>
                         ))}
                       </div>
                     )}
 
-                    {question.type === 'vrai-faux' && (
+                    {question.type === "vrai-faux" && (
                       <div className="flex gap-4">
-                        {['true', 'false'].map(value => (
+                        {["true", "false"].map((value) => (
                           <motion.button
                             key={value}
                             onClick={() => handleQuizAnswer(question.id, value)}
                             className={`px-6 py-3 rounded-lg border-2 transition-all duration-300 ${
                               quizAnswers[question.id] === value
-                                ? 'border-learning-primary bg-learning-accent bg-opacity-20'
-                                : 'border-gray-200 hover:border-learning-primary'
+                                ? "border-learning-primary bg-learning-accent bg-opacity-20"
+                                : "border-gray-200 hover:border-learning-primary"
                             }`}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                           >
-                            {value === 'true' ? 'Vrai' : 'Faux'}
+                            {value === "true" ? "Vrai" : "Faux"}
                           </motion.button>
                         ))}
                       </div>
@@ -2878,7 +3559,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
         )}
 
         {/* Phase Completion */}
-        {currentPhase === 'completion' && (
+        {currentPhase === "completion" && (
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -2896,45 +3577,61 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                 transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
                 className={`w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-br ${getBadgeColor(completionBadge)} flex items-center justify-center shadow-lg`}
               >
-                <span className="text-lg font-bold text-white">{getBadgeEmoji(completionBadge)}</span>
+                <span className="text-lg font-bold text-white">
+                  {getBadgeEmoji(completionBadge)}
+                </span>
               </motion.div>
 
               <div className="mb-8">
                 <h4 className="text-2xl font-bold text-learning-primary mb-4">
-                  {completionBadge === 'gold' ? 'Certification Or' :
-                   completionBadge === 'silver' ? 'Certification Argent' :
-                   completionBadge === 'bronze' ? 'Certification Bronze' :
-                   'Participation validée'}
+                  {completionBadge === "gold"
+                    ? "Certification Or"
+                    : completionBadge === "silver"
+                      ? "Certification Argent"
+                      : completionBadge === "bronze"
+                        ? "Certification Bronze"
+                        : "Participation validée"}
                 </h4>
                 <p className="text-lg text-gray-600 mb-4">
                   Score au quiz : {quizScore}%
                 </p>
                 <p className="text-gray-700">
-                  Vous avez terminé avec succès le Module 4 "Autonomie & Résilience Durable".
-                  Vous disposez maintenant d'outils concrets pour renforcer votre résilience
-                  et développer votre autonomie au quotidien.
+                  Vous avez terminé avec succès le Module 4 "Autonomie &
+                  Résilience Durable". Vous disposez maintenant d'outils
+                  concrets pour renforcer votre résilience et développer votre
+                  autonomie au quotidien.
                 </p>
               </div>
 
               {/* Résumé des acquis */}
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 <div className="p-4 bg-blue-50 rounded-xl">
-                  <h5 className="font-bold text-blue-600 mb-2">Outils acquis</h5>
+                  <h5 className="font-bold text-blue-600 mb-2">
+                    Outils acquis
+                  </h5>
                   <p className="text-sm text-blue-700">6 sections maîtrisées</p>
                 </div>
                 <div className="p-4 bg-green-50 rounded-xl">
-                  <h5 className="font-bold text-green-600 mb-2">Techniques apprises</h5>
-                  <p className="text-sm text-green-700">15+ stratégies pratiques</p>
+                  <h5 className="font-bold text-green-600 mb-2">
+                    Techniques apprises
+                  </h5>
+                  <p className="text-sm text-green-700">
+                    15+ stratégies pratiques
+                  </p>
                 </div>
                 <div className="p-4 bg-purple-50 rounded-xl">
-                  <h5 className="font-bold text-purple-600 mb-2">Durée du parcours</h5>
-                  <p className="text-sm text-purple-700">~30 minutes complétées</p>
+                  <h5 className="font-bold text-purple-600 mb-2">
+                    Durée du parcours
+                  </h5>
+                  <p className="text-sm text-purple-700">
+                    ~30 minutes complétées
+                  </p>
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
-                  onClick={() => setCurrentPhase('recap')}
+                  onClick={() => setCurrentPhase("recap")}
                   className="learning-button-secondary px-6 py-3"
                 >
                   Revoir la synthèse
@@ -2942,7 +3639,7 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
                 <button
                   onClick={() => {
                     onComplete();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="learning-button px-6 py-3"
                 >
@@ -2960,7 +3657,10 @@ function ModuleSynthesisSection({ progress, onComplete, onNavigate }: any) {
 // Placeholder Section Component
 function PlaceholderSection({ sectionId, title, description }: any) {
   return (
-    <section id={`section-${sectionId}`} className="min-h-screen py-20 px-4 flex items-center">
+    <section
+      id={`section-${sectionId}`}
+      className="min-h-screen py-20 px-4 flex items-center"
+    >
       <div className="max-w-4xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -2975,12 +3675,10 @@ function PlaceholderSection({ sectionId, title, description }: any) {
           <h2 className="text-4xl font-bold text-learning-primary mb-6">
             {title}
           </h2>
-          <p className="text-lg text-gray-600 mb-8">
-            {description}
-          </p>
+          <p className="text-lg text-gray-600 mb-8">{description}</p>
           <p className="text-sm text-gray-500">
-            Cette section sera développée dans la prochaine itération.
-            Continuez à faire défiler pour explorer les autres sections disponibles.
+            Cette section sera développée dans la prochaine itération. Continuez
+            à faire défiler pour explorer les autres sections disponibles.
           </p>
         </motion.div>
       </div>
