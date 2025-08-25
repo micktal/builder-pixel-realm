@@ -57,6 +57,27 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // E-learning module colors
+        purple: {
+          deep: "#5B2C83",
+          light: "#D8BFD8",
+          50: "#faf7ff",
+          100: "#f0e8ff",
+          200: "#e2d1ff",
+          300: "#D8BFD8",
+          400: "#b794f6",
+          500: "#9f7aea",
+          600: "#805ad5",
+          700: "#6b46c1",
+          800: "#5B2C83",
+          900: "#4c1d95",
+        },
+        learning: {
+          primary: "#5B2C83",
+          accent: "#D8BFD8",
+          neutral: "#222222",
+          light: "#FFFFFF",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -84,6 +105,10 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
       },
     },
   },
