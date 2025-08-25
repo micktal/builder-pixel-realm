@@ -766,7 +766,7 @@ function PriorityManagementSection({ progress, onComplete, onNavigate }: any) {
                   <h4 className="font-semibold text-learning-primary mb-3">Distinction fondamentale :</h4>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h5 className="font-semibold text-learning-primary mb-2">⏰ URGENT</h5>
+                      <h5 className="font-semibold text-learning-primary mb-2">URGENT</h5>
                       <p>Ce qui demande une attention immédiate. L'urgence est souvent imposée par les autres ou les circonstances externes.</p>
                     </div>
                     <div>
@@ -1815,7 +1815,7 @@ function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
   const getScoreLabel = (score: number) => {
     if (score >= 80) return 'RÉSISTANT AU STRESS';
     if (score >= 60) return 'RÉSILIENCE MODÉRÉE';
-    return 'RÉACTIF SOUS PRESSION';
+    return 'R��ACTIF SOUS PRESSION';
   };
 
   const formatTime = (seconds: number) => {
