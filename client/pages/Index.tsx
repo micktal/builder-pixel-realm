@@ -1253,9 +1253,15 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
               onClick={() => {
                 setCurrentPhase(phase.id as any);
                 setTimeout(() => {
-                  const section = document.getElementById('section-4');
-                  if (section) {
-                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  const targetElement = document.getElementById(`stress-${phase.id}`);
+                  if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  } else {
+                    // Fallback vers la section principale
+                    const section = document.getElementById('section-4');
+                    if (section) {
+                      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                   }
                 }, 100);
               }}
