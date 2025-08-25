@@ -16,7 +16,7 @@ const SECTIONS = [
   { id: 3, title: "Gestion des priorités" },
   { id: 4, title: "Gestion du stress" },
   { id: 5, title: "Simulation stress extrême" },
-  { id: 6, title: "Quiz final" },
+  { id: 6, title: "Réseau de soutien" },
 ];
 
 export default function Index() {
@@ -235,10 +235,10 @@ export default function Index() {
         onNavigate={navigateToSection}
       />
       
-      <PlaceholderSection
-        sectionId={6}
-        title="Quiz final & engagement"
-        description="Validez vos acquis et prenez votre engagement"
+      <RelationalMapSection
+        progress={progress}
+        onComplete={() => completeSection(6)}
+        onNavigate={navigateToSection}
       />
     </div>
   );
@@ -1124,7 +1124,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
     },
     {
       id: 'conflict-colleague',
-      title: 'Conflit avec un collègue',
+      title: 'Conflit avec un coll��gue',
       situation: 'Un collègue critique systématiquement vos propositions en réunion. Vous commencez à redouter ces moments.',
       options: [
         { id: 'A', text: 'Avant la réunion, visualiser une interaction positive', technique: 'cognitive' },
