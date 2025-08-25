@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { CheckCircle, ArrowUp, User, Zap, Users, Target, Shield, Award } from "lucide-react";
+import { CheckCircle, ArrowUp, User, Zap, Users, Target, Shield, Award, Heart } from "lucide-react";
 
 // Progress tracking
 interface ModuleProgress {
