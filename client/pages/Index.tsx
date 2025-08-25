@@ -14,7 +14,7 @@ const SECTIONS = [
   { id: 1, title: "Auto-bilan 360°" },
   { id: 2, title: "Résilience face à l'imprévu" },
   { id: 3, title: "Gestion des priorités" },
-  { id: 4, title: "Confiance en soi" },
+  { id: 4, title: "Gestion du stress" },
   { id: 5, title: "Mon système de suivi" },
   { id: 6, title: "Quiz final" },
 ];
@@ -223,7 +223,7 @@ export default function Index() {
         onNavigate={navigateToSection}
       />
       
-      <ConfidenceSection
+      <StressManagementSection
         progress={progress}
         onComplete={() => completeSection(4)}
         onNavigate={navigateToSection}
