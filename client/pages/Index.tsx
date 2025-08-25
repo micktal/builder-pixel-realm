@@ -1553,7 +1553,7 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
 
         {/* Phase Évaluation */}
         {currentPhase === 'evaluation' && (
-          <div className="space-y-8">
+          <div id="stress-evaluation" className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
