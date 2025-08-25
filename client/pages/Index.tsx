@@ -1668,6 +1668,383 @@ function StressManagementSection({ progress, onComplete, onNavigate }: any) {
   );
 }
 
+// Stress Simulation Section Component
+function StressSimulationSection({ progress, onComplete, onNavigate }: any) {
+  const [gameState, setGameState] = useState<'intro' | 'playing' | 'results'>('intro');
+  const [currentScenario, setCurrentScenario] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(120); // 2 minutes
+  const [responses, setResponses] = useState<Array<{scenarioId: number, choice: string, responseTime: number, type: 'resilient' | 'reactive'}>>([]);
+  const [startTime, setStartTime] = useState<number>(0);
+  const [resilienceScore, setResilienceScore] = useState(0);
+  const [totalPressure, setTotalPressure] = useState(0);
+
+  const stressScenarios = [
+    {
+      id: 0,
+      situation: "UN CLIENT HURLE AU TÉLÉPHONE",
+      context: "Il est furieux car sa commande n'est pas arrivée. Votre manager vous regarde. Que faites-vous ?",
+      urgency: "RÉACTION IMMÉDIATE REQUISE !",
+      choices: [
+        { id: 'A', text: "Je lui dis de se calmer ou je raccroche", type: 'reactive' as const },
+        { id: 'B', text: "J'écoute activement et reformule son problème", type: 'resilient' as const },
+        { id: 'C', text: "Je transfère immédiatement à mon manager", type: 'reactive' as const }
+      ]
+    },
+    {
+      id: 1,
+      situation: "DEADLINE IMPOSSIBLE",
+      context: "Votre manager vous demande un rapport complet pour dans 30 minutes. C'est physiquement impossible.",
+      urgency: "DÉCISION RAPIDE !",
+      choices: [
+        { id: 'A', text: "Je dis oui et je panique en silence", type: 'reactive' as const },
+        { id: 'B', text: "J'explique les contraintes et propose une alternative", type: 'resilient' as const },
+        { id: 'C', text: "Je fais semblant de comprendre et j'improvise", type: 'reactive' as const }
+      ]
+    },
+    {
+      id: 2,
+      situation: "CONFLIT ÉQUIPE EN RÉUNION",
+      context: "Deux collègues se disputent violemment devant tout le monde. L'atmosphère est électrique.",
+      urgency: "INTERVENTION NÉCESSAIRE !",
+      choices: [
+        { id: 'A', text: "Je sors de la réunion discrètement", type: 'reactive' as const },
+        { id: 'B', text: "Je propose une pause et recentre sur l'objectif", type: 'resilient' as const },
+        { id: 'C', text: "Je prends parti pour le plus convaincant", type: 'reactive' as const }
+      ]
+    },
+    {
+      id: 3,
+      situation: "PROBLÈME TECHNIQUE CRITIQUE",
+      context: "Le système plante 1h avant une présentation majeure. Tout le monde compte sur vous.",
+      urgency: "PRESSION MAXIMALE !",
+      choices: [
+        { id: 'A', text: "Je panique et cherche quelqu'un d'autre", type: 'reactive' as const },
+        { id: 'B', text: "Je respire, évalue les options et communique", type: 'resilient' as const },
+        { id: 'C', text: "J'essaie tout et n'importe quoi rapidement", type: 'reactive' as const }
+      ]
+    },
+    {
+      id: 4,
+      situation: "CRITIQUE PUBLIQUE INATTENDUE",
+      context: "En pleine présentation, un participant critique violemment votre travail devant 20 personnes.",
+      urgency: "TOUS LES REGARDS SUR VOUS !",
+      choices: [
+        { id: 'A', text: "Je contre-attaque et défends mon travail", type: 'reactive' as const },
+        { id: 'B', text: "J'accueille la critique et demande des précisions", type: 'resilient' as const },
+        { id: 'C', text: "Je minimise et passe rapidement au suivant", type: 'reactive' as const }
+      ]
+    }
+  ];
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (gameState === 'playing' && timeLeft > 0) {
+      timer = setTimeout(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            setGameState('results');
+            calculateResults();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [gameState, timeLeft]);
+
+  const startSimulation = () => {
+    setGameState('playing');
+    setStartTime(Date.now());
+    setCurrentScenario(0);
+    setTimeLeft(120);
+    setResponses([]);
+    setResilienceScore(0);
+    setTotalPressure(0);
+  };
+
+  const handleChoice = (choice: any) => {
+    const responseTime = (Date.now() - startTime) / 1000;
+    const newResponse = {
+      scenarioId: currentScenario,
+      choice: choice.id,
+      responseTime,
+      type: choice.type
+    };
+
+    setResponses(prev => [...prev, newResponse]);
+
+    // Calcul de la pression (plus on répond vite sous stress, plus c'est intense)
+    const pressureBonus = responseTime < 10 ? 20 : responseTime < 20 ? 10 : 5;
+    setTotalPressure(prev => prev + pressureBonus);
+
+    if (currentScenario < stressScenarios.length - 1) {
+      setCurrentScenario(prev => prev + 1);
+      setStartTime(Date.now()); // Reset timer for next scenario
+    } else {
+      setGameState('results');
+      calculateResults();
+    }
+  };
+
+  const calculateResults = () => {
+    const resilientResponses = responses.filter(r => r.type === 'resilient').length;
+    const totalResponses = responses.length || stressScenarios.length;
+    const baseScore = (resilientResponses / totalResponses) * 100;
+
+    // Bonus pour la rapidité sous pression
+    const speedBonus = totalPressure > 80 ? 20 : totalPressure > 50 ? 10 : 0;
+
+    setResilienceScore(Math.min(100, Math.round(baseScore + speedBonus)));
+  };
+
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return 'text-green-600';
+    if (score >= 60) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const getScoreLabel = (score: number) => {
+    if (score >= 80) return 'RÉSISTANT AU STRESS';
+    if (score >= 60) return 'RÉSILIENCE MODÉRÉE';
+    return 'RÉACTIF SOUS PRESSION';
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <section id="section-5" className="min-h-screen py-20 px-4 bg-gradient-to-b from-red-50 to-white">
+      <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl font-bold text-learning-primary mb-6">
+            Simulation de Stress Extrême
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Testez votre résilience dans des situations de haute pression.
+            Vous avez 2 minutes pour gérer 5 crises consécutives !
+          </p>
+        </motion.div>
+
+        {/* Phase Introduction */}
+        {gameState === 'intro' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="learning-card p-8 text-center"
+          >
+            <div className="mb-8">
+              <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-4xl">⚡</span>
+              </div>
+              <h3 className="text-2xl font-bold text-learning-primary mb-4">
+                Prêt(e) pour le défi ?
+              </h3>
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <div className="p-4 bg-red-50 rounded-xl">
+                  <h4 className="font-bold text-red-600 mb-2">⏱️ 2 Minutes</h4>
+                  <p className="text-sm text-gray-600">Chronomètre impitoyable</p>
+                </div>
+                <div className="p-4 bg-orange-50 rounded-xl">
+                  <h4 className="font-bold text-orange-600 mb-2">🔥 5 Crises</h4>
+                  <p className="text-sm text-gray-600">Situations extrêmes</p>
+                </div>
+                <div className="p-4 bg-yellow-50 rounded-xl">
+                  <h4 className="font-bold text-yellow-600 mb-2">⚡ Pression</h4>
+                  <p className="text-sm text-gray-600">Choix rapides requis</p>
+                </div>
+              </div>
+              <p className="text-gray-600 mb-8">
+                Chaque seconde compte ! Vos réactions seront analysées pour déterminer
+                si vous êtes <strong className="text-green-600">résilient</strong> ou
+                <strong className="text-red-600"> réactif</strong> sous pression.
+              </p>
+            </div>
+
+            <motion.button
+              onClick={startSimulation}
+              className="learning-button text-xl px-12 py-4"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              🚀 LANCER LA SIMULATION
+            </motion.button>
+          </motion.div>
+        )}
+
+        {/* Phase Jeu */}
+        {gameState === 'playing' && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="learning-card p-8"
+          >
+            {/* Timer et Progress */}
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex items-center space-x-4">
+                <motion.div
+                  className={`text-3xl font-bold ${timeLeft <= 30 ? 'text-red-500' : 'text-learning-primary'}`}
+                  animate={timeLeft <= 30 ? { scale: [1, 1.1, 1] } : {}}
+                  transition={{ repeat: timeLeft <= 30 ? Infinity : 0, duration: 1 }}
+                >
+                  {formatTime(timeLeft)}
+                </motion.div>
+                <div className="text-sm text-gray-500">
+                  Crise {currentScenario + 1}/{stressScenarios.length}
+                </div>
+              </div>
+              <div className="flex space-x-2">
+                {stressScenarios.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-4 h-4 rounded-full ${
+                      index < currentScenario ? 'bg-green-500' :
+                      index === currentScenario ? 'bg-red-500 animate-pulse' :
+                      'bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Scénario actuel */}
+            <div className="text-center mb-8">
+              <motion.div
+                key={currentScenario}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="mb-6">
+                  <h3 className="text-3xl font-bold text-red-600 mb-2">
+                    {stressScenarios[currentScenario].situation}
+                  </h3>
+                  <p className="text-lg text-gray-700 mb-4">
+                    {stressScenarios[currentScenario].context}
+                  </p>
+                  <div className="inline-block bg-red-100 text-red-700 px-4 py-2 rounded-full font-bold text-sm animate-pulse">
+                    {stressScenarios[currentScenario].urgency}
+                  </div>
+                </div>
+
+                <div className="grid gap-4 max-w-2xl mx-auto">
+                  {stressScenarios[currentScenario].choices.map((choice, index) => (
+                    <motion.button
+                      key={choice.id}
+                      onClick={() => handleChoice(choice)}
+                      className="p-4 text-left border-2 border-gray-300 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <div className="flex items-center">
+                        <span className="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4">
+                          {choice.id}
+                        </span>
+                        <span className="text-gray-700">{choice.text}</span>
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Phase Résultats */}
+        {gameState === 'results' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="learning-card p-8 text-center"
+          >
+            <h3 className="text-3xl font-bold text-learning-primary mb-6">
+              Analyse de votre résilience
+            </h3>
+
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+              className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center"
+            >
+              <span className={`text-3xl font-bold text-white`}>
+                {resilienceScore}%
+              </span>
+            </motion.div>
+
+            <div className={`text-2xl font-bold mb-8 ${getScoreColor(resilienceScore)}`}>
+              {getScoreLabel(resilienceScore)}
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="p-4 bg-blue-50 rounded-xl">
+                <h4 className="font-bold text-blue-600 mb-2">Choix résilients</h4>
+                <div className="text-2xl font-bold">
+                  {responses.filter(r => r.type === 'resilient').length}/{responses.length}
+                </div>
+              </div>
+              <div className="p-4 bg-green-50 rounded-xl">
+                <h4 className="font-bold text-green-600 mb-2">Pression gérée</h4>
+                <div className="text-2xl font-bold">{totalPressure} pts</div>
+              </div>
+              <div className="p-4 bg-purple-50 rounded-xl">
+                <h4 className="font-bold text-purple-600 mb-2">Temps moyen</h4>
+                <div className="text-2xl font-bold">
+                  {responses.length > 0 ?
+                    (responses.reduce((sum, r) => sum + r.responseTime, 0) / responses.length).toFixed(1)
+                    : '0'}s
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-8 p-6 bg-learning-accent bg-opacity-20 rounded-xl">
+              <h4 className="font-semibold text-learning-primary mb-3">Feedback personnalisé</h4>
+              <p className="text-gray-700">
+                {resilienceScore >= 80 ?
+                  "Excellent ! Vous gardez votre sang-froid même sous pression extrême. Votre capacité à prendre du recul et choisir des réponses constructives est remarquable." :
+                  resilienceScore >= 60 ?
+                  "Bien ! Vous montrez une résilience correcte, mais vous pourriez encore améliorer votre gestion du stress en vous entraînant à prendre du recul avant de réagir." :
+                  "À améliorer ! Sous pression, vous tendez vers des réactions impulsives. Pratiquez les techniques de respiration et de recadrage cognitif pour développer plus de résilience."
+                }
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={startSimulation}
+                className="learning-button-secondary px-6 py-3"
+              >
+                🔄 Rejouer
+              </button>
+              <button
+                onClick={() => {
+                  onComplete();
+                  onNavigate(6);
+                }}
+                className="learning-button px-6 py-3"
+              >
+                Continuer vers le quiz final
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 // Placeholder Section Component
 function PlaceholderSection({ sectionId, title, description }: any) {
   return (
